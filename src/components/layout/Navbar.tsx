@@ -25,13 +25,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
-// import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { useAuthStore } from '@/auth/authStore';
 
 const Navbar = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -100,7 +99,7 @@ const Navbar = () => {
               <NavigationMenuItem>
                 <div>
                   <NavigationMenuLink className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'>
-                    Home
+                    <Link to='/'>Home</Link>
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuItem>
@@ -270,7 +269,9 @@ const Navbar = () => {
               <Button variant='ghost' size='sm'>
                 Find an agent
               </Button>
-              <Button size='sm'>Log in</Button>
+              <Button size='sm' onClick={() => navigate('/login')}>
+                Log in
+              </Button>
             </>
           )}
         </div>

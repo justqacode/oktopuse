@@ -57,6 +57,9 @@
   --popover-foreground: oklch(0.145 0 0);
   /* --primary: oklch(0.205 0 0); */
   --primary: oklch(48.509% 0.16933 257.974);
+  --primary-hover: oklch(37.847% 0.13383 258.109);
+  --primary-disabled: oklch(70.003% 0.14409 255.748);
+  /* --primary-hover: color-mix(in oklch, var(--color-primary) 75%, black 25%); */
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
