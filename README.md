@@ -1,5 +1,5 @@
-## This is the Front end of Oktopuse website
+# This is the Front end of Oktopuse website
 
-# Tools used
+### Tools used
 
 React + Vite + Typescript + Tailwind

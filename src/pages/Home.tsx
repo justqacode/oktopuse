@@ -1,7 +1,12 @@
+import Navbar from '@/components/layout/Navbar';
+
 export const Home = () => {
   return (
-    <div className='w-full h-dvh flex justify-center items-center'>
-      <p>Here is home</p>
-    </div>
+    <>
+      <Navbar />
+      <div className='w-full h-dvh flex justify-center items-center'>
+        <p>Here is home</p>
+      </div>
+    </>
   );
 };
