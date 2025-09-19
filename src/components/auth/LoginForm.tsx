@@ -3,8 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from './schemas';
 import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,7 +20,7 @@ export const LoginForm = () => {
     setTimeout(() => {
       console.log('Login data:', data);
       setIsLoading(false);
-      alert('Login successful!');
+      navigate('/dashboard');
     }, 1000);
   };
 

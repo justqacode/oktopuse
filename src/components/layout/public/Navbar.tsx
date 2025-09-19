@@ -34,7 +34,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
 
   // Mock user state for demo - replace with actual auth
   // const [user, setUser] = useState(null); // Change to {} to simulate logged in state
@@ -98,8 +98,11 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <div>
-                  <NavigationMenuLink className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'>
-                    <Link to='/'>Home</Link>
+                  <NavigationMenuLink
+                    href='/'
+                    className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'
+                  >
+                    Home
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuItem>
