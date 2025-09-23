@@ -1,14 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { NavigateFunction } from 'react-router-dom';
-import API from '@/lib/axios';
+import { gql } from '@apollo/client';
+import client from '@/lib/apollo-client';
 import { config } from '@/config/app.config';
 import { toast } from 'sonner';
 
 type User = {
-  username: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
   role: string[];
-  [key: string]: any; // TODO: change this when you know the restTODo
 };
 
 type AuthState = {
@@ -20,6 +24,22 @@ type AuthState = {
   updateUser: (updates: Partial<User>) => void;
 };
 
+const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        firstName
+        lastName
+        email
+        phone
+        role
+      }
+    }
+  }
+`;
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -30,40 +50,31 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, password, navigate) => {
         set({ isLoading: true });
         try {
-          const res = await API.post('/auth/login', { email, password });
-          if (res.status === 200) {
-            const token = res.data.token;
+          type LoginMutationResponse = {
+            login: {
+              token: string;
+              user: User;
+            };
+          };
 
-            const userRes = await API.get('/auth/me', {
-              headers: { Authorization: `Bearer ${token}` },
-            });
+          const { data } = await client.mutate<LoginMutationResponse>({
+            mutation: LOGIN_MUTATION,
+            variables: { email, password },
+          });
 
-            const user = userRes.data.user;
+          if (data?.login) {
+            const { token, user } = data.login;
 
             set({ token, user });
 
-            // toast({
-            //   title: 'Login successful',
-            //   description: `Welcome back ${user.username}!`,
-            //   duration: 1000,
-            // });
-
             toast('Login successful');
-
-            if (user.role.includes('mentee')) {
-              navigate('/student-history');
-            } else if (user.role.includes('mentor')) {
-              navigate('/mentor-history');
-            }
+            navigate('/dashboard');
+          } else {
+            toast('Login failed');
           }
-        } catch (err) {
-          // toast({
-          //   title: 'Login failed',
-          //   description: 'Invalid email or password. Please try again.',
-          //   variant: 'destructive',
-          //   duration: 2000,
-          // });
+        } catch (err: any) {
           toast('Login failed');
+          console.error('Login error:', err.message);
         } finally {
           set({ isLoading: false });
         }
