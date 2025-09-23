@@ -81,15 +81,17 @@ const Navbar = () => {
       <div className='container mx-auto px-4 lg:px-8 flex items-center justify-between h-16'>
         {/* Logo */}
         <div className='flex items-center space-x-2'>
-          <div className='flex items-center space-x-2'>
-            <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
-              <span className='text-primary-foreground font-bold text-sm'>OP</span>
+          <Link to='/'>
+            <div className='flex items-center space-x-2'>
+              <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
+                <span className='text-primary-foreground font-bold text-sm'>OP</span>
+              </div>
+              <span className='font-semibold text-lg'>
+                {/* White<span className='text-primary'>Gloves</span> */}
+                Octopuse
+              </span>
             </div>
-            <span className='font-semibold text-lg'>
-              {/* White<span className='text-primary'>Gloves</span> */}
-              Octopuse
-            </span>
-          </div>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}

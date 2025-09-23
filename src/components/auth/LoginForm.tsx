@@ -3,25 +3,57 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from './schemas';
 import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+// import { useNavigate } from 'react-router-dom';
+
+const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
+        id
+        firstName
+        lastName
+        email
+        phone
+        role
+      }
+    }
+  }
+`;
 
 export const LoginForm = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  //  const [mutate, { data, loading, error}] = useMutation(LOGIN_MUTATION)
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
 
+  // const [loginMutation] = useMutation(LOGIN_MUTATION);
+
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    setTimeout(() => {
-      console.log('Login data:', data);
+
+    try {
+      const { data: result } = await loginMutation({
+        variables: {
+          email: data.email,
+          password: data.password,
+        },
+      });
+
+      console.log(result);
+    } catch (error: any) {
+      console.error('Login failed:', error.message);
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
 
   return (

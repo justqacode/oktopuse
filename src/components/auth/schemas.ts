@@ -6,9 +6,19 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
+  lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
+  phone: z
+    .string()
+    .min(10, { message: 'Phone number must be at least 10 digits' })
+    .regex(/^[+]?[\d\s\-\(\)]+$/, { message: 'Please enter a valid phone number' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  role: z
+    .string()
+    .refine((val) => ['tenant', 'landlord', 'admin'].includes(val), {
+      message: 'Please select a valid role',
+    }),
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the Terms & Conditions',
   }),

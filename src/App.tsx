@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from './components/ui/tooltip';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -7,6 +6,8 @@ import Navbar from './components/layout/public/Navbar';
 import DashboardLayout from './components/layout/dashboard/DashboardLayout';
 import DashboardHome from './pages/dashboard/dashboard-home';
 import Settings from './pages/dashboard/settings';
+import { ApolloProvider } from '@apollo/client/react';
+import client from './lib/apollo-client';
 
 const checkAuth = () => {
   const user = 'mario';
@@ -39,7 +40,7 @@ function DashboardLayoutV() {
 
 function App() {
   return (
-    <QueryClientProvider client={new QueryClient()}>
+    <ApolloProvider client={client}>
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
@@ -60,7 +61,7 @@ function App() {
         </BrowserRouter>
         <Toaster position='top-center' richColors duration={2000} />
       </TooltipProvider>
-    </QueryClientProvider>
+    </ApolloProvider>
   );
 }
 

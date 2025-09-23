@@ -3,38 +3,114 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from './schemas';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+
+const REGISTER_MUTATION = gql`
+  mutation Register(
+    $firstName: String!
+    $lastName: String!
+    $email: String!
+    $password: String!
+    $phone: String!
+    $role: String!
+  ) {
+    register(
+      firstName: $firstName
+      lastName: $lastName
+      email: $email
+      password: $password
+      phone: $phone
+      role: $role
+    ) {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+  }
+`;
 
 export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [registerMutation] = useMutation(REGISTER_MUTATION);
 
   const form = useForm({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: '', email: '', password: '', agreeToTerms: false },
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      phone: '',
+      role: 'tenant',
+      agreeToTerms: false,
+    },
   });
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    setTimeout(() => {
-      console.log('Register data:', data);
+    setSuccess(false);
+
+    try {
+      const { data: result } = await registerMutation({
+        variables: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          role: data.role,
+        },
+      });
+
+      console.log('Registration successful:', result);
+      setSuccess(true);
+      form.reset();
+    } catch (error: any) {
+      console.error('Registration failed:', error.message);
+    } finally {
       setIsLoading(false);
-      //   alert('Registration successful!');
-    }, 1000);
+    }
   };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-      {/* Name */}
+      {/* Success Message */}
+      {success && (
+        <div className='bg-green-50 border border-green-200 rounded-lg p-4'>
+          <p className='text-green-800 text-sm'>Registration successful! Welcome aboard!</p>
+        </div>
+      )}
+
+      {/* First Name */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Name</label>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>First Name</label>
         <input
-          {...form.register('name')}
+          {...form.register('firstName')}
           type='text'
-          placeholder='Enter your name'
+          placeholder='Enter your first name'
           className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
         />
-        {form.formState.errors.name && (
-          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.name.message}</p>
+        {form.formState.errors.firstName && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.firstName.message}</p>
+        )}
+      </div>
+
+      {/* Last Name */}
+      <div>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Last Name</label>
+        <input
+          {...form.register('lastName')}
+          type='text'
+          placeholder='Enter your last name'
+          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+        />
+        {form.formState.errors.lastName && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.lastName.message}</p>
         )}
       </div>
 
@@ -49,6 +125,20 @@ export const RegisterForm = () => {
         />
         {form.formState.errors.email && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.email.message}</p>
+        )}
+      </div>
+
+      {/* Phone */}
+      <div>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Phone</label>
+        <input
+          {...form.register('phone')}
+          type='tel'
+          placeholder='Enter your phone number'
+          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+        />
+        {form.formState.errors.phone && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.phone.message}</p>
         )}
       </div>
 
@@ -72,6 +162,22 @@ export const RegisterForm = () => {
         </div>
         {form.formState.errors.password && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.password.message}</p>
+        )}
+      </div>
+
+      {/* Role */}
+      <div>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Role</label>
+        <select
+          {...form.register('role')}
+          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+        >
+          <option value='tenant'>Tenant</option>
+          <option value='landlord'>Landlord</option>
+          <option value='admin'>Admin</option>
+        </select>
+        {form.formState.errors.role && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>
         )}
       </div>
 
