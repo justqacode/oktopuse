@@ -8,6 +8,7 @@ import DashboardHome from './pages/dashboard/dashboard-home';
 import Settings from './pages/dashboard/settings';
 import { ApolloProvider } from '@apollo/client/react';
 import client from './lib/apollo-client';
+import TestPage from './pages/dashboard/test-page';
 
 const checkAuth = () => {
   const user = 'mario';
@@ -55,6 +56,7 @@ function App() {
               <Route path='/dashboard' element={<DashboardLayoutV />}>
                 <Route index element={<DashboardHome />} />
                 <Route path='settings' element={<Settings />} />
+                <Route path='test-page' element={<TestPage />} />
               </Route>
             </Route>
           </Routes>
