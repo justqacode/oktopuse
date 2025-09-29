@@ -1,6 +1,4 @@
 import { SectionCards } from '@/components/section-cards';
-import { IconPlus } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
 import { TabsContent, TabsLayout } from '@/components/tab-layout';
 import RentHistory from '@/components/dashboard-main/rent-history';
 import MaintenanceRequests from '@/components/dashboard-main/maintenance-requests';

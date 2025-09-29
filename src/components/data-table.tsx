@@ -19,15 +19,12 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
-  IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
   IconDotsVertical,
   IconGripVertical,
-  IconLayoutColumns,
-  IconPlus,
 } from '@tabler/icons-react';
 import {
   type ColumnDef,
@@ -48,7 +45,6 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -85,17 +81,9 @@ export interface DataTableProps<T> {
   pageSize?: number;
   pageSizeOptions?: number[];
   onRowDragEnd?: (oldIndex: number, newIndex: number, newData: T[]) => void;
-  // Customization callbacks
-  // onAddItem?: () => void;
-  // addButtonLabel?: string;
+
   // Styling
   className?: string;
-  // Header actions - render prop pattern
-  // headerActions?: React.ReactNode;
-  // Children for custom header content
-  // children?: React.ReactNode;
-  // Optional tabs prop
-  // tabs?: boolean;
 }
 
 function DragHandle<T extends Record<string, any>>({
@@ -383,50 +371,6 @@ export function DataTable<T extends Record<string, any>>({
 
   return (
     <div className={`relative flex flex-col gap-4 overflow-auto ${className}`}>
-      {/* Header with actions */}
-      {/* Removed tabs, customize columns, add button, and headerActions */}
-      {/* <div className='flex items-center justify-between'>
-        <div className='flex-1'>{tabs ? children : ''}</div>
-        <div className='flex items-center gap-2'>
-          {enableColumnVisibility && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant='outline' size='sm'>
-                  <IconLayoutColumns />
-                  <span className='hidden lg:inline'>Customize Columns</span>
-                  <span className='lg:hidden'>Columns</span>
-                  <IconChevronDown />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align='end' className='w-56'>
-                {table
-                  .getAllColumns()
-                  .filter(
-                    (column) => typeof column.accessorFn !== 'undefined' && column.getCanHide()
-                  )
-                  .map((column) => (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className='capitalize'
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-          {onAddItem && (
-            <Button variant='outline' size='sm' onClick={onAddItem}>
-              <IconPlus />
-              <span className='hidden lg:inline'>{addButtonLabel}</span>
-            </Button>
-          )}
-          {headerActions}
-        </div>
-      </div> */}
-      {/* Table */}
       <div className='overflow-hidden rounded-lg border'>
         {enableDragAndDrop ? (
           <DndContext
