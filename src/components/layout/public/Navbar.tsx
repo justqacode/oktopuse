@@ -34,7 +34,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   // Mock user state for demo - replace with actual auth
   // const [user, setUser] = useState(null); // Change to {} to simulate logged in state
@@ -63,10 +63,10 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // logout(navigate);
+    logout(navigate);
     // setUser(null);
 
-    console.log('clicked logout');
+    // console.log('clicked logout');
   };
 
   return (
@@ -261,11 +261,7 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56' align='end'>
                   <DropdownMenuItem asChild>
-                    <Link
-                      to={user?.role?.includes('mentor') ? '/mentor-history' : '/student-history'}
-                    >
-                      Dashboard
-                    </Link>
+                    <Link to='/dashboard'>Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
