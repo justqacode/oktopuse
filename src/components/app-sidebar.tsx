@@ -29,6 +29,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { InfoIcon } from 'lucide-react';
+import { SidebarInfo } from './sidebar-info-card';
 
 const data = {
   user: {
@@ -173,6 +175,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
         {/* <NavDocuments items={data.documents} /> */}
         <NavSecondary items={data.navSecondary} className='mt-auto' />
+        <SidebarInfo />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

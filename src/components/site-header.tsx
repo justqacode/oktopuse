@@ -1,16 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import clsx from 'clsx';
+import PaymentModal from './dashboard-main/modals/rent-payment-modal';
+import { useState } from 'react';
 
 export function SiteHeader() {
+  const [open, setOpen] = useState(false);
   const dueDate = new Date('2024-09-30');
   const today = new Date();
   const sixMonths = 365 / 2;
 
   const daysLeft = dueDate.getDate() - today.getDate();
 
-  console.log('daysleft: ', daysLeft);
+  // console.log('daysleft: ', daysLeft);
   return (
     <header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)'>
       <div className='flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6'>
@@ -20,18 +22,16 @@ export function SiteHeader() {
         <div className='ml-auto flex items-center gap-2'>
           <Button
             variant={daysLeft <= 3 ? 'default' : 'destructive'}
-            asChild
             size='sm'
             className='hidden sm:flex'
+            onClick={() => setOpen(true)}
           >
-            <a href='/' rel='noopener noreferrer' className='dark:text-foreground'>
-              {/* {daysLeft => 3 ?  "Pay Rent" : `Rent due in ${daysLeft} days Renew now`} */}
-
-              {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`}
-            </a>
+            {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`}
           </Button>
         </div>
       </div>
+
+      <PaymentModal open={open} onOpenChange={setOpen} />
     </header>
   );
 }

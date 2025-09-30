@@ -19,13 +19,22 @@ interface TabsLayoutProps {
   header?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  onValueChange?: (value: string) => void;
 }
 
-export function TabsLayout({ tabs, defaultValue, header, children, className }: TabsLayoutProps) {
+export function TabsLayout({
+  tabs,
+  defaultValue,
+  header,
+  children,
+  className,
+  onValueChange,
+}: TabsLayoutProps) {
   return (
     <Tabs
       defaultValue={defaultValue || tabs[0]?.value}
       className={`flex flex-col gap-4 ${className || ''}`}
+      onValueChange={onValueChange}
     >
       {/* Top row: tabs + header actions */}
       <div className='flex items-center justify-between'>

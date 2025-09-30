@@ -1,5 +1,9 @@
 import { DataTable } from '@/components/data-table';
 import { maintenanceRequestsColumn, rentHistoryColumn } from './columns';
+import { Button } from '../ui/button';
+import { IconPlus } from '@tabler/icons-react';
+import MaintenanceRequestModal from './modals/maintenance-modal';
+import { useState } from 'react';
 
 const sampleData = [
   {
@@ -37,3 +41,21 @@ export default function MaintenanceRequests() {
     />
   );
 }
+
+MaintenanceRequests.HeaderButton = function HeaderButton() {
+  const [open, setOpen] = useState(false);
+  const handleRequestMaintenance = () => {
+    console.log('Request maintenance triggered from header!');
+    setOpen(true);
+  };
+
+  return (
+    <div className='flex gap-2'>
+      <Button variant='outline' size='sm' onClick={handleRequestMaintenance}>
+        <IconPlus /> Request Maintenance
+      </Button>
+
+      <MaintenanceRequestModal open={open} onOpenChange={setOpen} />
+    </div>
+  );
+};

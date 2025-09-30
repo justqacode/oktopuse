@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAuthStore } from '@/auth/authStore';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useAuthStore } from '@/auth/authStore';
 
 const Navbar = () => {
   const navigate = useNavigate();
