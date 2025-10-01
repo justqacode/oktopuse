@@ -13,6 +13,7 @@ type User = {
   email: string;
   phone?: string;
   role: string[];
+  address?: string;
 };
 
 type AuthState = {

@@ -35,9 +35,6 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user, logout } = useAuthStore();
 
-  // Mock user state for demo - replace with actual auth
-  // const [user, setUser] = useState(null); // Change to {} to simulate logged in state
-
   // Handle scrolling effect
   useEffect(() => {
     const handleScroll = () => {
