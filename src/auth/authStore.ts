@@ -19,6 +19,7 @@ type AuthState = {
   token: string | null;
   user: User | null;
   isLoading: boolean;
+  expiresAt: number | null;
   login: (email: string, password: string, navigate: NavigateFunction) => Promise<void>;
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
@@ -42,10 +43,11 @@ const LOGIN_MUTATION = gql`
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       token: null,
       user: null,
       isLoading: false,
+      expiresAt: null,
 
       login: async (email, password, navigate) => {
         set({ isLoading: true });
@@ -64,10 +66,11 @@ export const useAuthStore = create<AuthState>()(
 
           if (data?.login) {
             const { token, user } = data.login;
+            const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 1 week from now
 
-            set({ token, user });
+            set({ token, user, expiresAt });
 
-            toast('Login successful');
+            toast.success('Login successful');
             navigate('/dashboard');
           } else {
             toast('Login failed');
@@ -81,7 +84,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: (navigate) => {
-        set({ token: null, user: null });
+        set({ token: null, user: null, expiresAt: null });
         useAuthStore.persist.clearStorage();
         navigate('/login');
       },
@@ -97,7 +100,16 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         token: state.token,
         user: state.user,
+        expiresAt: state.expiresAt,
       }),
+      onRehydrateStorage: () => (state) => {
+        // Check for token expiration after rehydration
+        if (state?.expiresAt && Date.now() > state.expiresAt) {
+          state.token = null;
+          state.user = null;
+          state.expiresAt = null;
+        }
+      },
     }
   )
 );

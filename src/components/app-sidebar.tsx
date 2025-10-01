@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/sidebar';
 import { InfoIcon } from 'lucide-react';
 import { SidebarInfo } from './sidebar-info-card';
+import { NavLink } from 'react-router-dom';
 
 const data = {
   user: {
@@ -161,12 +162,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-              <div className='flex items-center space-x-2'>
-                <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
-                  <span className='text-primary-foreground font-bold text-sm'>OP</span>
+              <NavLink to='/' className=''>
+                <div className='flex items-center space-x-2'>
+                  <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
+                    <span className='text-primary-foreground font-bold text-sm'>OP</span>
+                  </div>
+                  <span className='font-semibold text-lg'>Octopuse</span>
                 </div>
-                <span className='font-semibold text-lg'>Octopuse</span>
-              </div>
+              </NavLink>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
