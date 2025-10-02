@@ -5,15 +5,17 @@ import { gql } from '@apollo/client';
 import client from '@/lib/apollo-client';
 import { config } from '@/config/app.config';
 import { toast } from 'sonner';
+import type { Role } from '@/types';
 
-type User = {
+export type User = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   phone?: string;
-  role: string[];
+  role: Role | Role[];
   address?: string;
+  profilePhoto?: string;
 };
 
 type AuthState = {

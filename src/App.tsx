@@ -4,14 +4,15 @@ import { Toaster } from 'sonner';
 import { Auth, Home } from './pages';
 import Navbar from './components/layout/public/Navbar';
 import DashboardLayout from './components/layout/dashboard/DashboardLayout';
-import DashboardHome from './pages/dashboard/dashboard-home';
 import Settings from './pages/dashboard/settings';
 import { ApolloProvider } from '@apollo/client/react';
 import client from './lib/apollo-client';
 import TestPage from './pages/dashboard/test-page';
+import DashboardHome from './pages/dashboard/dashboard-home';
+import { useAuthStore } from './auth/authStore';
 
 const checkAuth = () => {
-  const user = 'mario';
+  const { user } = useAuthStore();
   return !!user;
 };
 
@@ -39,7 +40,7 @@ function DashboardLayoutV() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <ApolloProvider client={client}>
       <TooltipProvider>
@@ -66,5 +67,3 @@ function App() {
     </ApolloProvider>
   );
 }
-
-export default App;
