@@ -12,7 +12,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant='inset' />
+      {/* <AppSidebar variant='inset' /> */}
+      <AppSidebar />
       <SidebarInset>
         <SiteHeader />
         <main>{children}</main>

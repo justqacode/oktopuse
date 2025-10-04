@@ -24,7 +24,7 @@ export default function DashboardHomeLandlord() {
             <DashCard cardDescription='Total Properties' cardMainContent='50' />
             <DashCard cardDescription='Total Units' cardMainContent='120' />
             <DashCard cardDescription='Occupied Units' cardMainContent='85' />
-            <DashCard cardDescription='Occupancy Rate (%)' cardMainContent='$90,000' />
+            <DashCard cardDescription='Total monthly rent collected' cardMainContent='$90,000' />
           </div>
           <div className='py-4 lg:py-6 px-8'>
             <TabsLayout

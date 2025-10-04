@@ -28,12 +28,14 @@ export function SiteHeader() {
         {tenant && (
           <div className='ml-auto flex items-center gap-2'>
             <Button
-              variant={daysLeft <= 3 ? 'default' : 'destructive'}
+              // variant={daysLeft <= 3 ? 'default' : 'destructive'}
+              variant={'default'}
               size='sm'
               className='hidden sm:flex'
               onClick={() => setOpen(true)}
             >
-              {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`}
+              {/* {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`} */}
+              Pay Rent
             </Button>
           </div>
         )}

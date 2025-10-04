@@ -1,1 +1,1 @@
-export type Role = 'tenant' | 'admin' | 'landlord';
+export type Role = 'tenant' | 'admin' | 'landlord' | 'manager';
