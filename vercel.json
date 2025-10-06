@@ -1,0 +1,10 @@
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "redirects": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://octopuse-735244eb964b.herokuapp.com/graphql/",
+      "permanent": false
+    }
+  ]
+}

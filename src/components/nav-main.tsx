@@ -9,6 +9,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import clsx from 'clsx';
+import { NavLink, useLocation } from 'react-router-dom';
 
 export function NavMain({
   items,
@@ -17,12 +18,14 @@ export function NavMain({
     title: string;
     url: string;
     icon?: Icon;
-    isActive?: boolean;
   }[];
 }) {
+  const location = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className='flex flex-col gap-2'>
+        {/* A more suffisticated menu */}
         {/* <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
@@ -43,21 +46,28 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu> */}
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                tooltip={item.title}
-                className={clsx(
-                  'min-w-8 duration-200 ease-linear',
-                  item.isActive &&
-                    'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground'
-                )}
-              >
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items.map((item) => {
+            const isActive = location.pathname === item.url;
+
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  className={clsx(
+                    'min-w-8 duration-200 ease-linear',
+                    isActive &&
+                      'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground'
+                  )}
+                  asChild
+                >
+                  <NavLink to={item.url}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

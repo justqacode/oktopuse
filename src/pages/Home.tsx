@@ -22,13 +22,13 @@ const GET_PROPERTY = gql`
 `;
 
 export const Home = () => {
-  const { data, loading, error } = useQuery(GET_PROPERTY, {
-    variables: { id: '68cd55761d1285352ee0219e' }, // replace with actual ID
-  });
+  // const { data, loading, error } = useQuery(GET_PROPERTY, {
+  //   variables: { id: '68cd55761d1285352ee0219e' }, // replace with actual ID
+  // });
 
-  if (loading) console.log('Loading property...');
-  if (error) console.error('GraphQL Error:', error);
-  if (data) console.log('GraphQL result:', data);
+  // if (loading) console.log('Loading property...');
+  // if (error) console.error('GraphQL Error:', error);
+  // if (data) console.log('GraphQL result:', data);
 
   return (
     <div className='w-full h-dvh flex justify-center items-center pt-6'>

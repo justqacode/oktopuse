@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,17 +27,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useAuthStore } from '@/auth/authStore';
 import { Link, useNavigate } from 'react-router-dom';
-// import { useAuthStore } from '@/auth/authStore';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { user } = useAuthStore();
-
-  // Mock user state for demo - replace with actual auth
-  // const [user, setUser] = useState(null); // Change to {} to simulate logged in state
+  const { user, logout } = useAuthStore();
 
   // Handle scrolling effect
   useEffect(() => {
@@ -63,10 +59,10 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // logout(navigate);
+    logout(navigate);
     // setUser(null);
 
-    console.log('clicked logout');
+    // console.log('clicked logout');
   };
 
   return (
@@ -261,11 +257,7 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56' align='end'>
                   <DropdownMenuItem asChild>
-                    <Link
-                      to={user?.role?.includes('mentor') ? '/mentor-history' : '/student-history'}
-                    >
-                      Dashboard
-                    </Link>
+                    <Link to='/dashboard'>Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
