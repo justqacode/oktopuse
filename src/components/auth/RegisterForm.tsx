@@ -5,6 +5,7 @@ import { registerSchema } from './schemas';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
 const REGISTER_MUTATION = gql`
   mutation Register(
@@ -68,10 +69,12 @@ export const RegisterForm = () => {
       });
 
       console.log('Registration successful:', result);
+      toast.success('Registration successful! Welcome aboard!');
       setSuccess(true);
       form.reset();
     } catch (error: any) {
-      console.error('Registration failed:', error.message);
+      // console.error('Registration failed:', error.message);
+      toast.error(`Registration failed: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -174,7 +177,7 @@ export const RegisterForm = () => {
         >
           <option value='tenant'>Tenant</option>
           <option value='landlord'>Landlord</option>
-          <option value='admin'>Admin</option>
+          <option value='admin'>Property Manager</option>
         </select>
         {form.formState.errors.role && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>

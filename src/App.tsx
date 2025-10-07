@@ -50,6 +50,7 @@ export default function App() {
             <Route element={<PublicLayout />}>
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Auth />} />
+              <Route path='/register' element={<Auth />} />
             </Route>
 
             {/* Protected Dashboard Routes */}
