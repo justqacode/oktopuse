@@ -6,11 +6,12 @@ import {
   RegisterForm,
   SocialLogin,
 } from '@/components/auth';
-import { useRouterSwitch } from '@/components/auth/useRouterSwitch';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Auth = () => {
-  const { route, navigate } = useRouterSwitch();
-  const isLogin = route === '/login';
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isLogin = location.pathname === '/login' ? true : false;
 
   return (
     <AuthLayout>
