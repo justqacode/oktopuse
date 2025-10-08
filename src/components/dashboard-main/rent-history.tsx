@@ -1,5 +1,8 @@
 import { DataTable } from '@/components/data-table';
 import { rentHistoryColumn } from './columns';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
+import { useAuthStore } from '@/auth/authStore';
 
 const sampleData = [
   {
@@ -22,7 +25,38 @@ const sampleData = [
   },
 ];
 
+// {
+//   "query": "query GetPaymentHistoryByTenant($tenantID: ID!) { getPaymentHistoryByTenantID(tenantID: $tenantID) { _id propertyID tenantID amount date rentForMonth note } }",
+//   "variables": {
+//     "tenantID": "68ccdee49efe164572477f50"
+//   }
+// }
+
+const GET_PAYMENT_HISTORY = gql`
+  query GetPaymentHistoryByTenant($tenantID: ID!) {
+    getPaymentHistoryByTenantID(tenantID: $tenantID) {
+      _id
+      propertyID
+      tenantID
+      amount
+      date
+      rentForMonth
+      note
+    }
+  }
+`;
+
 export default function RentHistory() {
+  const { user } = useAuthStore();
+  console.log(user);
+  const { data, loading, error } = useQuery(GET_PAYMENT_HISTORY, {
+    // variables: { tenantID: user?.id },
+    variables: { tenantID: '68ccdee49efe164572477f50' },
+  });
+
+  if (loading) console.log('Loading property...');
+  if (error) console.error('GraphQL Error:', error);
+  if (data) console.log('GraphQL result:', data);
   return (
     <DataTable
       columns={rentHistoryColumn}

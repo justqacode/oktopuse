@@ -28,7 +28,7 @@ import {
 import { useAuthStore } from '@/auth/authStore';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+export const Navbar = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -125,7 +125,7 @@ const Navbar = () => {
                       <div className='group grid grid-cols-[auto_1fr] gap-4 rounded-md p-3 hover:bg-accent cursor-pointer'>
                         <Users className='h-5 w-5 mt-1 text-muted-foreground' />
                         <div className='grid gap-1'>
-                          <div className='font-medium leading-none'>Agents</div>
+                          <div className='font-medium leading-none'>Resources</div>
                           <div className='text-sm text-muted-foreground'>
                             Connect with experienced agents
                           </div>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <NavigationMenuTrigger className='flex items-center gap-1'>
                   Company
                 </NavigationMenuTrigger>
@@ -196,7 +196,7 @@ const Navbar = () => {
                     </div>
                   </div>
                 </NavigationMenuContent>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
 
               <NavigationMenuItem>
                 <div>
@@ -266,7 +266,8 @@ const Navbar = () => {
           ) : (
             <>
               <Button variant='ghost' size='sm'>
-                Find an agent
+                {/* Find an agent */}
+                Connet with a PM
               </Button>
               <Button size='sm' onClick={() => navigate('/login')}>
                 Log in
@@ -278,5 +279,3 @@ const Navbar = () => {
     </header>
   );
 };
-
-export default Navbar;
