@@ -2,7 +2,6 @@ import { TooltipProvider } from './components/ui/tooltip';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Auth, Home } from './pages';
-import Navbar from './components/layout/public/Navbar';
 import DashboardLayout from './components/layout/dashboard/DashboardLayout';
 import Settings from './pages/dashboard/settings';
 import { ApolloProvider } from '@apollo/client/react';
@@ -10,6 +9,7 @@ import client from './lib/apollo-client';
 import TestPage from './pages/dashboard/test-page';
 import DashboardHome from './pages/dashboard/dashboard-home';
 import { useAuthStore } from './auth/authStore';
+import { Footer, Navbar } from './components/layout/public';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -26,6 +26,7 @@ function PublicLayout() {
     <>
       <Navbar />
       <Outlet />
+      <Footer />
     </>
   );
 }
