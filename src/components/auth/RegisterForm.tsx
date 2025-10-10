@@ -68,7 +68,7 @@ export const RegisterForm = () => {
         },
       });
 
-      console.log('Registration successful:', result);
+      // console.log('Registration successful:', result);
       toast.success('Registration successful! Welcome aboard!');
       setSuccess(true);
       form.reset();

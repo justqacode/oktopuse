@@ -25,13 +25,6 @@ const sampleData = [
   },
 ];
 
-// {
-//   "query": "query GetPaymentHistoryByTenant($tenantID: ID!) { getPaymentHistoryByTenantID(tenantID: $tenantID) { _id propertyID tenantID amount date rentForMonth note } }",
-//   "variables": {
-//     "tenantID": "68ccdee49efe164572477f50"
-//   }
-// }
-
 const GET_PAYMENT_HISTORY = gql`
   query GetPaymentHistoryByTenant($tenantID: ID!) {
     getPaymentHistoryByTenantID(tenantID: $tenantID) {
@@ -52,6 +45,8 @@ export default function RentHistory() {
   const { data, loading, error } = useQuery(GET_PAYMENT_HISTORY, {
     // variables: { tenantID: user?.id },
     variables: { tenantID: '68ccdee49efe164572477f50' },
+    // skip: !user?.id,
+    fetchPolicy: 'cache-and-network',
   });
 
   if (loading) console.log('Loading property...');
