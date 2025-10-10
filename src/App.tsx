@@ -10,6 +10,7 @@ import TestPage from './pages/dashboard/test-page';
 import DashboardHome from './pages/dashboard/dashboard-home';
 import { useAuthStore } from './auth/authStore';
 import { Footer, Navbar } from './components/layout/public';
+import { Verify } from './pages/Verify';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -52,6 +53,8 @@ export default function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Auth />} />
               <Route path='/register' element={<Auth />} />
+              <Route path='/verify' element={<Verify />} />
+              <Route path='/verify/:id' element={<Verify />} />
             </Route>
 
             {/* Protected Dashboard Routes */}

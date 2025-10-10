@@ -251,3 +251,29 @@ actions
   documents under tabs.\
 - **CRM Systems**: Organize leads, accounts, and activities in tabbed
   views.
+
+## ROUTE AND QUERY PARAMETERS
+
+<Route path='/verify/:id' element={<Verify />} />
+
+```
+const param = useParams();
+const location = useLocation();
+const searchParams = new URLSearchParams(location.search);
+
+console.log('param', param);
+console.log('search', searchParams);
+console.log(searchParams.get('mango'));
+```
+
+## TOAST
+
+```
+toast("Event has been created", {
+          description: "Sunday, December 03, 2023 at 9:00 AM",
+          action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+          },
+})
+```
