@@ -53,6 +53,7 @@ export default function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Auth />} />
               <Route path='/register' element={<Auth />} />
+              <Route path='/forgotpassword' element={<Auth />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/verify/:id' element={<Verify />} />
             </Route>

@@ -1,10 +1,14 @@
-export const AuthHeader = ({ isLogin }: { isLogin: boolean }) => (
+export const AuthHeader = ({ route }: { route: string }) => (
   <div className='p-8 text-center'>
     <h1 className='text-3xl font-bold text-gray-900 mb-2'>
-      {isLogin ? 'Welcome Back' : 'Create an account'}
+      {route === '/login' && 'Welcome Back'}
+      {route === '/register' && 'Create an account'}
+      {route === '/forgotpassword' && 'Forgot Password?'}
     </h1>
     <p className='text-gray-600'>
-      {isLogin ? 'Please enter Your details' : 'Please fill in your details to create an account'}
+      {route === '/login' && 'Please enter Your details'}
+      {route === '/register' && 'Please fill in your details to create an account'}
+      {route === '/forgotpassword' && 'Please enter your email'}
     </p>
   </div>
 );

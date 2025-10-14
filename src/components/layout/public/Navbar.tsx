@@ -126,9 +126,7 @@ export const Navbar = () => {
                         <Users className='h-5 w-5 mt-1 text-muted-foreground' />
                         <div className='grid gap-1'>
                           <div className='font-medium leading-none'>Resources</div>
-                          <div className='text-sm text-muted-foreground'>
-                            Connect with experienced agents
-                          </div>
+                          <div className='text-sm text-muted-foreground'>Explore our resources</div>
                         </div>
                       </div>
                       {/* <div className='group grid grid-cols-[auto_1fr] gap-4 rounded-md p-3 hover:bg-accent cursor-pointer'>
@@ -201,7 +199,7 @@ export const Navbar = () => {
               <NavigationMenuItem>
                 <div>
                   <NavigationMenuLink className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'>
-                    Pricing
+                    About Us
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuItem>

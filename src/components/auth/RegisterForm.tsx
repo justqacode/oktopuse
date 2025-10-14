@@ -69,9 +69,11 @@ export const RegisterForm = () => {
       });
 
       // console.log('Registration successful:', result);
-      toast.success('Registration successful! Welcome aboard!');
-      setSuccess(true);
-      form.reset();
+      if (result) {
+        toast.success('Registration successful! Welcome aboard!');
+        setSuccess(true);
+        form.reset();
+      }
     } catch (error: any) {
       // console.error('Registration failed:', error.message);
       toast.error(`Registration failed: ${error.message}`);

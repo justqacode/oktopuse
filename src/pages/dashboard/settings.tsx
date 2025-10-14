@@ -20,6 +20,34 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { useAuthStore } from '@/auth/authStore';
 
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
+
+const PROFILE_MUTATION = gql`
+  mutation UpdateRenterProfile($firstName: String!, $lastName: String!, $phone: String!) {
+    updateRenterProfile(firstName: $firstName, lastName: $lastName, phone: $phone) {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+  }
+`;
+
+const PASSWORD_MUTATION = gql`
+  mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
+    updateRenterProfile(oldPassword: $oldPassword, password: $password) {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+  }
+`;
+
 // Profile form schema
 const profileSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),
@@ -87,6 +115,9 @@ export default function Settings() {
   const [hasProfileChanges, setHasProfileChanges] = useState(false);
   const [hasNotificationChanges, setHasNotificationChanges] = useState(false);
 
+  const [profileMutation] = useMutation(PROFILE_MUTATION);
+  const [passwordMutation] = useMutation(PASSWORD_MUTATION);
+
   // Profile form
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -147,7 +178,7 @@ export default function Settings() {
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Here you would make your actual API call:
       // const response = await fetch('/api/user/profile', {
@@ -156,12 +187,21 @@ export default function Settings() {
       //   body: JSON.stringify({ userId: user?.id, ...data }),
       // });
 
-      console.log('Profile Update Data:', { userId: user?.id, ...data });
+      // console.log('Profile Update Data:', { userId: user?.id, ...data });
+      const { data: result } = await profileMutation({
+        variables: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+        },
+      });
 
-      setProfileSuccess(true);
-      setHasProfileChanges(false);
+      if (result) {
+        setProfileSuccess(true);
+        setHasProfileChanges(false);
+      }
 
-      setTimeout(() => setProfileSuccess(false), 3000);
+      // setTimeout(() => setProfileSuccess(false), 3000);
     } catch (error) {
       console.error('Error updating profile:', error);
       setProfileError('Update failed. Please try again later.');
@@ -177,7 +217,7 @@ export default function Settings() {
 
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Here you would make your actual API call:
       // const response = await fetch('/api/user/password', {
@@ -190,16 +230,25 @@ export default function Settings() {
       //   }),
       // });
 
-      console.log('Password Change Data:', {
-        userId: user?.id,
-        oldPassword: '***',
-        newPassword: '***',
+      // console.log('Password Change Data:', {
+      //   userId: user?.id,
+      //   oldPassword: '***',
+      //   newPassword: '***',
+      // });
+
+      const { data: result } = await passwordMutation({
+        variables: {
+          oldPassword: data.oldPassword,
+          password: data.newPassword,
+        },
       });
 
-      setPasswordSuccess(true);
-      passwordForm.reset();
+      if (result) {
+        setPasswordSuccess(true);
+        passwordForm.reset();
+      }
 
-      setTimeout(() => setPasswordSuccess(false), 3000);
+      // setTimeout(() => setPasswordSuccess(false), 3000);
     } catch (error) {
       console.error('Error changing password:', error);
       setPasswordError('Update failed. Please try again later.');
@@ -358,7 +407,7 @@ export default function Settings() {
                         disabled
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Address (Optional)</FormLabel>
+                            <FormLabel>Address</FormLabel>
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
