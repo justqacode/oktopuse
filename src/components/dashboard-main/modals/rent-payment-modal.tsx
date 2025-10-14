@@ -23,16 +23,19 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Switch } from '@/components/ui/switch';
+// import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
 const formSchema = z
   .object({
@@ -41,8 +44,8 @@ const formSchema = z
     }),
     customAmount: z.string().optional(),
     scheduleDate: z.string().min(1, { message: 'Please select a payment date' }),
-    enableAutoPay: z.boolean(),
-    paymentMethod: z.string().min(1, { message: 'Please select a payment method' }),
+    // enableAutoPay: z.boolean(),
+    // paymentMethod: z.string().min(1, { message: 'Please select a payment method' }),
     notes: z.string().optional(),
   })
   .refine(
@@ -75,24 +78,47 @@ interface PaymentModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// {
+//   "query": "mutation PayRent($amountPaid: Float!, $rentForMonth:String!,$note:String!) { payRent(amountPaid: $amountPaid, rentForMonth:$rentForMonth,note:$note) { id amountPaid date } }",
+//   "variables": {
+
+//     "amountPaid": 12100,
+//     "rentForMonth":"October Mid 2025",
+//     "note":"All good"
+//   }
+// }
+
+const RENT_MUTATION = gql`
+  mutation PayRent($amountPaid: Float!, $rentForMonth: String!, $note: String!) {
+    payRent(amountPaid: $amountPaid, rentForMonth: $rentForMonth, note: $note) {
+      id
+      amountPaid
+      date
+    }
+  }
+`;
+
 export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [rentMutation] = useMutation(RENT_MUTATION);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amountType: 'full',
       customAmount: '',
-      scheduleDate: new Date().toISOString().split('T')[0],
-      enableAutoPay: false,
-      paymentMethod: '',
+      // scheduleDate: new Date().toISOString().split('T')[0],
+      // scheduleDate: new Date().toISOString().split('T')[0],
+      // enableAutoPay: false,
+      // paymentMethod: '',
       notes: '',
+      scheduleDate: new Date().toISOString().slice(0, 7),
     },
   });
 
   const amountType = form.watch('amountType');
-  const enableAutoPay = form.watch('enableAutoPay');
+  // const enableAutoPay = form.watch('enableAutoPay');
 
   const getPaymentAmount = () => {
     const type = form.getValues('amountType');
@@ -108,16 +134,34 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       const paymentAmount = getPaymentAmount();
 
       const paymentData = {
-        ...data,
-        amount: paymentAmount,
-        propertyName: mockPropertyData.propertyName,
-        tenantId: mockPropertyData.tenantId,
-        propertyId: mockPropertyData.propertyId,
-        unitId: mockPropertyData.unitId,
+        // ...data,
+        // amount: paymentAmount,
+        // propertyName: mockPropertyData.propertyName,
+        // tenantId: mockPropertyData.tenantId,
+        // propertyId: mockPropertyData.propertyId,
+        // unitId: mockPropertyData.unitId,
+        amountPaid: paymentAmount,
+        rentForMonth: data.scheduleDate,
+        note: data.notes,
       };
 
+      const { data: result } = await rentMutation({
+        variables: {
+          amountPaid: paymentAmount,
+          rentForMonth: data.scheduleDate,
+          note: data.notes,
+        },
+      });
+
+      if (result) {
+        setShowSuccess(false);
+        form.reset();
+        onOpenChange(false);
+        toast.success('Payment successfull');
+      }
+
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Here you would make your actual API call:
       // const response = await fetch('/api/payments', {
@@ -126,17 +170,17 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       //   body: JSON.stringify(paymentData),
       // });
 
-      console.log('Payment Data:', paymentData);
+      // console.log('Payment Data:', paymentData);
 
       // Show success message
-      setShowSuccess(true);
+      // setShowSuccess(true);
 
       // Reset form and close modal after 2 seconds
-      setTimeout(() => {
-        setShowSuccess(false);
-        form.reset();
-        onOpenChange(false);
-      }, 2000);
+      // setTimeout(() => {
+      //   setShowSuccess(false);
+      //   form.reset();
+      //   onOpenChange(false);
+      // }, 2000);
     } catch (error) {
       console.error('Error processing payment:', error);
       // Handle error appropriately
@@ -242,7 +286,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
               </div>
 
               {/* Schedule Section */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='scheduleDate'
                 render={({ field }) => (
@@ -262,10 +306,32 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
                     <FormMessage />
                   </FormItem>
                 )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name='scheduleDate'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Schedule *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='month'
+                        {...field}
+                        min={new Date().toISOString().slice(0, 7)} // yyyy-MM
+                        className='block w-full'
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Select the month you want to process this payment
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
 
               {/* AutoPay Toggle */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='enableAutoPay'
                 render={({ field }) => (
@@ -281,19 +347,19 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
                     </FormControl>
                   </FormItem>
                 )}
-              />
+              /> */}
 
-              {enableAutoPay && (
+              {/* {enableAutoPay && (
                 <Alert>
                   <AlertDescription>
                     AutoPay will be set up to recur monthly on the selected date using your chosen
                     payment method.
                   </AlertDescription>
                 </Alert>
-              )}
+              )} */}
 
               {/* Payment Method */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='paymentMethod'
                 render={({ field }) => (
@@ -328,7 +394,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Notes */}
               <FormField

@@ -45,6 +45,7 @@ function DashboardLayoutV() {
 export default function App() {
   return (
     <ApolloProvider client={client}>
+      <Toaster position='top-center' richColors duration={2000} />
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
@@ -54,6 +55,7 @@ export default function App() {
               <Route path='/login' element={<Auth />} />
               <Route path='/register' element={<Auth />} />
               <Route path='/forgotpassword' element={<Auth />} />
+              <Route path='/reset-password' element={<Auth />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/verify/:id' element={<Verify />} />
             </Route>
@@ -68,7 +70,6 @@ export default function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-        <Toaster position='top-center' richColors duration={2000} />
       </TooltipProvider>
     </ApolloProvider>
   );

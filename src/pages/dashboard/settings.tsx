@@ -272,7 +272,7 @@ export default function Settings() {
       //   body: JSON.stringify({ userId: user.id, ...data }),
       // });
 
-      console.log('Notification Preferences:', { userId: user?.id, ...data });
+      // console.log('Notification Preferences:', { userId: user?.id, ...data });
 
       setNotificationSuccess(true);
       setHasNotificationChanges(false);

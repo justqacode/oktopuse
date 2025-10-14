@@ -32,6 +32,9 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
@@ -65,6 +68,45 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+// {
+//   "query": "mutation CreateRequest($category: String!, $preferedDateOfResolution: String!,$preferedTimeOfResolution: String!, $description: String!,$canManagementAccess: Boolean!,$images:[String!]!) { createMaintenanceRequest(category: $category, preferedDateOfResolution: $preferedDateOfResolution,preferedTimeOfResolution: $preferedTimeOfResolution, description: $description,images:$images,canManagementAccess:$canManagementAccess ) { _id status createdAt } }",
+//   "variables": {
+
+//     "description": "Leaky faucet in bathroom 1",
+//     //Options:Plumbing, HVAC, Appliances, Pest Control, Landscaping / Exterior, General Requests / Other
+//     "category":"Plumbing",
+//     "preferedDateOfResolution":"2025-10-04",
+//     "preferedTimeOfResolution":"9AM",
+//     "canManagementAccess":false,
+//     "images":["www.images.com"]
+
+//   }
+// }
+
+const MAINTENANCE_MUTATION = gql`
+  mutation CreateRequest(
+    $category: String!
+    $preferedDateOfResolution: String!
+    $preferedTimeOfResolution: String!
+    $description: String!
+    $canManagementAccess: Boolean!
+    $images: [String!]!
+  ) {
+    createMaintenanceRequest(
+      category: $category
+      preferedDateOfResolution: $preferedDateOfResolution
+      preferedTimeOfResolution: $preferedTimeOfResolution
+      description: $description
+      images: $images
+      canManagementAccess: $canManagementAccess
+    ) {
+      _id
+      status
+      createdAt
+    }
+  }
+`;
+
 // Mock data - replace with actual data from your auth/property store
 const mockApartmentData = {
   apartmentName: 'Sunset View Apartments - Unit 204',
@@ -87,6 +129,7 @@ export default function MaintenanceRequestModal({
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState('');
+  const [maintenanceRequest] = useMutation(MAINTENANCE_MUTATION);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -130,13 +173,32 @@ export default function MaintenanceRequestModal({
       //   body: formData,
       // });
 
-      console.log('Maintenance Request Data:', {
-        ...data,
-        apartmentName: mockApartmentData.apartmentName,
-        unitId: mockApartmentData.unitId,
-        propertyId: mockApartmentData.propertyId,
-        photo: data.photo?.[0]?.name || 'No file attached',
+      // console.log('Maintenance Request Data:', {
+      //   ...data,
+      //   apartmentName: mockApartmentData.apartmentName,
+      //   unitId: mockApartmentData.unitId,
+      //   propertyId: mockApartmentData.propertyId,
+      //   photo: data.photo?.[0]?.name || 'No file attached',
+      // });
+
+      const { data: result } = await maintenanceRequest({
+        variables: {
+          description: data.description,
+          category: data.category,
+          preferedDateOfResolution: data.preferredDate,
+          preferedTimeOfResolution: data.preferredTime,
+          canManagementAccess: data.allowEntry === 'yes' ? true : false,
+          images: data.photo,
+        },
       });
+
+      if (result) {
+        setShowSuccess(true);
+
+        form.reset();
+        setSelectedFileName('');
+        onOpenChange(false);
+      }
 
       // Show success message
       setShowSuccess(true);
@@ -144,21 +206,17 @@ export default function MaintenanceRequestModal({
       // Reset form and close modal after 2 seconds
       setTimeout(() => {
         setShowSuccess(false);
-        form.reset();
-        setSelectedFileName('');
-        onOpenChange(false);
+        // form.reset();
+        // setSelectedFileName('');
+        // onOpenChange(false);
       }, 2000);
-    } catch (error) {
-      console.error('Error submitting maintenance request:', error);
+    } catch (error: any) {
+      // console.error('Error submitting maintenance request:', error);
       // Handle error appropriately
+      toast.error('Error submitting maintenance request:', error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleClear = () => {
-    form.reset();
-    setSelectedFileName('');
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,6 +269,8 @@ export default function MaintenanceRequestModal({
                         <SelectItem value='electrical'>Electrical</SelectItem>
                         <SelectItem value='heating'>Heating</SelectItem>
                         <SelectItem value='other'>Other</SelectItem>
+
+                        {/* Plumbing, HVAC, Appliances, Pest Control, Landscaping / Exterior, General Requests / Other */}
                       </SelectContent>
                     </Select>
                     <FormMessage />

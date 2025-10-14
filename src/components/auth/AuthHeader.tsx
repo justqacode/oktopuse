@@ -4,11 +4,13 @@ export const AuthHeader = ({ route }: { route: string }) => (
       {route === '/login' && 'Welcome Back'}
       {route === '/register' && 'Create an account'}
       {route === '/forgotpassword' && 'Forgot Password?'}
+      {route === '/reset-password' && 'Create New Password'}
     </h1>
     <p className='text-gray-600'>
       {route === '/login' && 'Please enter Your details'}
       {route === '/register' && 'Please fill in your details to create an account'}
       {route === '/forgotpassword' && 'Please enter your email'}
+      {route === '/reset-password' && 'Add a new password'}
     </p>
   </div>
 );

@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { forgotPasswordSchema } from './schemas';
+import { forgotPasswordSchema, resetPasswordSchema } from './schemas';
 import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
 import type z from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
 import { useState } from 'react';
 import { Button } from '../ui/button';
@@ -11,12 +11,11 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 
-type FormValues = z.infer<typeof forgotPasswordSchema>;
-
-const FORGOTPASSWORD_MUTATION = gql`
-  mutation RequestPasswordReset($email: String!) {
-    requestPasswordReset(email: $email) {
+const RESETPASSWORD_MUTATION = gql`
+  mutation ResetPassword($resetToken: String!, $newPassword: String!) {
+    resetPassword(resetToken: $resetToken, newPassword: $newPassword) {
       resetToken
+      newPassword
     }
   }
 `;
@@ -26,33 +25,40 @@ const FORGOTPASSWORD_MUTATION = gql`
 //     "email": "babsam480@gmail.com"
 // }
 
-export const ForgotPasswordForm = () => {
+export const ResetPasswordAfterForgetForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [forgotPasswordMutation] = useMutation(FORGOTPASSWORD_MUTATION);
+  // const [success, setSuccess] = useState(false);
+  const [forgotPasswordMutation] = useMutation(RESETPASSWORD_MUTATION);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  console.log(searchParams.get('token'));
+  const resetToken = searchParams.get('token');
 
   const form = useForm({
-    resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: { email: '' },
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { password: '' },
   });
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    setSuccess(false);
+    // setSuccess(false);
 
     try {
       const { data: result } = await forgotPasswordMutation({
         variables: {
-          email: data.email,
+          resetToken,
+          newPassword: data.password,
         },
       });
 
       if (result) {
         // console.log('Registration successful:', result);
-        toast.success('Request sent successfully! Check your email');
-        setSuccess(true);
+        toast.success('Password reset successful');
+        // setSuccess(true);
         form.reset();
+        navigate('/login');
       }
     } catch (error: any) {
       // console.error('Registration failed:', error.message);
@@ -66,20 +72,24 @@ export const ForgotPasswordForm = () => {
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
       {/* Email */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Email Address</label>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Password</label>
         <div className='relative'>
           <input
-            {...form.register('email')}
-            type='email'
-            placeholder='you@example.com'
-            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+            {...form.register('password')}
+            type={showPassword ? 'text' : 'password'}
+            placeholder='Enter your password'
+            className='w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
           />
-          {/* <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
-            <Check className='w-5 h-5 text-green-500' />
-          </div> */}
+          <button
+            type='button'
+            onClick={() => setShowPassword(!showPassword)}
+            className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600'
+          >
+            {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
+          </button>
         </div>
-        {form.formState.errors.email && (
-          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.email.message}</p>
+        {form.formState.errors.password && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.password.message}</p>
         )}
       </div>
 
