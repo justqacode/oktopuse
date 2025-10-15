@@ -22,7 +22,7 @@ export const registerSchema = z.object({
     .min(10, { message: 'Phone number must be at least 10 digits' })
     .regex(/^[+]?[\d\s\-\(\)]+$/, { message: 'Please enter a valid phone number' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
-  role: z.string().refine((val) => ['tenant', 'landlord', 'admin'].includes(val), {
+  role: z.string().refine((val) => ['tenant', 'landlord', 'manager'].includes(val), {
     message: 'Please select a valid role',
   }),
   agreeToTerms: z.boolean().refine((val) => val === true, {

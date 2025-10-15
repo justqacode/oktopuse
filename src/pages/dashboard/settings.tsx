@@ -22,7 +22,7 @@ import { useAuthStore } from '@/auth/authStore';
 
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
-import { toast } from 'sonner';
+// import { toast } from 'sonner';
 
 const PROFILE_MUTATION = gql`
   mutation UpdateRenterProfile($firstName: String!, $lastName: String!, $phone: String!) {
@@ -95,7 +95,7 @@ const getRoleDisplay = (role: string) => {
     tenant: 'Tenant',
     landlord: 'Landlord',
     manager: 'Property Manager/Agent',
-    agent: 'Property Manager/Agent',
+    // agent: 'Property Manager/Agent',
   };
   return roleMap[role] || role.charAt(0).toUpperCase() + role.slice(1);
 };

@@ -4,7 +4,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import PaymentModal from './dashboard-main/modals/rent-payment-modal';
 import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
-import { userMockLandlord } from '@/mockData/user';
+// import { userMockLandlord } from '@/mockData/user';
 
 export function SiteHeader() {
   const { user } = useAuthStore();
@@ -17,6 +17,7 @@ export function SiteHeader() {
 
   const landlord = user?.role.includes('landlord');
   const tenant = user?.role.includes('tenant');
+  const manager = user?.role.includes('manager');
 
   // console.log('daysleft: ', daysLeft);
   return (
@@ -57,6 +58,18 @@ export function SiteHeader() {
               onClick={() => setOpen(true)}
             >
               + Add Property
+            </Button>
+          </div>
+        )}
+        {manager && (
+          <div className='ml-auto flex items-center gap-2'>
+            <Button
+              variant='default'
+              size='sm'
+              className='hidden sm:flex'
+              onClick={() => setOpen(true)}
+            >
+              Send Notice
             </Button>
           </div>
         )}
