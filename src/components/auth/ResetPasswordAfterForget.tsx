@@ -11,12 +11,17 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 
+// const RESETPASSWORD_MUTATION = gql`
+//   mutation ResetPassword($resetToken: String!, $newPassword: String!) {
+//     resetPassword(resetToken: $resetToken, newPassword: $newPassword) {
+//       resetToken
+//       newPassword
+//     }
+//   }
+// `;
 const RESETPASSWORD_MUTATION = gql`
   mutation ResetPassword($resetToken: String!, $newPassword: String!) {
-    resetPassword(resetToken: $resetToken, newPassword: $newPassword) {
-      resetToken
-      newPassword
-    }
+    resetPassword(resetToken: $resetToken, newPassword: $newPassword)
   }
 `;
 
