@@ -179,7 +179,7 @@ export const RegisterForm = () => {
         >
           <option value='tenant'>Tenant</option>
           <option value='landlord'>Landlord</option>
-          <option value='admin'>Property Manager</option>
+          <option value='manager'>Property Manager</option>
         </select>
         {form.formState.errors.role && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>
