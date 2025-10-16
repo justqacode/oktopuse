@@ -16,6 +16,8 @@ export type User = {
   role: Role | Role[];
   address?: string;
   profilePhoto?: string;
+  accountNumber?: string;
+  routingNumber?: string;
 };
 
 type AuthState = {
