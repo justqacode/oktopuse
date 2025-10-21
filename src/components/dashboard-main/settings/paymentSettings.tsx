@@ -35,10 +35,10 @@ const PAYMENT_MUTATION = gql`
 // Profile form schema
 const paymentSchema = z.object({
   accountNumber: z
-    .string()
+    .number()
     .min(6, { message: 'Account number must be between 6-17 digits' })
     .max(17, { message: 'Account number must be between 6-17 digits' }),
-  routingNumber: z.string().min(9, { message: 'Routing number must be 9 digits' }),
+  routingNumber: z.number().min(9, { message: 'Routing number must be 9 digits' }),
 });
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
@@ -57,8 +57,8 @@ export function PaymentSettings() {
   const paymentForm = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      accountNumber: user?.accountNumber || '',
-      routingNumber: user?.routingNumber || '',
+      accountNumber: user?.accountNumber || 0,
+      routingNumber: user?.routingNumber || 0,
     },
   });
 
@@ -135,7 +135,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Account Number *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type='number' placeholder='0123456789123456' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -148,7 +148,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Routing Number *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type='number' placeholder='123456789' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

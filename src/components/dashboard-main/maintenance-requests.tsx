@@ -1,9 +1,19 @@
 import { DataTable } from '@/components/data-table';
-import { maintenanceRequestsColumn, rentHistoryColumn } from './columns';
+import { maintenanceRequestsColumn } from './columns';
 import { Button } from '../ui/button';
 import { IconPlus } from '@tabler/icons-react';
 import MaintenanceRequestModal from './modals/maintenance-modal';
 import { useState } from 'react';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
+import { useAuthStore } from '@/auth/authStore';
+
+// {
+//   "query": "query GetHistory($tenantID: ID!) { getMaintenanceHistoryByTenant(tenantID: $tenantID) { _id description status createdAt } }",
+//   "variables": {
+//     "tenantID": "68d68aacb92da2ce0d44e758"
+//   }
+// }
 
 const sampleData = [
   {
@@ -26,7 +36,30 @@ const sampleData = [
   },
 ];
 
+const GET_MAINTENANCE_HISTORY = gql`
+  query GetHistory($tenantID: ID!) {
+    getMaintenanceHistoryByTenant(tenantID: $tenantID) {
+      _id
+      description
+      status
+      createdAt
+    }
+  }
+`;
+
 export default function MaintenanceRequests() {
+  const { user } = useAuthStore();
+  const { data, loading, error } = useQuery(GET_MAINTENANCE_HISTORY, {
+    variables: { tenantID: user?.id },
+    // variables: { tenantID: '68ccdee49efe164572477f50' },
+    // skip: !user?.id,
+    fetchPolicy: 'cache-and-network',
+  });
+
+  if (loading) console.log('Loading property...');
+  if (error) console.error('GraphQL Error:', error);
+  if (data) console.log('GraphQL result:', data);
+
   return (
     <DataTable
       columns={maintenanceRequestsColumn}

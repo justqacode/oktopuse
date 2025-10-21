@@ -188,7 +188,7 @@ export default function MaintenanceRequestModal({
           preferedDateOfResolution: data.preferredDate,
           preferedTimeOfResolution: data.preferredTime,
           canManagementAccess: data.allowEntry === 'yes' ? true : false,
-          images: data.photo,
+          images: data.photo?.[0]?.name ? data.photo : '',
         },
       });
 
