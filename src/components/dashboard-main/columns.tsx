@@ -21,7 +21,7 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
     header: 'Payment Date',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.header}
+        {row.original.date}
       </Button>
     ),
   },
@@ -30,7 +30,16 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
     header: 'Amount',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.type}
+        {row.original.amount}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'rentForMonth',
+    header: 'Rent For Month',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.rentForMonth}
       </Button>
     ),
   },

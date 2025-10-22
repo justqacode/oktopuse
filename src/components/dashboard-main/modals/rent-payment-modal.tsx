@@ -37,6 +37,7 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/auth/authStore';
+import { usePaymentStore } from '@/stores/usePaymentStore';
 
 const formSchema = z
   .object({
@@ -131,21 +132,22 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
+    const { triggerRefetch } = usePaymentStore.getState();
 
     try {
       const paymentAmount = getPaymentAmount();
 
-      const paymentData = {
-        // ...data,
-        // amount: paymentAmount,
-        // propertyName: mockPropertyData.propertyName,
-        // tenantId: mockPropertyData.tenantId,
-        // propertyId: mockPropertyData.propertyId,
-        // unitId: mockPropertyData.unitId,
-        amountPaid: paymentAmount,
-        rentForMonth: data.scheduleDate,
-        note: data.notes,
-      };
+      // const paymentData = {
+      //   // ...data,
+      //   // amount: paymentAmount,
+      //   // propertyName: mockPropertyData.propertyName,
+      //   // tenantId: mockPropertyData.tenantId,
+      //   // propertyId: mockPropertyData.propertyId,
+      //   // unitId: mockPropertyData.unitId,
+      //   amountPaid: paymentAmount,
+      //   rentForMonth: data.scheduleDate,
+      //   note: data.notes,
+      // };
 
       const { data: result } = await rentMutation({
         variables: {
@@ -157,6 +159,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       });
 
       if (result) {
+        triggerRefetch();
         setShowSuccess(false);
         form.reset();
         onOpenChange(false);

@@ -2,28 +2,25 @@ import { DataTable } from '@/components/data-table';
 import { rentHistoryColumn } from './columns';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { useAuthStore } from '@/auth/authStore';
+import { usePaymentStore } from '@/stores/usePaymentStore';
+import { useEffect } from 'react';
 
-const sampleData = [
-  {
-    id: 1,
-    header: '20-09-2024',
-    type: 'Executive Summary',
-    status: 'paid',
-  },
-  {
-    id: 2,
-    header: '20-09-2024',
-    type: 'Technical Approach',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    header: '20-09-2024',
-    type: 'Design',
-    status: 'overdue',
-  },
-];
+interface PaymentHistoryItem {
+  _id: string;
+  propertyID?: string;
+  tenantID?: string;
+  amount?: number;
+  date?: string;
+  rentForMonth?: string;
+  note?: string;
+  status?: string;
+  paymentMethod?: string;
+  purpose?: string;
+}
+
+interface GetPaymentHistoryResult {
+  getPaymentHistoryByTenantID: PaymentHistoryItem[];
+}
 
 const GET_PAYMENT_HISTORY = gql`
   query GetPaymentHistoryByTenant {
@@ -42,41 +39,44 @@ const GET_PAYMENT_HISTORY = gql`
   }
 `;
 
-// const GET_PAYMENT_HISTORY = gql`
-//   query GetPaymentHistoryByTenant($tenantID: ID!) {
-//     getPaymentHistoryByTenantID(tenantID: $tenantID) {
-//       _id
-//       propertyID
-//       tenantID
-//       amount
-//       date
-//       rentForMonth
-//       note
-//     }
-//   }
-// `;
-
 export default function RentHistory() {
-  const { user } = useAuthStore();
-  // console.log(user);
-  const { data, loading, error } = useQuery(GET_PAYMENT_HISTORY, {
-    // variables: { tenantID: user?.id },
-    // variables: { tenantID: '68ccdee49efe164572477f50' },
-    // skip: !user?.id,
+  const { data, refetch } = useQuery<GetPaymentHistoryResult>(GET_PAYMENT_HISTORY, {
     fetchPolicy: 'cache-and-network',
   });
 
-  if (loading) console.log('Loading property...');
-  if (error) console.error('GraphQL Error:', error);
-  if (data) console.log('GraphQL result:', data);
+  const { shouldRefetch, resetRefetch } = usePaymentStore();
+
+  useEffect(() => {
+    if (shouldRefetch) {
+      refetch().then(() => {
+        resetRefetch();
+      });
+    }
+  }, [shouldRefetch, refetch, resetRefetch]);
+
+  // if (loading) console.log('Loading property...');
+  // if (error) console.error('GraphQL Error:', error);
+  // if (data) console.log('GraphQL result:', data.getPaymentHistoryByTenantID);
+
+  const rentHistoryData = data?.getPaymentHistoryByTenantID || [];
+  const rentHistoryFormatted = rentHistoryData.map((item) => ({
+    id: item._id,
+    date: item.date,
+    amount: item.amount || 0,
+    rentForMonth: item.rentForMonth,
+    status: item.status || 'pending',
+    tenantId: item.tenantID,
+    propertyId: item.propertyID,
+  }));
+
   return (
     <DataTable
       columns={rentHistoryColumn}
-      data={sampleData}
+      data={rentHistoryFormatted}
       enablePagination
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
     />
   );
 }
