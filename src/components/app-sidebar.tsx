@@ -60,9 +60,9 @@ const data = {
     },
     {
       title: 'Messages',
-      url: '#',
+      url: '/dashboard/messages',
       icon: IconListDetails,
-      roles: ['manager', 'landlord'],
+      roles: ['tenant', 'manager', 'landlord'],
     },
     {
       title: 'Test Page',

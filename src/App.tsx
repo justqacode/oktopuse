@@ -11,6 +11,7 @@ import DashboardHome from './pages/dashboard/dashboard-home';
 import { useAuthStore } from './auth/authStore';
 import { Footer, Navbar } from './components/layout/public';
 import { Verify } from './pages/Verify';
+import DashboardChats from './components/dashboard-main/chats';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -65,6 +66,7 @@ export default function App() {
               <Route path='/dashboard' element={<DashboardLayoutV />}>
                 <Route index element={<DashboardHome />} />
                 <Route path='settings' element={<Settings />} />
+                <Route path='messages' element={<DashboardChats />} />
                 <Route path='test-page' element={<TestPage />} />
               </Route>
             </Route>

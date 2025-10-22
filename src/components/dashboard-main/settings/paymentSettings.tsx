@@ -20,6 +20,46 @@ import { useAuthStore } from '@/auth/authStore';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 
+gql`
+  mutation UpdateRenterProfile(
+    $phone: String
+    $tenantInfo: TenantInfoInput
+    $lastName: String
+    $password: String
+    $oldPassword: String
+  ) {
+    updateRenterProfile(
+      phone: $phone
+      oldPassword: $oldPassword
+      password: $password
+      tenantInfo: $tenantInfo
+      lastName: $lastName
+    ) {
+      firstName
+      phone
+      lastName
+      tenantInfo {
+        propertyId
+        leaseStartDate
+        leaseEndDate
+        rentAmount
+        balanceDue
+        paymentFrequency
+        notificationPreferences
+        emergencyContact {
+          name
+          phone
+          relationship
+        }
+        ACHProfile {
+          ACHRouting
+          ACHAccount
+        }
+      }
+    }
+  }
+`;
+
 const PAYMENT_MUTATION = gql`
   mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
     updateRenterProfile(oldPassword: $oldPassword, password: $password) {

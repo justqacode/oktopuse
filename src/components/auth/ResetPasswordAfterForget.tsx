@@ -1,73 +1,55 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { forgotPasswordSchema, resetPasswordSchema } from './schemas';
-import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
-import type z from 'zod';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/auth/authStore';
-import { useState } from 'react';
-import { Button } from '../ui/button';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// const RESETPASSWORD_MUTATION = gql`
-//   mutation ResetPassword($resetToken: String!, $newPassword: String!) {
-//     resetPassword(resetToken: $resetToken, newPassword: $newPassword) {
-//       resetToken
-//       newPassword
-//     }
-//   }
-// `;
-const RESETPASSWORD_MUTATION = gql`
+import { resetPasswordSchema } from './schemas';
+import { Button } from '../ui/button';
+
+// ✅ GraphQL mutation
+const RESET_PASSWORD_MUTATION = gql`
   mutation ResetPassword($resetToken: String!, $newPassword: String!) {
     resetPassword(resetToken: $resetToken, newPassword: $newPassword)
   }
 `;
 
-// "query": "mutation RequestPasswordReset($email: String!) { requestPasswordReset(email: $email) { resetToken } }",
-// "variables": {
-//     "email": "babsam480@gmail.com"
-// }
-
 export const ResetPasswordAfterForgetForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  // const [success, setSuccess] = useState(false);
-  const [forgotPasswordMutation] = useMutation(RESETPASSWORD_MUTATION);
   const location = useLocation();
+
+  // Extract token from URL
   const searchParams = new URLSearchParams(location.search);
-  console.log(searchParams.get('token'));
   const resetToken = searchParams.get('token');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [resetPasswordMutation] = useMutation(RESET_PASSWORD_MUTATION);
 
   const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: '' },
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (values: { password: string }) => {
     setIsLoading(true);
-    // setSuccess(false);
-
     try {
-      const { data: result } = await forgotPasswordMutation({
+      await resetPasswordMutation({
         variables: {
           resetToken,
-          newPassword: data.password,
+          newPassword: values.password,
         },
       });
 
-      if (result) {
-        // console.log('Registration successful:', result);
-        toast.success('Password reset successful');
-        // setSuccess(true);
-        form.reset();
-        navigate('/login');
-      }
+      toast.success('Password reset successful');
+      form.reset();
+      navigate('/login');
     } catch (error: any) {
-      // console.error('Registration failed:', error.message);
-      toast.error(`Request failed: ${error.message}`);
+      toast.error(error.message || 'Password reset failed');
     } finally {
       setIsLoading(false);
     }
@@ -75,20 +57,20 @@ export const ResetPasswordAfterForgetForm = () => {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-      {/* Email */}
+      {/* Password Field */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Password</label>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>New Password</label>
         <div className='relative'>
           <input
             {...form.register('password')}
             type={showPassword ? 'text' : 'password'}
-            placeholder='Enter your password'
+            placeholder='Enter your new password'
             className='w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
           />
           <button
             type='button'
-            onClick={() => setShowPassword(!showPassword)}
-            className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600'
+            onClick={() => setShowPassword((prev) => !prev)}
+            className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600'
           >
             {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
           </button>
@@ -98,16 +80,16 @@ export const ResetPasswordAfterForgetForm = () => {
         )}
       </div>
 
-      {/* Submit */}
-      <button
+      {/* Submit Button */}
+      <Button
         type='submit'
         disabled={isLoading}
         className='w-full bg-primary hover:bg-blue-500 disabled:bg-blue-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2'
       >
         {isLoading ? (
           <>
-            <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
-            <span>Sending request...</span>
+            <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
+            <span>Resetting...</span>
           </>
         ) : (
           <>
@@ -115,7 +97,7 @@ export const ResetPasswordAfterForgetForm = () => {
             <span>Continue</span>
           </>
         )}
-      </button>
+      </Button>
     </form>
   );
 };

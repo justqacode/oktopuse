@@ -36,6 +36,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
+import { useAuthStore } from '@/auth/authStore';
 
 const formSchema = z
   .object({
@@ -102,6 +103,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [rentMutation] = useMutation(RENT_MUTATION);
+  const { user } = useAuthStore();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -147,6 +149,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
       const { data: result } = await rentMutation({
         variables: {
+          userId: user?.id,
           amountPaid: paymentAmount,
           rentForMonth: data.scheduleDate,
           note: data.notes,
@@ -183,6 +186,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       // }, 2000);
     } catch (error) {
       console.error('Error processing payment:', error);
+      toast.error('Payment failed. Please try again.');
       // Handle error appropriately
     } finally {
       setIsLoading(false);
