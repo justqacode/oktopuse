@@ -1,9 +1,9 @@
 import { DataTable } from '@/components/data-table';
-import { maintenanceRequestsManagerColumn } from './columns';
-import type { ManagerRequest } from './types';
-import { useAuthStore } from '@/auth/authStore';
+import { maintenanceRequestsLandlordColumn } from './columns';
+import type { LandlordRequest, ManagerRequest } from './types';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
+import { useAuthStore } from '@/auth/authStore';
 
 const sampleData: ManagerRequest[] = [
   {
@@ -40,7 +40,7 @@ const sampleData: ManagerRequest[] = [
   },
 ];
 
-const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
+const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
   query GetHistory($ownerID: ID!) {
     getMaintenanceHistoryByLandLord(ownerID: $ownerID) {
       _id
@@ -51,12 +51,12 @@ const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   }
 `;
 
-export default function MaintenanceRequestsManager() {
+export default function MaintenanceRequestsLandlord() {
   const { user } = useAuthStore();
-  const { data } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
+  const { data } = useQuery<any>(GET_LANDLORD_MAINTENANCE_REQUESTS, {
     fetchPolicy: 'cache-and-network',
     // variables: { ownerID: '68ccdee49efe164572477f50' },
-    variables: { managerID: user?.id },
+    variables: { ownerID: user?.id },
   });
 
   // console.log('Landlord Maintenance Requests:', data);
@@ -70,9 +70,10 @@ export default function MaintenanceRequestsManager() {
     category: item._id,
     status: item.status || 'pending',
   }));
+
   return (
     <DataTable
-      columns={maintenanceRequestsManagerColumn}
+      columns={maintenanceRequestsLandlordColumn}
       data={maintenanceHistoryFormatted}
       // enableDragAndDrop
       // enableSelection

@@ -6,6 +6,7 @@ import LeaseDoc from '@/components/dashboard-main/lease-doc';
 import { useState } from 'react';
 import { DashCard } from '@/components/dashboard-card';
 import ExpensesHistory from '@/components/dashboard-main/expenses';
+import MaintenanceRequestsLandlord from '@/components/dashboard-main/maintenance-requests-landlord';
 
 const tabs = [
   { value: 'expenses', label: 'Expenses' },
@@ -38,7 +39,7 @@ export default function DashboardHomeLandlord() {
               </TabsContent>
 
               <TabsContent value='maintenance-requests'>
-                <MaintenanceRequests />
+                <MaintenanceRequestsLandlord />
               </TabsContent>
 
               <TabsContent value='lease-documents'>

@@ -29,3 +29,12 @@ export type ManagerRequest = {
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
 };
+
+export type LandlordRequest = {
+  id: number;
+  date: string;
+  property: string;
+  tenant: string;
+  category: string;
+  status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+};
