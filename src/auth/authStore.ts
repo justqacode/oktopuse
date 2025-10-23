@@ -16,8 +16,8 @@ export type User = {
   role: Role | Role[];
   address?: string;
   profilePhoto?: string;
-  accountNumber?: number;
-  routingNumber?: number;
+  accountNumber?: number | string | undefined;
+  routingNumber?: number | string | undefined;
 };
 
 type AuthState = {

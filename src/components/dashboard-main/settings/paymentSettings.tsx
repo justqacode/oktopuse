@@ -20,37 +20,12 @@ import { useAuthStore } from '@/auth/authStore';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 
-gql`
-  mutation UpdateRenterProfile(
-    $phone: String
-    $tenantInfo: TenantInfoInput
-    $lastName: String
-    $password: String
-    $oldPassword: String
-  ) {
-    updateRenterProfile(
-      phone: $phone
-      oldPassword: $oldPassword
-      password: $password
-      tenantInfo: $tenantInfo
-      lastName: $lastName
-    ) {
+const PAYMENT_MUTATION = gql`
+  mutation UpdateRenterProfile($tenantInfo: TenantInfoInput) {
+    updateRenterProfile(tenantInfo: $tenantInfo) {
       firstName
-      phone
       lastName
       tenantInfo {
-        propertyId
-        leaseStartDate
-        leaseEndDate
-        rentAmount
-        balanceDue
-        paymentFrequency
-        notificationPreferences
-        emergencyContact {
-          name
-          phone
-          relationship
-        }
         ACHProfile {
           ACHRouting
           ACHAccount
@@ -60,25 +35,25 @@ gql`
   }
 `;
 
-const PAYMENT_MUTATION = gql`
-  mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
-    updateRenterProfile(oldPassword: $oldPassword, password: $password) {
-      id
-      firstName
-      lastName
-      email
-      role
-    }
-  }
-`;
+// const PAYMENT_MUTATION = gql`
+//   mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
+//     updateRenterProfile(oldPassword: $oldPassword, password: $password) {
+//       id
+//       firstName
+//       lastName
+//       email
+//       role
+//     }
+//   }
+// `;
 
 // Profile form schema
 const paymentSchema = z.object({
   accountNumber: z
-    .number()
+    .string()
     .min(6, { message: 'Account number must be between 6-17 digits' })
     .max(17, { message: 'Account number must be between 6-17 digits' }),
-  routingNumber: z.number().min(9, { message: 'Routing number must be 9 digits' }),
+  routingNumber: z.string().min(9, { message: 'Routing number must be 9 digits' }),
 });
 
 type PaymentFormValues = z.infer<typeof paymentSchema>;
@@ -97,8 +72,10 @@ export function PaymentSettings() {
   const paymentForm = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      accountNumber: user?.accountNumber || 0,
-      routingNumber: user?.routingNumber || 0,
+      accountNumber:
+        user && user.accountNumber !== undefined ? String(user.accountNumber) : undefined,
+      routingNumber:
+        user && user.routingNumber !== undefined ? String(user.routingNumber) : undefined,
     },
   });
 
@@ -118,20 +95,24 @@ export function PaymentSettings() {
     setPaymentSuccess(false);
 
     try {
-      console.log('Payment Update Data:', { userId: user?.id, ...data });
-      //   const { data: result } = await paymentMutation({
-      //     variables: {
-      //       accountNumber: data.accountNumber,
-      //       routingNumber: data.routingNumber,
-      //     },
-      //   });
+      // console.log('Payment Update Data:', { userId: user?.id, ...data });
+      const { data: result } = await paymentMutation({
+        variables: {
+          tenantInfo: {
+            ACHProfile: {
+              ACHAccount: data.accountNumber,
+              ACHRouting: data.routingNumber,
+            },
+          },
+        },
+      });
 
-      //   if (result) {
-      //     setPaymentSuccess(true);
-      //     setHasPaymentChanges(false);
-      //   }
+      if (result) {
+        setPaymentSuccess(true);
+        setHasPaymentChanges(false);
+      }
 
-      // setTimeout(() => setPaymentSuccess(false), 3000);
+      setTimeout(() => setPaymentSuccess(false), 3000);
     } catch (error) {
       console.error('Error updating profile:', error);
       setPaymentError('Update failed. Please try again later.');
