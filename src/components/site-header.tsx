@@ -4,11 +4,13 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import PaymentModal from './dashboard-main/modals/rent-payment-modal';
 import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
+import AddPropertyModal from './dashboard-main/modals/add-property-modal';
 // import { userMockLandlord } from '@/mockData/user';
 
 export function SiteHeader() {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
+  const [openAddProperty, setOpenAddProperty] = useState(false);
   const dueDate = new Date('2024-09-30');
   const today = new Date();
   const sixMonths = 365 / 2;
@@ -55,7 +57,7 @@ export function SiteHeader() {
               variant='default'
               size='sm'
               className='hidden sm:flex'
-              onClick={() => setOpen(true)}
+              onClick={() => setOpenAddProperty(true)}
             >
               + Add Property
             </Button>
@@ -76,6 +78,7 @@ export function SiteHeader() {
       </div>
 
       <PaymentModal open={open} onOpenChange={setOpen} />
+      <AddPropertyModal open={openAddProperty} onOpenChange={setOpenAddProperty} />
     </header>
   );
 }

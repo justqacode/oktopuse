@@ -165,28 +165,6 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         onOpenChange(false);
         toast.success('Payment successfull');
       }
-
-      // Simulate API call
-      // await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Here you would make your actual API call:
-      // const response = await fetch('/api/payments', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(paymentData),
-      // });
-
-      // console.log('Payment Data:', paymentData);
-
-      // Show success message
-      // setShowSuccess(true);
-
-      // Reset form and close modal after 2 seconds
-      // setTimeout(() => {
-      //   setShowSuccess(false);
-      //   form.reset();
-      //   onOpenChange(false);
-      // }, 2000);
     } catch (error) {
       console.error('Error processing payment:', error);
       toast.error('Payment failed. Please try again.');
