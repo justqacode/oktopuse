@@ -84,7 +84,7 @@ MaintenanceRequests.HeaderButton = function HeaderButton() {
 
   return (
     <div className='flex gap-2'>
-      <Button variant='outline' size='sm' onClick={handleRequestMaintenance}>
+      <Button variant='default' size='sm' onClick={handleRequestMaintenance}>
         <IconPlus /> Request Maintenance
       </Button>
 
