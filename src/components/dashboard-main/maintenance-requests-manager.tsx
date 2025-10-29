@@ -41,8 +41,8 @@ const sampleData: ManagerRequest[] = [
 ];
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
-  query GetHistory($ownerID: ID!) {
-    getMaintenanceHistoryByLandLord(ownerID: $ownerID) {
+  query GetHistory($managerID: ID!) {
+    getMaintenanceHistoryByManager(managerID: $managerID) {
       _id
       description
       status

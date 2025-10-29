@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { useEffect } from 'react';
+import formatDate from '@/utils/format-date';
 
 interface PaymentHistoryItem {
   _id: string;
@@ -59,15 +60,20 @@ export default function RentHistory() {
   // if (data) console.log('GraphQL result:', data.getPaymentHistoryByTenantID);
 
   const rentHistoryData = data?.getPaymentHistoryByTenantID || [];
-  const rentHistoryFormatted = rentHistoryData.map((item) => ({
-    id: item._id,
-    date: item.date,
-    amount: item.amount || 0,
-    rentForMonth: item.rentForMonth,
-    status: item.status || 'pending',
-    tenantId: item.tenantID,
-    propertyId: item.propertyID,
-  }));
+  const rentHistoryFormatted = rentHistoryData
+    .slice()
+    .reverse()
+    .map((item) => ({
+      id: item._id,
+      date: formatDate(item.date),
+      amount: item.amount || 0,
+      rentForMonth: item.rentForMonth,
+      status: item.status || 'pending',
+      tenantId: item.tenantID,
+      propertyId: item.propertyID,
+    }));
+
+  // const rentda = rentHistoryFormatted.slice().reverse();
 
   return (
     <DataTable
