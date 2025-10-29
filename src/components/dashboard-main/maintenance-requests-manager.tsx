@@ -70,6 +70,7 @@ export default function MaintenanceRequestsManager() {
     category: item._id,
     status: item.status || 'pending',
   }));
+
   return (
     <DataTable
       columns={maintenanceRequestsManagerColumn}

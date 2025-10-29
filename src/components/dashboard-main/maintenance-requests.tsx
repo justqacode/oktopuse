@@ -7,34 +7,7 @@ import { useState } from 'react';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useAuthStore } from '@/auth/authStore';
-
-// {
-//   "query": "query GetHistory($tenantID: ID!) { getMaintenanceHistoryByTenant(tenantID: $tenantID) { _id description status createdAt } }",
-//   "variables": {
-//     "tenantID": "68d68aacb92da2ce0d44e758"
-//   }
-// }
-
-const sampleData = [
-  {
-    id: 1,
-    header: '20-09-2024',
-    type: 'Executive Summary',
-    status: 'paid',
-  },
-  {
-    id: 2,
-    header: '20-09-2024',
-    type: 'Technical Approach',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    header: '20-09-2024',
-    type: 'Design',
-    status: 'overdue',
-  },
-];
+import formatDate from '@/utils/format-date';
 
 const GET_MAINTENANCE_HISTORY = gql`
   query GetHistory($tenantID: ID!) {
@@ -49,28 +22,29 @@ const GET_MAINTENANCE_HISTORY = gql`
 
 export default function MaintenanceRequests() {
   const { user } = useAuthStore();
-  const { data, loading, error } = useQuery(GET_MAINTENANCE_HISTORY, {
-    variables: { tenantID: user?.id },
-    // variables: { tenantID: '68ccdee49efe164572477f50' },
-    // skip: !user?.id,
+  const { data } = useQuery<any>(GET_MAINTENANCE_HISTORY, {
     fetchPolicy: 'cache-and-network',
+    variables: { tenantID: user?.id },
   });
 
-  if (loading) console.log('Loading property...');
-  if (error) console.error('GraphQL Error:', error);
-  if (data) console.log('GraphQL result:', data);
+  const maintenanceHistoryData = data?.getMaintenanceHistoryByTenant || [];
+  const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
+    id: item._id,
+    date: formatDate(item.createdAt) || '',
+    description: item.description.split(0, 22) || '',
+    category: 'needs fix from sam',
+    status: item.status || 'pending',
+  }));
 
   return (
     <DataTable
       columns={maintenanceRequestsColumn}
-      data={sampleData}
-      enableDragAndDrop
-      enableSelection
+      data={maintenanceHistoryFormatted}
       enablePagination
       enableColumnVisibility
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
     />
   );
 }

@@ -3,7 +3,14 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter } from '@/utils/capitalize-first-letter';
-import type { Expenses, LandlordRequest, ManagerRequest, Messages, Properties } from './types';
+import type {
+  Expenses,
+  LandlordRequest,
+  ManagerRequest,
+  Messages,
+  Properties,
+  TenantRequest,
+} from './types';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -59,10 +66,10 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
   },
 ];
 
-export const maintenanceRequestsColumn: ColumnDef<any>[] = [
+export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
   {
     accessorKey: 'id',
-    header: 'Payment ID',
+    header: 'Request ID',
     cell: ({ row }) => (
       <Button variant='link' className='text-foreground w-fit px-0 text-left'>
         {row.original.id}
@@ -72,19 +79,29 @@ export const maintenanceRequestsColumn: ColumnDef<any>[] = [
   },
   {
     accessorKey: 'date',
-    header: 'Payment Date',
+    header: 'Date Submitted',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.header}
+        {row.original.description}
       </Button>
     ),
   },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
+    accessorKey: 'category',
+    header: 'Category',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.type}
+        {row.original.category}
       </Button>
     ),
   },
@@ -93,8 +110,10 @@ export const maintenanceRequestsColumn: ColumnDef<any>[] = [
     header: 'Status',
     cell: ({ row }) => (
       <Badge variant='outline' className='text-muted-foreground px-1.5'>
-        {row.original.status === 'paid' ? (
+        {row.original.status === 'completed' ? (
           <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
         ) : (
           <IconLoader />
         )}
