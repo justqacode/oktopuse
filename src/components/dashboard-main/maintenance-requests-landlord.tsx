@@ -4,6 +4,7 @@ import type { LandlordRequest, ManagerRequest } from './types';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { useAuthStore } from '@/auth/authStore';
+import formatDate from '@/utils/format-date';
 
 const sampleData: ManagerRequest[] = [
   {
@@ -59,12 +60,10 @@ export default function MaintenanceRequestsLandlord() {
     variables: { ownerID: user?.id },
   });
 
-  // console.log('Landlord Maintenance Requests:', data);
-
   const maintenanceHistoryData = data?.getMaintenanceHistoryByLandLord || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: item._id,
-    date: item.createdAt,
+    date: formatDate(item.createdAt) || '',
     property: item.description.split(0, 22) || 0,
     tenant: item.description.split(0, 22) || 0,
     category: item._id,
