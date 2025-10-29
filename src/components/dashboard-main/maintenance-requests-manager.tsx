@@ -63,11 +63,11 @@ export default function MaintenanceRequestsManager() {
 
   const maintenanceHistoryData = data?.getMaintenanceHistoryByLandLord || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
-    id: item._id,
+    id: '...' + item._id.slice(-6),
     date: item.createdAt,
     property: item.description.split(0, 22) || 0,
     tenant: item.description.split(0, 22) || 0,
-    category: item._id,
+    category: 'needs fix from sam',
     status: item.status || 'pending',
   }));
 

@@ -64,7 +64,7 @@ export default function RentHistory() {
     .slice()
     .reverse()
     .map((item) => ({
-      id: item._id,
+      id: '...' + item._id.slice(-6),
       date: formatDate(item.date),
       amount: item.amount || 0,
       rentForMonth: item.rentForMonth,
