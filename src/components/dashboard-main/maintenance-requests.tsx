@@ -3,11 +3,12 @@ import { maintenanceRequestsColumn } from './columns';
 import { Button } from '../ui/button';
 import { IconPlus } from '@tabler/icons-react';
 import MaintenanceRequestModal from './modals/maintenance-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useAuthStore } from '@/auth/authStore';
 import formatDate from '@/utils/format-date';
+import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
 
 const GET_MAINTENANCE_HISTORY = gql`
   query GetHistory($tenantID: ID!) {
@@ -22,10 +23,20 @@ const GET_MAINTENANCE_HISTORY = gql`
 
 export default function MaintenanceRequests() {
   const { user } = useAuthStore();
-  const { data } = useQuery<any>(GET_MAINTENANCE_HISTORY, {
+  const { data, refetch } = useQuery<any>(GET_MAINTENANCE_HISTORY, {
     fetchPolicy: 'cache-and-network',
     variables: { tenantID: user?.id },
   });
+
+  const { shouldRefetch, resetRefetch } = useMaintenanceStore();
+
+  useEffect(() => {
+    if (shouldRefetch) {
+      refetch().then(() => {
+        resetRefetch();
+      });
+    }
+  }, [shouldRefetch, refetch, resetRefetch]);
 
   const maintenanceHistoryData = data?.getMaintenanceHistoryByTenant || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({

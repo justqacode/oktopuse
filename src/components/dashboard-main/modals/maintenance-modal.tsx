@@ -36,6 +36,7 @@ import { gql } from '@apollo/client';
 import { toast } from 'sonner';
 import { useMutation } from '@apollo/client/react';
 import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
+import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
 
 // ================== CONSTANTS ==================
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -169,6 +170,8 @@ export default function MaintenanceRequestModal({
   // ================== SUBMIT HANDLER ==================
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
+    const { triggerRefetch } = useMaintenanceStore.getState();
+
     try {
       const imageUrls = await uploadImages(selectedImages);
 
@@ -184,6 +187,7 @@ export default function MaintenanceRequestModal({
       });
 
       if (result) {
+        triggerRefetch();
         setShowSuccess(true);
         form.reset();
         setSelectedImages([]);
