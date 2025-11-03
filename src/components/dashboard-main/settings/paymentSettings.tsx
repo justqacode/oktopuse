@@ -73,9 +73,13 @@ export function PaymentSettings() {
     resolver: zodResolver(paymentSchema),
     defaultValues: {
       accountNumber:
-        user && user.accountNumber !== undefined ? String(user.accountNumber) : undefined,
+        user && user.tenantInfo.ACHProfile.ACHAccount !== undefined
+          ? String(user.tenantInfo.ACHProfile.ACHAccount)
+          : undefined,
       routingNumber:
-        user && user.routingNumber !== undefined ? String(user.routingNumber) : undefined,
+        user && user.tenantInfo.ACHProfile.ACHRouting !== undefined
+          ? String(user.tenantInfo.ACHProfile.ACHRouting)
+          : undefined,
     },
   });
 
@@ -83,7 +87,8 @@ export function PaymentSettings() {
   useEffect(() => {
     const subscription = paymentForm.watch((value) => {
       const hasChanged =
-        value.accountNumber !== user?.accountNumber || value.routingNumber !== user?.routingNumber;
+        value.accountNumber !== user?.tenantInfo.ACHProfile.ACHAccount ||
+        value.routingNumber !== user?.tenantInfo.ACHProfile.ACHRouting;
       setHasPaymentChanges(hasChanged);
     });
     return () => subscription.unsubscribe();

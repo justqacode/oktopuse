@@ -16,8 +16,15 @@ export type User = {
   role: Role | Role[];
   address?: string;
   profilePhoto?: string;
-  accountNumber?: number | string | undefined;
-  routingNumber?: number | string | undefined;
+  // accountNumber?: number | string | undefined;
+  // routingNumber?: number | string | undefined;
+  tenantInfo: {
+    ACHProfile: {
+      ACHRouting?: number | string | undefined;
+      ACHAccount?: number | string | undefined;
+    };
+    [key: string]: any;
+  };
 };
 
 type AuthState = {
