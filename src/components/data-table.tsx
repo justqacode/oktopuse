@@ -66,6 +66,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Loader2 } from 'lucide-react';
 
 export interface DataTableProps<T> {
   columns: ColumnDef<T>[];
@@ -84,6 +85,9 @@ export interface DataTableProps<T> {
 
   // Styling
   className?: string;
+
+  // loading state
+  loading?: boolean;
 }
 
 function DragHandle<T extends Record<string, any>>({
@@ -279,6 +283,7 @@ export function DataTable<T extends Record<string, any>>({
   pageSizeOptions = [10, 20, 30, 40, 50],
   onRowDragEnd,
   className = '',
+  loading = false,
 }: DataTableProps<T>) {
   // Prepare columns with optional drag and select columns
   const columns = React.useMemo(() => {
@@ -404,7 +409,14 @@ export function DataTable<T extends Record<string, any>>({
                 ) : (
                   <TableRow>
                     <TableCell colSpan={columns.length} className='h-24 text-center'>
-                      No results.
+                      {loading ? (
+                        <div className='flex items-center justify-center'>
+                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                          Loading...
+                        </div>
+                      ) : (
+                        'No results.'
+                      )}
                     </TableCell>
                   </TableRow>
                 )}

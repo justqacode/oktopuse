@@ -5,12 +5,13 @@ import { useQuery } from '@apollo/client/react';
 import { usePaymentStore } from '@/stores/usePaymentStore';
 import { useEffect } from 'react';
 import formatDate from '@/utils/format-date';
+import { formatCurrency } from '@/utils/format-currency';
 
 interface PaymentHistoryItem {
   _id: string;
   propertyID?: string;
   tenantID?: string;
-  amount?: number;
+  amountPaid?: number;
   date?: string;
   rentForMonth?: string;
   note?: string;
@@ -29,7 +30,7 @@ const GET_PAYMENT_HISTORY = gql`
       _id
       propertyID
       tenantID
-      amount
+      amountPaid
       date
       rentForMonth
       note
@@ -41,7 +42,7 @@ const GET_PAYMENT_HISTORY = gql`
 `;
 
 export default function RentHistory() {
-  const { data, refetch } = useQuery<GetPaymentHistoryResult>(GET_PAYMENT_HISTORY, {
+  const { data, refetch, loading } = useQuery<GetPaymentHistoryResult>(GET_PAYMENT_HISTORY, {
     fetchPolicy: 'cache-and-network',
   });
 
@@ -66,7 +67,7 @@ export default function RentHistory() {
     .map((item) => ({
       id: '...' + item._id.slice(-6),
       date: formatDate(item.date),
-      amount: item.amount || 0,
+      amount: formatCurrency(Number(item.amountPaid)) || 0,
       rentForMonth: item.rentForMonth,
       status: item.status || 'pending',
       tenantId: item.tenantID,
@@ -83,6 +84,7 @@ export default function RentHistory() {
       enableSorting
       enableFiltering
       pageSize={10}
+      loading={loading}
     />
   );
 }

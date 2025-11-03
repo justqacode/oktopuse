@@ -54,7 +54,7 @@ const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
 
 export default function MaintenanceRequestsLandlord() {
   const { user } = useAuthStore();
-  const { data } = useQuery<any>(GET_LANDLORD_MAINTENANCE_REQUESTS, {
+  const { data, loading } = useQuery<any>(GET_LANDLORD_MAINTENANCE_REQUESTS, {
     fetchPolicy: 'cache-and-network',
     // variables: { ownerID: '68ccdee49efe164572477f50' },
     variables: { ownerID: user?.id },
@@ -81,6 +81,7 @@ export default function MaintenanceRequestsLandlord() {
       enableSorting
       enableFiltering
       pageSize={5}
+      loading={loading}
     />
   );
 }

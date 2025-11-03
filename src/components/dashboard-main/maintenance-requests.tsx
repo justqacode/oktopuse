@@ -23,7 +23,7 @@ const GET_MAINTENANCE_HISTORY = gql`
 
 export default function MaintenanceRequests() {
   const { user } = useAuthStore();
-  const { data, refetch } = useQuery<any>(GET_MAINTENANCE_HISTORY, {
+  const { data, refetch, loading } = useQuery<any>(GET_MAINTENANCE_HISTORY, {
     fetchPolicy: 'cache-and-network',
     variables: { tenantID: user?.id },
   });
@@ -56,6 +56,7 @@ export default function MaintenanceRequests() {
       enableSorting
       enableFiltering
       pageSize={10}
+      loading={loading}
     />
   );
 }

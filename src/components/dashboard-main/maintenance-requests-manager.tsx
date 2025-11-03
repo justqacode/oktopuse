@@ -53,7 +53,7 @@ const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
 
 export default function MaintenanceRequestsManager() {
   const { user } = useAuthStore();
-  const { data } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
+  const { data, loading } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
     fetchPolicy: 'cache-and-network',
     // variables: { ownerID: '68ccdee49efe164572477f50' },
     variables: { managerID: user?.id },
@@ -82,6 +82,7 @@ export default function MaintenanceRequestsManager() {
       enableSorting
       enableFiltering
       pageSize={5}
+      loading={loading}
     />
   );
 }
