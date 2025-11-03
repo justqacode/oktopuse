@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/auth/authStore';
 import DashboardHomeTenant from './tenant/dashboard-home-tenant';
-import DashboardHomeLandlord from './landlord/dashboard-home-landord';
+import DashboardHomeLandlord from './landlord/dashboard-home-landlord';
 import DashboardHomeManager from './manager/dashboard-home-manager';
 
 export default function DashboardHome() {

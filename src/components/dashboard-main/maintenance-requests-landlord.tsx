@@ -42,12 +42,24 @@ const sampleData: ManagerRequest[] = [
 ];
 
 const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
-  query GetHistory($ownerID: ID!) {
-    getMaintenanceHistoryByLandLord(ownerID: $ownerID) {
+  query GetMaintenanceHistoryByLandLord {
+    getMaintenanceHistoryByLandLord {
       _id
       description
       status
       createdAt
+      category
+      images
+      propertyDetails {
+        name
+        propertyType
+        address {
+          street
+          city
+          state
+          zip
+        }
+      }
     }
   }
 `;
@@ -66,7 +78,7 @@ export default function MaintenanceRequestsLandlord() {
     date: formatDate(item.createdAt) || '',
     property: item.description.split(0, 22) || 0,
     tenant: item.description.split(0, 22) || 0,
-    category: 'needs fix from sam',
+    category: item.category,
     status: item.status || 'pending',
   }));
 

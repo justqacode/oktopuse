@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter } from '@/utils/capitalize-first-letter';
 import type {
   Expenses,
+  LandlordRentHistory,
   LandlordRequest,
   ManagerRequest,
   Messages,
@@ -212,9 +213,9 @@ export const maintenanceRequestsLandlordColumn: ColumnDef<LandlordRequest>[] = [
     accessorKey: 'category',
     header: 'Category',
     cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
         {row.original.category}
-      </Button>
+      </Badge>
     ),
   },
   {
@@ -230,6 +231,80 @@ export const maintenanceRequestsLandlordColumn: ColumnDef<LandlordRequest>[] = [
           <IconLoader />
         )}
         {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+];
+
+export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
+  {
+    accessorKey: 'date',
+    header: 'Date Received',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'property',
+    header: 'Property',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.property}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.tenant}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.amount}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'method',
+    header: 'Payment Method',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.method}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'completed' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'statement',
+    header: 'Statement',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.statement}
       </Badge>
     ),
   },

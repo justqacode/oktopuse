@@ -1,21 +1,20 @@
-import { SectionCards } from '@/components/section-cards';
 import { TabsContent, TabsLayout } from '@/components/tab-layout';
-import RentHistory from '@/components/dashboard-main/rent-history';
-import MaintenanceRequests from '@/components/dashboard-main/maintenance-requests';
 import LeaseDoc from '@/components/dashboard-main/lease-doc';
 import { useState } from 'react';
 import { DashCard } from '@/components/dashboard-card';
 import ExpensesHistory from '@/components/dashboard-main/expenses';
 import MaintenanceRequestsLandlord from '@/components/dashboard-main/maintenance-requests-landlord';
+import PaymentHistoryLandlord from '@/components/dashboard-main/payment-history-landlord';
 
 const tabs = [
+  { value: 'payment-history', label: 'Payment History' },
   { value: 'expenses', label: 'Expenses' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
   { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
 ];
 
 export default function DashboardHomeLandlord() {
-  const [activeTab, setActiveTab] = useState('expenses');
+  const [activeTab, setActiveTab] = useState('payment-history');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -30,10 +29,14 @@ export default function DashboardHomeLandlord() {
           <div className='py-4 lg:py-6 px-8'>
             <TabsLayout
               tabs={tabs}
-              defaultValue='expenses'
+              defaultValue='payment-history'
               onValueChange={setActiveTab}
               header={activeTab === 'expenses' ? <ExpensesHistory.HeaderButton /> : null}
             >
+              <TabsContent value='payment-history'>
+                <PaymentHistoryLandlord />
+              </TabsContent>
+
               <TabsContent value='expenses'>
                 <ExpensesHistory />
               </TabsContent>

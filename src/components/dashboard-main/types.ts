@@ -28,7 +28,7 @@ export type TenantRequest = {
   tenant: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
-  description?: string;
+  description: string;
 };
 
 export type ManagerRequest = {
@@ -47,4 +47,15 @@ export type LandlordRequest = {
   tenant: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+};
+
+export type LandlordRentHistory = {
+  id: number;
+  date: string;
+  property: string;
+  tenant: string;
+  amount: string;
+  method: string;
+  status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+  statement: string;
 };
