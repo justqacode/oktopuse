@@ -1,9 +1,17 @@
-import { IconCircleCheckFilled, IconLoader } from '@tabler/icons-react';
+import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter } from '@/utils/capitalize-first-letter';
-import type { Expenses } from './types';
+import type {
+  Expenses,
+  LandlordRentHistory,
+  LandlordRequest,
+  ManagerRequest,
+  Messages,
+  Properties,
+  TenantRequest,
+} from './types';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -21,7 +29,7 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
     header: 'Payment Date',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.header}
+        {row.original.date}
       </Button>
     ),
   },
@@ -30,7 +38,16 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
     header: 'Amount',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.type}
+        {row.original.amount}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'rentForMonth',
+    header: 'Rent For Month',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.rentForMonth}
       </Button>
     ),
   },
@@ -50,10 +67,10 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
   },
 ];
 
-export const maintenanceRequestsColumn: ColumnDef<any>[] = [
+export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
   {
     accessorKey: 'id',
-    header: 'Payment ID',
+    header: 'Request ID',
     cell: ({ row }) => (
       <Button variant='link' className='text-foreground w-fit px-0 text-left'>
         {row.original.id}
@@ -63,19 +80,29 @@ export const maintenanceRequestsColumn: ColumnDef<any>[] = [
   },
   {
     accessorKey: 'date',
-    header: 'Payment Date',
+    header: 'Date Submitted',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.header}
+        {row.original.description}
       </Button>
     ),
   },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
+    accessorKey: 'category',
+    header: 'Category',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.type}
+        {row.original.category}
       </Button>
     ),
   },
@@ -84,58 +111,242 @@ export const maintenanceRequestsColumn: ColumnDef<any>[] = [
     header: 'Status',
     cell: ({ row }) => (
       <Badge variant='outline' className='text-muted-foreground px-1.5'>
-        {row.original.status === 'paid' ? (
+        {row.original.status === 'completed' ? (
           <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
         ) : (
           <IconLoader />
         )}
         {capitalizeFirstLetter(row.original.status)}
       </Badge>
+    ),
+  },
+];
+
+export const maintenanceRequestsManagerColumn: ColumnDef<ManagerRequest>[] = [
+  {
+    accessorKey: 'date',
+    header: 'Date Submitted',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'property',
+    header: 'Property',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.property}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.tenant}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.category}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'completed' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+];
+
+export const maintenanceRequestsLandlordColumn: ColumnDef<LandlordRequest>[] = [
+  {
+    accessorKey: 'date',
+    header: 'Date Submitted',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'property',
+    header: 'Property',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.property}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.tenant}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.category}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'completed' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+];
+
+export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
+  {
+    accessorKey: 'date',
+    header: 'Date Received',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'property',
+    header: 'Property',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.property}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.tenant}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'amount',
+    header: 'Amount',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.amount}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'method',
+    header: 'Payment Method',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.method}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'completed' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : row.original.status === 'rejected' ? (
+          <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'statement',
+    header: 'Statement',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left underline'>
+        {/* {row.original.statement} */}
+        Download
+      </Button>
     ),
   },
 ];
 
 export const leaseDocColumn: ColumnDef<any>[] = [
   {
-    accessorKey: 'id',
-    header: 'Payment ID',
+    accessorKey: 'docName',
+    header: 'Document Name',
     cell: ({ row }) => (
       <Button variant='link' className='text-foreground w-fit px-0 text-left'>
-        {row.original.id}
+        {row.original.docName}
       </Button>
     ),
-    enableHiding: false,
   },
   {
-    accessorKey: 'date',
-    header: 'Payment Date',
+    accessorKey: 'type',
+    header: 'Type',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.header}
-      </Button>
-    ),
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
         {row.original.type}
       </Button>
     ),
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: 'date',
+    header: 'Date Uploaded',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground px-1.5'>
-        {row.original.status === 'paid' ? (
-          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
-        ) : (
-          <IconLoader />
-        )}
-        {capitalizeFirstLetter(row.original.status)}
-      </Badge>
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
+        {/* {row.original.type} */}
+        Download
+      </Button>
     ),
   },
 ];
@@ -174,6 +385,85 @@ export const expensesColumn: ColumnDef<Expenses>[] = [
     cell: ({ row }) => (
       <Badge variant='outline' className='text-muted-foreground px-1.5'>
         {row.original.status === 'paid' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+];
+
+export const propertiesColumn: ColumnDef<Properties>[] = [
+  {
+    accessorKey: 'propertyName',
+    header: 'Property Name',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.propertyName}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.tenant}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'paid' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+];
+
+export const messagesColumn: ColumnDef<Messages>[] = [
+  {
+    accessorKey: 'from',
+    header: 'From',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.from}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'subject',
+    header: 'Subject',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.subject}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'date',
+    header: 'Date',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'sent' ? (
           <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
         ) : (
           <IconLoader />

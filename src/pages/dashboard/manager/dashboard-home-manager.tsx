@@ -1,20 +1,18 @@
-import { SectionCards } from '@/components/section-cards';
 import { TabsContent, TabsLayout } from '@/components/tab-layout';
-import RentHistory from '@/components/dashboard-main/rent-history';
 import MaintenanceRequests from '@/components/dashboard-main/maintenance-requests';
-import LeaseDoc from '@/components/dashboard-main/lease-doc';
-import { useState } from 'react';
+import Messages from '@/components/dashboard-main/messages';
 import { DashCard } from '@/components/dashboard-card';
-import ExpensesHistory from '@/components/dashboard-main/expenses';
+import Properties from '@/components/dashboard-main/properties';
+import MaintenanceRequestsManager from '@/components/dashboard-main/maintenance-requests-manager';
 
 const tabs = [
-  { value: 'expenses', label: 'Expenses' },
+  { value: 'properties', label: 'Properties' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
-  { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
+  { value: 'messages', label: 'Messages', badge: 2 },
 ];
 
-export default function DashboardHomeLandlord() {
-  const [activeTab, setActiveTab] = useState('expenses');
+export default function DashboardHomeManager() {
+  // const [activeTab, setActiveTab] = useState('expenses');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -29,20 +27,20 @@ export default function DashboardHomeLandlord() {
           <div className='py-4 lg:py-6 px-8'>
             <TabsLayout
               tabs={tabs}
-              defaultValue='expenses'
-              onValueChange={setActiveTab}
-              header={activeTab === 'expenses' ? <ExpensesHistory.HeaderButton /> : null}
+              defaultValue='properties'
+              // onValueChange={setActiveTab}
+              // header={activeTab === 'properties' ? <ExpensesHistory.HeaderButton /> : null}
             >
-              <TabsContent value='expenses'>
-                <ExpensesHistory />
+              <TabsContent value='properties'>
+                <Properties />
               </TabsContent>
 
               <TabsContent value='maintenance-requests'>
-                <MaintenanceRequests />
+                <MaintenanceRequestsManager />
               </TabsContent>
 
-              <TabsContent value='lease-documents'>
-                <LeaseDoc />
+              <TabsContent value='messages'>
+                <Messages />
               </TabsContent>
             </TabsLayout>
           </div>

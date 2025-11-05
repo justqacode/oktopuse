@@ -6,32 +6,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-// const REGISTER_MUTATION = gql`
-//   mutation Register(
-//     $firstName: String!
-//     $lastName: String!
-//     $email: String!
-//     $password: String!
-//     $phone: String!
-//     $role: String!
-//   ) {
-//     register(
-//       firstName: $firstName
-//       lastName: $lastName
-//       email: $email
-//       password: $password
-//       phone: $phone
-//       role: $role
-//     ) {
-//       id
-//       firstName
-//       lastName
-//       email
-//       role
-//     }
-//   }
-// `;
-
 const VERIFY_MUTATION = gql`
   mutation Verify($token: String!) {
     verifyAccount(token: $token) {
@@ -44,13 +18,6 @@ const VERIFY_MUTATION = gql`
     }
   }
 `;
-
-// {
-//   "query": "mutation verifyAccount($token: String!) { verifyAccount(token: $token) { id firstName lastName email phone role } }",
-//   "variables": {
-//     "token": "true"
-//   }
-// }
 
 export const Verify = () => {
   const location = useLocation();
@@ -75,21 +42,42 @@ export const Verify = () => {
   }, []);
 
   useEffect(() => {
-    if (!!resp?.data?.verifyAccount?.email) {
-      toast.success('Email verified successfully!');
-      navigate('/login');
+    let timer;
+
+    if (resp?.data?.verifyAccount?.email) {
+      toast.success('Email verified successfully!', { duration: 5000 });
+
+      timer = setTimeout(() => {
+        navigate('/register');
+      }, 3000);
     } else {
-      toast.error('Verification failed!', {
-        description: 'Your link is invalid or has expired.',
-        action: {
-          label: 'Resend verification link',
-          onClick: () => console.log('Undo'),
-        },
-        duration: 5000,
-      });
-      navigate('/login');
+      // toast.error('Verification failed!', {
+      //   description: 'Your link is invalid or has expired.',
+      //   action: {
+      //     label: 'Resend verification link',
+      //     onClick: () => console.log('Undo'),
+      //   },
+      //   duration: 5000,
+      // });
+
+      toast.error(
+        <div className='flex flex-col gap-5'>
+          <p>Your link is invalid or has expired.</p>
+          <button
+            onClick={() => console.log('Resend link clicked')}
+            className='px-2 py-2 rounded-md bg-black hover:bg-white/20  text-white text-sm'
+          >
+            Resend verification link
+          </button>
+        </div>,
+        { duration: 5000 }
+      );
+
+      timer = setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     }
-  }, [resp]);
+  }, []);
 
   return (
     <div className='w-full h-dvh flex justify-center items-center pt-6'>

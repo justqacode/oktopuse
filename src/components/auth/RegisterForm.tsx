@@ -69,9 +69,11 @@ export const RegisterForm = () => {
       });
 
       // console.log('Registration successful:', result);
-      toast.success('Registration successful! Welcome aboard!');
-      setSuccess(true);
-      form.reset();
+      if (result) {
+        toast.success('Registration successful! Welcome aboard!');
+        setSuccess(true);
+        form.reset();
+      }
     } catch (error: any) {
       // console.error('Registration failed:', error.message);
       toast.error(`Registration failed: ${error.message}`);
@@ -177,7 +179,7 @@ export const RegisterForm = () => {
         >
           <option value='tenant'>Tenant</option>
           <option value='landlord'>Landlord</option>
-          <option value='admin'>Property Manager</option>
+          <option value='manager'>Property Manager</option>
         </select>
         {form.formState.errors.role && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>

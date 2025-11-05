@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Wrench, Image, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Image, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -32,10 +32,18 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { gql } from '@apollo/client';
+import { toast } from 'sonner';
+import { useMutation } from '@apollo/client/react';
+import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
+import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
 
+// ================== CONSTANTS ==================
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+const ACCEPTED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+const MAX_IMAGES = 5;
 
+// ================== ZOD SCHEMA ==================
 const formSchema = z.object({
   category: z.string().min(1, { message: 'Please select a category' }),
   description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
@@ -48,24 +56,49 @@ const formSchema = z.object({
     .any()
     .optional()
     .refine(
-      (file) => {
-        if (!file || file.length === 0) return true;
-        return file[0]?.size <= MAX_FILE_SIZE;
-      },
-      { message: 'File size must be less than 5MB' }
+      (files) =>
+        !files ||
+        files.length === 0 ||
+        Array.from(files).every((f) => (f as File).size <= MAX_FILE_SIZE),
+      { message: 'Each file must be less than 5MB' }
     )
     .refine(
-      (file) => {
-        if (!file || file.length === 0) return true;
-        return ACCEPTED_FILE_TYPES.includes(file[0]?.type);
-      },
-      { message: 'Only .jpg, .png, and .pdf files are accepted' }
+      (files) =>
+        !files ||
+        files.length === 0 ||
+        Array.from(files).every((f) => ACCEPTED_FILE_TYPES.includes((f as File).type)),
+      { message: 'Only JPG and PNG images are accepted' }
     ),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-// Mock data - replace with actual data from your auth/property store
+// ================== GRAPHQL MUTATION ==================
+const MAINTENANCE_MUTATION = gql`
+  mutation CreateRequest(
+    $category: String!
+    $preferedDateOfResolution: String!
+    $preferedTimeOfResolution: String!
+    $description: String!
+    $canManagementAccess: Boolean!
+    $images: [String!]!
+  ) {
+    createMaintenanceRequest(
+      category: $category
+      preferedDateOfResolution: $preferedDateOfResolution
+      preferedTimeOfResolution: $preferedTimeOfResolution
+      description: $description
+      images: $images
+      canManagementAccess: $canManagementAccess
+    ) {
+      _id
+      status
+      createdAt
+    }
+  }
+`;
+
+// Mock property/tenant info
 const mockApartmentData = {
   apartmentName: 'Sunset View Apartments - Unit 204',
   unitId: 'unit-204',
@@ -75,6 +108,7 @@ const mockApartmentData = {
   managerEmail: 'manager@example.com',
 };
 
+// ================== COMPONENT ==================
 interface MaintenanceRequestModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -86,7 +120,10 @@ export default function MaintenanceRequestModal({
 }: MaintenanceRequestModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [selectedFileName, setSelectedFileName] = useState('');
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
+  const [maintenanceRequest] = useMutation(MAINTENANCE_MUTATION);
+  const { uploadImages, isUploading, progress } = useCloudinaryUpload();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -100,76 +137,72 @@ export default function MaintenanceRequestModal({
     },
   });
 
+  // ================== FILE HANDLERS ==================
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const validFiles = Array.from(files).filter((file) => ACCEPTED_FILE_TYPES.includes(file.type));
+
+    if (validFiles.length === 0) {
+      toast.error('Only JPG and PNG images are allowed');
+      return;
+    }
+
+    const newImages = [...selectedImages, ...validFiles].slice(0, MAX_IMAGES);
+    setSelectedImages(newImages);
+
+    // Update form value for validation
+    const dataTransfer = new DataTransfer();
+    newImages.forEach((file) => dataTransfer.items.add(file));
+    form.setValue('photo', dataTransfer.files);
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = selectedImages.filter((_, i) => i !== index);
+    setSelectedImages(newImages);
+
+    const dataTransfer = new DataTransfer();
+    newImages.forEach((file) => dataTransfer.items.add(file));
+    form.setValue('photo', dataTransfer.files);
+  };
+
+  // ================== SUBMIT HANDLER ==================
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
+    const { triggerRefetch } = useMaintenanceStore.getState();
 
     try {
-      // Prepare form data including file if present
-      const formData = new FormData();
-      formData.append('category', data.category);
-      formData.append('description', data.description);
-      formData.append('preferredDate', data.preferredDate);
-      formData.append('preferredTime', data.preferredTime);
-      formData.append('allowEntry', data.allowEntry);
-      formData.append('unitId', mockApartmentData.unitId);
-      formData.append('propertyId', mockApartmentData.propertyId);
-      formData.append('tenantId', mockApartmentData.tenantId);
-      formData.append('tenantEmail', mockApartmentData.tenantEmail);
-      formData.append('managerEmail', mockApartmentData.managerEmail);
+      const imageUrls = await uploadImages(selectedImages);
 
-      if (data.photo && data.photo.length > 0) {
-        formData.append('photo', data.photo[0]);
-      }
-
-      // Simulate API call
-      //   await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Here you would make your actual API call:
-      // const response = await fetch('/api/maintenance-requests', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      console.log('Maintenance Request Data:', {
-        ...data,
-        apartmentName: mockApartmentData.apartmentName,
-        unitId: mockApartmentData.unitId,
-        propertyId: mockApartmentData.propertyId,
-        photo: data.photo?.[0]?.name || 'No file attached',
+      const { data: result } = await maintenanceRequest({
+        variables: {
+          description: data.description,
+          category: data.category,
+          preferedDateOfResolution: data.preferredDate,
+          preferedTimeOfResolution: data.preferredTime,
+          canManagementAccess: data.allowEntry === 'yes',
+          images: selectedImages.map((img) => img.name),
+        },
       });
 
-      // Show success message
-      setShowSuccess(true);
-
-      // Reset form and close modal after 2 seconds
-      setTimeout(() => {
-        setShowSuccess(false);
+      if (result) {
+        triggerRefetch();
+        setShowSuccess(true);
         form.reset();
-        setSelectedFileName('');
+        setSelectedImages([]);
         onOpenChange(false);
-      }, 2000);
-    } catch (error) {
-      console.error('Error submitting maintenance request:', error);
-      // Handle error appropriately
+      }
+
+      setTimeout(() => setShowSuccess(false), 2000);
+    } catch (error: any) {
+      toast.error('Error submitting maintenance request');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleClear = () => {
-    form.reset();
-    setSelectedFileName('');
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFileName(file.name);
-    } else {
-      setSelectedFileName('');
-    }
-  };
-
+  // ================== RENDER ==================
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto'>
@@ -186,13 +219,13 @@ export default function MaintenanceRequestModal({
           <Alert className='bg-green-50 border-green-200'>
             <CheckCircle2 className='h-5 w-5 text-green-600' />
             <AlertDescription className='text-green-800 font-medium'>
-              Maintenance request submitted successfully! You will receive a confirmation email
-              shortly.
+              Maintenance request submitted successfully!
             </AlertDescription>
           </Alert>
         ) : (
           <Form {...form}>
             <div className='space-y-6'>
+              {/* Category */}
               <FormField
                 control={form.control}
                 name='category'
@@ -206,11 +239,17 @@ export default function MaintenanceRequestModal({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value='general'>General</SelectItem>
-                        <SelectItem value='plumbing'>Plumbing</SelectItem>
-                        <SelectItem value='electrical'>Electrical</SelectItem>
-                        <SelectItem value='heating'>Heating</SelectItem>
-                        <SelectItem value='other'>Other</SelectItem>
+                        <SelectItem value='Plumbing'>Plumbing</SelectItem>
+                        <SelectItem value='Electrical'>Electrical</SelectItem>
+                        <SelectItem value='HVAC'>HVAC</SelectItem>
+                        <SelectItem value='Appliances'>Appliances</SelectItem>
+                        <SelectItem value='Pest Control'>Pest Control</SelectItem>
+                        <SelectItem value='Landscaping / Exterior'>
+                          Landscaping / Exterior
+                        </SelectItem>
+                        <SelectItem value='General Requests / Other'>
+                          General Requests / Other
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -218,6 +257,7 @@ export default function MaintenanceRequestModal({
                 )}
               />
 
+              {/* Description */}
               <FormField
                 control={form.control}
                 name='description'
@@ -232,13 +272,14 @@ export default function MaintenanceRequestModal({
                       />
                     </FormControl>
                     <FormDescription>
-                      Provide as much detail as possible to help us resolve the issue quickly
+                      Provide as much detail as possible to help us resolve the issue quickly.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* Date + Time */}
               <div className='grid grid-cols-2 gap-4'>
                 <FormField
                   control={form.control}
@@ -284,6 +325,7 @@ export default function MaintenanceRequestModal({
                 />
               </div>
 
+              {/* Allow Entry */}
               <FormField
                 control={form.control}
                 name='allowEntry'
@@ -315,57 +357,89 @@ export default function MaintenanceRequestModal({
                 )}
               />
 
+              {/* Upload + Preview */}
               <FormField
                 control={form.control}
                 name='photo'
-                render={({ field: { onChange, value, ...field } }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel>Attach Photo (Optional)</FormLabel>
                     <FormControl>
-                      <div className='flex items-center gap-2'>
-                        <Input
-                          type='file'
-                          accept='.jpg,.jpeg,.png,.pdf'
-                          className='hidden'
-                          id='photo-upload'
-                          onChange={(e) => {
-                            onChange(e.target.files);
-                            handleFileChange(e);
-                          }}
-                          {...field}
-                        />
-                        <Button
-                          type='button'
-                          variant='outline'
-                          onClick={() => document.getElementById('photo-upload')?.click()}
-                          className='w-full'
-                        >
-                          <Image className='mr-2 h-4 w-4' />
-                          {selectedFileName || 'Choose file'}
-                        </Button>
+                      <div className='space-y-4'>
+                        <div className='flex items-center gap-2'>
+                          <Input
+                            type='file'
+                            accept='image/jpeg,image/jpg,image/png'
+                            multiple
+                            className='hidden'
+                            id='photo-upload'
+                            onChange={handleFileChange}
+                          />
+                          <Button
+                            type='button'
+                            variant='outline'
+                            onClick={() => document.getElementById('photo-upload')?.click()}
+                            className='w-full'
+                          >
+                            <Image className='mr-2 h-4 w-4' />
+                            {selectedImages.length > 0
+                              ? `${selectedImages.length} image(s) selected`
+                              : 'Choose file(s)'}
+                          </Button>
+                        </div>
+
+                        {selectedImages.length > 0 && (
+                          <div className='space-y-2'>
+                            <p className='text-sm text-muted-foreground'>
+                              {selectedImages.length} of {MAX_IMAGES} images selected
+                            </p>
+                            <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                              {selectedImages.map((image, index) => (
+                                <div key={index} className='relative group'>
+                                  <div className='aspect-video bg-muted rounded-lg overflow-hidden border'>
+                                    <img
+                                      src={URL.createObjectURL(image)}
+                                      alt={`Preview ${index + 1}`}
+                                      className='w-full h-full object-cover'
+                                    />
+                                  </div>
+                                  <Button
+                                    type='button'
+                                    variant='destructive'
+                                    size='icon'
+                                    className='absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
+                                    onClick={() => removeImage(index)}
+                                  >
+                                    <X className='h-3 w-3' />
+                                  </Button>
+                                  <p className='text-xs text-muted-foreground mt-1 truncate'>
+                                    {image.name}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </FormControl>
-                    <FormDescription>Accepted formats: JPG, PNG, PDF (Max 5MB)</FormDescription>
+                    <FormDescription>
+                      Accepted formats: JPG, PNG (Max 5MB each, up to {MAX_IMAGES} images)
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* Submit */}
               <DialogFooter className='gap-2 sm:gap-0'>
-                {/* <Button type='button' variant='outline' onClick={handleClear} disabled={isLoading}>
-                  Clear
-                </Button> */}
                 <Button type='button' onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
                   {isLoading ? (
                     <span className='flex items-center'>
                       <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
-                      Submitting...
+                      Uploading ({Math.round(progress)}%)
                     </span>
                   ) : (
-                    <>
-                      {/* <Wrench className='mr-2 h-4 w-4' /> */}
-                      Submit Request
-                    </>
+                    <>Submit Request</>
                   )}
                 </Button>
               </DialogFooter>

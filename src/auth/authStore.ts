@@ -16,6 +16,15 @@ export type User = {
   role: Role | Role[];
   address?: string;
   profilePhoto?: string;
+  // accountNumber?: number | string | undefined;
+  // routingNumber?: number | string | undefined;
+  tenantInfo: {
+    ACHProfile: {
+      ACHRouting?: number | string | undefined;
+      ACHAccount?: number | string | undefined;
+    };
+    [key: string]: any;
+  };
 };
 
 type AuthState = {
@@ -28,9 +37,24 @@ type AuthState = {
   updateUser: (updates: Partial<User>) => void;
 };
 
+// const LOGIN_MUTATION = gql`
+//   mutation Login($email: String!, $password: String!) {
+//     login(email: $email, password: $password) {
+//       token
+//       user {
+//         id
+//         firstName
+//         lastName
+//         email
+//         phone
+//         role
+//       }
+//     }
+//   }
+// `;
 const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation Login($email: String!, $password: String!, $tenantInfo: TenantInfoInput) {
+    login(email: $email, password: $password, tenantInfo: $tenantInfo) {
       token
       user {
         id
@@ -39,6 +63,30 @@ const LOGIN_MUTATION = gql`
         email
         phone
         role
+        managerInfo {
+          companyName
+        }
+        landlordInfo {
+          ownedProperties
+        }
+        tenantInfo {
+          propertyId
+          leaseStartDate
+          leaseEndDate
+          rentAmount
+          balanceDue
+          paymentFrequency
+          notificationPreferences
+          emergencyContact {
+            name
+            phone
+            relationship
+          }
+          ACHProfile {
+            ACHRouting
+            ACHAccount
+          }
+        }
       }
     }
   }

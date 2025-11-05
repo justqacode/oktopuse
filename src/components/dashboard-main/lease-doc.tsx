@@ -4,21 +4,27 @@ import { leaseDocColumn } from './columns';
 const sampleData = [
   {
     id: 1,
-    header: '20-09-2024',
-    type: 'Executive Summary',
-    status: 'paid',
+    docName: 'Lease Agreement.pdf',
+    type: 'PDF',
+    date: '20-09-2024',
   },
   {
     id: 2,
-    header: '20-09-2024',
-    type: 'Technical Approach',
-    status: 'pending',
+    docName: 'Payment REceipt Aug 2025.pdf',
+    type: 'PDF',
+    date: '20-09-2024',
   },
   {
     id: 3,
-    header: '20-09-2024',
-    type: 'Design',
-    status: 'overdue',
+    docName: 'Move-in checklist.pdf',
+    type: 'PDF',
+    date: '20-09-2024',
+  },
+  {
+    id: 4,
+    docName: 'Notice of Entry.pdf',
+    type: 'PDF',
+    date: '20-09-2024',
   },
 ];
 
@@ -27,8 +33,6 @@ export default function LeaseDoc() {
     <DataTable
       columns={leaseDocColumn}
       data={sampleData}
-      enableDragAndDrop
-      enableSelection
       enablePagination
       enableColumnVisibility
       enableSorting

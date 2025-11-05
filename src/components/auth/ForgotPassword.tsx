@@ -1,27 +1,65 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema } from './schemas';
+import { forgotPasswordSchema } from './schemas';
 import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
 import type z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
-type FormValues = z.infer<typeof loginSchema>;
+type FormValues = z.infer<typeof forgotPasswordSchema>;
 
-export const LoginForm = () => {
+const FORGOTPASSWORD_MUTATION = gql`
+  mutation RequestPasswordReset($email: String!) {
+    requestPasswordReset(email: $email) {
+      resetToken
+    }
+  }
+`;
+
+// "query": "mutation RequestPasswordReset($email: String!) { requestPasswordReset(email: $email) { resetToken } }",
+// "variables": {
+//     "email": "babsam480@gmail.com"
+// }
+
+export const ForgotPasswordForm = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthStore();
-  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [forgotPasswordMutation] = useMutation(FORGOTPASSWORD_MUTATION);
 
   const form = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: '' },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    await login(data.email, data.password, navigate);
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    setSuccess(false);
+
+    try {
+      const { data: result } = await forgotPasswordMutation({
+        variables: {
+          email: data.email,
+        },
+      });
+
+      if (result) {
+        // console.log('Registration successful:', result);
+        toast.success('Request sent successfully! Check your email');
+        setSuccess(true);
+        form.reset();
+      }
+    } catch (error: any) {
+      // console.error('Registration failed:', error.message);
+      toast.error(`Request failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,36 +83,6 @@ export const LoginForm = () => {
         )}
       </div>
 
-      {/* Password */}
-      <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Password</label>
-        <div className='relative'>
-          <input
-            {...form.register('password')}
-            type={showPassword ? 'text' : 'password'}
-            placeholder='••••••••'
-            className='w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
-          />
-          <button
-            type='button'
-            onClick={() => setShowPassword(!showPassword)}
-            className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600'
-          >
-            {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
-          </button>
-        </div>
-        {form.formState.errors.password && (
-          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.password.message}</p>
-        )}
-      </div>
-
-      {/* Forgot Password */}
-      <div className='flex justify-end'>
-        <div className='text-sm bg-transparent text-blue-600 hover:text-blue-800 font-medium'>
-          <Link to='/forgotpassword'>Forgot password?</Link>
-        </div>
-      </div>
-
       {/* Submit */}
       <button
         type='submit'
@@ -84,7 +92,7 @@ export const LoginForm = () => {
         {isLoading ? (
           <>
             <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
-            <span>Signing in...</span>
+            <span>Sending request...</span>
           </>
         ) : (
           <>

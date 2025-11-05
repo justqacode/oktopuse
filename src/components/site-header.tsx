@@ -4,11 +4,13 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import PaymentModal from './dashboard-main/modals/rent-payment-modal';
 import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
-import { userMockLandlord } from '@/mockData/user';
+import AddPropertyModal from './dashboard-main/modals/add-property-modal';
+// import { userMockLandlord } from '@/mockData/user';
 
 export function SiteHeader() {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
+  const [openAddProperty, setOpenAddProperty] = useState(false);
   const dueDate = new Date('2024-09-30');
   const today = new Date();
   const sixMonths = 365 / 2;
@@ -17,6 +19,7 @@ export function SiteHeader() {
 
   const landlord = user?.role.includes('landlord');
   const tenant = user?.role.includes('tenant');
+  const manager = user?.role.includes('manager');
 
   // console.log('daysleft: ', daysLeft);
   return (
@@ -54,15 +57,28 @@ export function SiteHeader() {
               variant='default'
               size='sm'
               className='hidden sm:flex'
-              onClick={() => setOpen(true)}
+              onClick={() => setOpenAddProperty(true)}
             >
               + Add Property
+            </Button>
+          </div>
+        )}
+        {manager && (
+          <div className='ml-auto flex items-center gap-2'>
+            <Button
+              variant='default'
+              size='sm'
+              className='hidden sm:flex'
+              onClick={() => setOpen(true)}
+            >
+              Send Notice
             </Button>
           </div>
         )}
       </div>
 
       <PaymentModal open={open} onOpenChange={setOpen} />
+      <AddPropertyModal open={openAddProperty} onOpenChange={setOpenAddProperty} />
     </header>
   );
 }

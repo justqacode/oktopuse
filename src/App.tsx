@@ -11,6 +11,7 @@ import DashboardHome from './pages/dashboard/dashboard-home';
 import { useAuthStore } from './auth/authStore';
 import { Footer, Navbar } from './components/layout/public';
 import { Verify } from './pages/Verify';
+import DashboardChats from './components/dashboard-main/chats';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -45,6 +46,7 @@ function DashboardLayoutV() {
 export default function App() {
   return (
     <ApolloProvider client={client}>
+      <Toaster position='top-center' richColors duration={2000} />
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
@@ -53,6 +55,8 @@ export default function App() {
               <Route path='/' element={<Home />} />
               <Route path='/login' element={<Auth />} />
               <Route path='/register' element={<Auth />} />
+              <Route path='/forgotpassword' element={<Auth />} />
+              <Route path='/reset-password' element={<Auth />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/verify/:id' element={<Verify />} />
             </Route>
@@ -62,12 +66,12 @@ export default function App() {
               <Route path='/dashboard' element={<DashboardLayoutV />}>
                 <Route index element={<DashboardHome />} />
                 <Route path='settings' element={<Settings />} />
+                <Route path='messages' element={<DashboardChats />} />
                 <Route path='test-page' element={<TestPage />} />
               </Route>
             </Route>
           </Routes>
         </BrowserRouter>
-        <Toaster position='top-center' richColors duration={2000} />
       </TooltipProvider>
     </ApolloProvider>
   );
