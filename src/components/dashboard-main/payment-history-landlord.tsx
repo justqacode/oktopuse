@@ -25,32 +25,33 @@ export default function PaymentHistoryLandlord() {
     variables: { ownerID: user?.id },
   });
 
-  // const paymentHistoryData = data?.getPayHistoryByLandLord || [];
-  // const maintenanceHistoryFormatted = paymentHistoryData.map((item: any) => ({
-  //   id: '...' + item._id.slice(-6),
-  //   date: formatDate(item.createdAt) || '',
-  //   property: item.description.split(0, 22) || 0,
-  //   tenant: item.description.split(0, 22) || 0,
-  //   category: item.category,
-  //   status: item.status || 'pending',
-  // }));
+  const paymentHistoryData = data?.getPayHistoryByLandLord || [];
+  const paymentHistoryFormatted = paymentHistoryData.map((item: any) => ({
+    id: '...' + item._id.slice(-6),
+    date: formatDate(item.createdAt) || '',
+    property: item.description || 'Sam says v2',
+    tenant: item.description || 'Sam says v2',
+    amount: item.amount || 'needs fix f Sam',
+    method: item.paymentMethod || 'needs fix f Sam',
+    status: item.status || 'N/A',
+    statement: item.docLink || 'N/A',
+  }));
 
-  // console.log('paymentHistoryData', paymentHistoryData);
-  console.log('paymentHistoryData', data);
+  // console.log('paymentHistoryData n', paymentHistoryData);
+  // console.log('paymentHistoryData', data);
 
   return (
-    // <DataTable
-    //   columns={paymentHistoryLandlordColumn}
-    //   data={data}
-    //   // enableDragAndDrop
-    //   // enableSelection
-    //   enablePagination
-    //   enableColumnVisibility
-    //   enableSorting
-    //   enableFiltering
-    //   pageSize={5}
-    //   loading={loading}
-    // />
-    <div>Payment History Landlord Component - Work in Progress</div>
+    <DataTable
+      columns={paymentHistoryLandlordColumn}
+      data={paymentHistoryFormatted}
+      // enableDragAndDrop
+      // enableSelection
+      enablePagination
+      enableColumnVisibility
+      enableSorting
+      enableFiltering
+      pageSize={5}
+      loading={loading}
+    />
   );
 }

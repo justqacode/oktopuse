@@ -303,9 +303,10 @@ export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
     accessorKey: 'statement',
     header: 'Statement',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
-        {row.original.statement}
-      </Badge>
+      <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left underline'>
+        {/* {row.original.statement} */}
+        Download
+      </Button>
     ),
   },
 ];
