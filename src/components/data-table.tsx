@@ -82,6 +82,7 @@ export interface DataTableProps<T> {
   pageSize?: number;
   pageSizeOptions?: number[];
   onRowDragEnd?: (oldIndex: number, newIndex: number, newData: T[]) => void;
+  onRowClick?: (row: T) => void;
 
   // Styling
   className?: string;
@@ -122,9 +123,11 @@ function DragHandle<T extends Record<string, any>>({
 function DraggableRow<T extends Record<string, any>>({
   row,
   enableDragAndDrop = true,
+  onRowClick,
 }: {
   row: Row<T>;
   enableDragAndDrop?: boolean;
+  onRowClick?: (row: T) => void;
 }) {
   const rowId = row.original.id || row.id;
   const sortable = useSortable({
@@ -132,9 +135,19 @@ function DraggableRow<T extends Record<string, any>>({
     disabled: !enableDragAndDrop,
   });
 
+  const handleRowClick = () => {
+    if (onRowClick) {
+      onRowClick(row.original);
+    }
+  };
+
   if (!enableDragAndDrop) {
     return (
-      <TableRow data-state={row.getIsSelected() && 'selected'}>
+      <TableRow
+        data-state={row.getIsSelected() && 'selected'}
+        onClick={handleRowClick}
+        className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
+      >
         {row.getVisibleCells().map((cell) => (
           <TableCell key={cell.id}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -149,7 +162,10 @@ function DraggableRow<T extends Record<string, any>>({
       data-state={row.getIsSelected() && 'selected'}
       data-dragging={sortable.isDragging}
       ref={sortable.setNodeRef}
-      className='relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80'
+      onClick={handleRowClick}
+      className={`relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80 ${
+        onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''
+      }`}
       style={{
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition,
@@ -282,6 +298,7 @@ export function DataTable<T extends Record<string, any>>({
   pageSize = 10,
   pageSizeOptions = [10, 20, 30, 40, 50],
   onRowDragEnd,
+  onRowClick,
   className = '',
   loading = false,
 }: DataTableProps<T>) {
@@ -403,7 +420,12 @@ export function DataTable<T extends Record<string, any>>({
                 {table.getRowModel().rows?.length ? (
                   <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
                     {table.getRowModel().rows.map((row) => (
-                      <DraggableRow key={row.id} row={row} enableDragAndDrop={enableDragAndDrop} />
+                      <DraggableRow
+                        key={row.id}
+                        row={row}
+                        enableDragAndDrop={enableDragAndDrop}
+                        onRowClick={onRowClick}
+                      />
                     ))}
                   </SortableContext>
                 ) : (
@@ -443,7 +465,12 @@ export function DataTable<T extends Record<string, any>>({
                 table
                   .getRowModel()
                   .rows.map((row) => (
-                    <DraggableRow key={row.id} row={row} enableDragAndDrop={false} />
+                    <DraggableRow
+                      key={row.id}
+                      row={row}
+                      enableDragAndDrop={false}
+                      onRowClick={onRowClick}
+                    />
                   ))
               ) : (
                 <TableRow>
