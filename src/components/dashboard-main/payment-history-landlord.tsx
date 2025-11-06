@@ -4,14 +4,16 @@ import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { useAuthStore } from '@/auth/authStore';
 import formatDate from '@/utils/format-date';
+import { formatCurrency } from '@/utils/format-currency';
 
 const GET_LANDLORD_RENT_PAYMENT_HISTORY = gql`
   query GetPaymentHistoryByLandLord {
     getPayHistoryByLandLord {
       _id
-      owner
       status
-      createdAt
+      date
+      amountReceived
+      note
       docLink
     }
   }
@@ -28,10 +30,10 @@ export default function PaymentHistoryLandlord() {
   const paymentHistoryData = data?.getPayHistoryByLandLord || [];
   const paymentHistoryFormatted = paymentHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
-    date: formatDate(item.createdAt) || '',
+    date: formatDate(item.date) || 'N/A',
     property: item.description || 'Sam says v2',
     tenant: item.description || 'Sam says v2',
-    amount: item.amount || 'needs fix f Sam',
+    amount: formatCurrency(Number(item.amountReceived)) || 'N/A',
     method: item.paymentMethod || 'needs fix f Sam',
     status: item.status || 'N/A',
     statement: item.docLink || 'N/A',
