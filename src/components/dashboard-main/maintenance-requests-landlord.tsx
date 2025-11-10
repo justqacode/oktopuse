@@ -43,6 +43,29 @@ const sampleData: ManagerRequest[] = [
   },
 ];
 
+// const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
+//   query GetMaintenanceHistoryByLandLord {
+//     getMaintenanceHistoryByLandLord {
+//       _id
+//       description
+//       status
+//       createdAt
+//       category
+//       images
+//       propertyDetails {
+//         name
+//         propertyType
+//         address {
+//           street
+//           city
+//           state
+//           zip
+//         }
+//       }
+//     }
+//   }
+// `;
+
 const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryByLandLord {
     getMaintenanceHistoryByLandLord {
@@ -52,9 +75,9 @@ const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
       createdAt
       category
       images
+      property
       propertyDetails {
         name
-        propertyType
         address {
           street
           city
@@ -80,10 +103,11 @@ export default function MaintenanceRequestsLandlord() {
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
     date: formatDate(item.createdAt) || '',
-    property: item.description.split(0, 22) || 0,
-    tenant: item.description.split(0, 22) || 0,
+    property: item.propertyDetails.name,
+    description: item.description.split(0, 22) || 0,
     category: item.category,
     status: item.status || 'pending',
+    tenant: item.propertyDetails.address,
   }));
 
   const handleRowClick = (request: any) => {

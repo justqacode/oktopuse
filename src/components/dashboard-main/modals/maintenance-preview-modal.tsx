@@ -10,7 +10,12 @@ interface MaintenanceRequestPreview {
   id: string;
   date: string;
   property: string;
-  tenant: string;
+  tenant: {
+    street: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+  };
   category: string;
   status: string;
   description?: string;
@@ -112,8 +117,10 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
               <User className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
-                <p className='text-sm font-medium text-muted-foreground'>Tenant</p>
-                <p className='text-base font-semibold'>{request.tenant}</p>
+                <p className='text-sm font-medium text-muted-foreground'>Address</p>
+                <p className='text-base font-semibold'>{`${request?.tenant?.street || 'N/A'}, ${
+                  request?.tenant?.city || 'N/A'
+                }, ${request?.tenant?.state || 'N/A'}`}</p>
               </div>
             </div>
           </div>

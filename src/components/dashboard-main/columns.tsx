@@ -201,11 +201,11 @@ export const maintenanceRequestsLandlordColumn: ColumnDef<LandlordRequest>[] = [
     ),
   },
   {
-    accessorKey: 'tenant',
-    header: 'Tenant',
+    accessorKey: 'description',
+    header: 'Description',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.tenant}
+        {row.original.description}
       </Button>
     ),
   },

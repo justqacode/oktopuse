@@ -44,7 +44,7 @@ export type LandlordRequest = {
   id: number;
   date: string;
   property: string;
-  tenant: string;
+  description: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
 };
