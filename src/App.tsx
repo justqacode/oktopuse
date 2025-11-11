@@ -12,6 +12,7 @@ import { useAuthStore } from './auth/authStore';
 import { Footer, Navbar } from './components/layout/public';
 import { Verify } from './pages/Verify';
 import DashboardChats from './components/dashboard-main/chats';
+import PaymentHistoryManager from './pages/dashboard/manager/dashboard-payments-manager';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -65,6 +66,7 @@ export default function App() {
             <Route element={<RequireAuth />}>
               <Route path='/dashboard' element={<DashboardLayoutV />}>
                 <Route index element={<DashboardHome />} />
+                <Route path='payments' element={<PaymentHistoryManager />} />
                 <Route path='settings' element={<Settings />} />
                 <Route path='messages' element={<DashboardChats />} />
                 <Route path='test-page' element={<TestPage />} />

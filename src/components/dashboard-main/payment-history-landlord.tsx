@@ -23,7 +23,6 @@ export default function PaymentHistoryLandlord() {
   const { user } = useAuthStore();
   const { data, loading } = useQuery<any>(GET_LANDLORD_RENT_PAYMENT_HISTORY, {
     fetchPolicy: 'cache-and-network',
-    // variables: { ownerID: '68ccdee49efe164572477f50' },
     variables: { ownerID: user?.id },
   });
 
@@ -31,23 +30,18 @@ export default function PaymentHistoryLandlord() {
   const paymentHistoryFormatted = paymentHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
     date: formatDate(item.date) || 'N/A',
-    property: item.description || 'Sam says v2',
-    tenant: item.description || 'Sam says v2',
+    property: item.propertyDetails?.name || 'N/A',
+    tenant: item.description || 'N/A',
     amount: formatCurrency(Number(item.amountReceived)) || 'N/A',
     method: item.paymentMethod || 'needs fix f Sam',
     status: item.status || 'N/A',
     statement: item.docLink || 'N/A',
   }));
 
-  // console.log('paymentHistoryData n', paymentHistoryData);
-  // console.log('paymentHistoryData', data);
-
   return (
     <DataTable
       columns={paymentHistoryLandlordColumn}
       data={paymentHistoryFormatted}
-      // enableDragAndDrop
-      // enableSelection
       enablePagination
       enableColumnVisibility
       enableSorting

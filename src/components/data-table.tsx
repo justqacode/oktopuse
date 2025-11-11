@@ -475,7 +475,14 @@ export function DataTable<T extends Record<string, any>>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className='h-24 text-center'>
-                    No results.
+                    {loading ? (
+                      <div className='flex items-center justify-center'>
+                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                        Loading...
+                      </div>
+                    ) : (
+                      'No results.'
+                    )}
                   </TableCell>
                 </TableRow>
               )}

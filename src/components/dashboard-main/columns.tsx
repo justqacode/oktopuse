@@ -9,6 +9,7 @@ import type {
   LandlordRequest,
   ManagerRequest,
   Messages,
+  PaymentHistoryManager,
   Properties,
   TenantRequest,
 } from './types';
@@ -470,6 +471,74 @@ export const messagesColumn: ColumnDef<Messages>[] = [
         )}
         {capitalizeFirstLetter(row.original.status)}
       </Badge>
+    ),
+  },
+];
+
+// id: '...' + item._id.slice(-6),
+// paymentRef: item.paymentRef,
+// date: item.date,
+// amountReceived: item.amountReceived || 0,
+// note: item.note.split(0, 22) || 0,
+// docLink: 'needs fix from sam',
+// status: item.status || 'pending',
+
+export const paymentHistoryManagerColumn: ColumnDef<PaymentHistoryManager>[] = [
+  {
+    accessorKey: 'paymentRef',
+    header: 'Payment Ref',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.paymentRef}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'date',
+    header: 'Date',
+    cell: ({ row }) => (
+      <div className='text-muted-foreground w-fit text-left'>{row.original.date}</div>
+    ),
+  },
+  {
+    accessorKey: 'amountReceived',
+    header: 'Amount Received',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.amountReceived}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'note',
+    header: 'Note',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.note}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.status === 'paid' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.status)}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'docLink',
+    header: 'Doc',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.docLink}
+      </Button>
     ),
   },
 ];

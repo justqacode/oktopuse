@@ -59,3 +59,13 @@ export type LandlordRentHistory = {
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
   statement: string;
 };
+
+export type PaymentHistoryManager = {
+  id: number;
+  paymentRef: string;
+  date: string;
+  amountReceived: string;
+  note: string;
+  status: string;
+  docLink: string;
+};
