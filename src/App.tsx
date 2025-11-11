@@ -6,7 +6,6 @@ import DashboardLayout from './components/layout/dashboard/DashboardLayout';
 import Settings from './pages/dashboard/settings';
 import { ApolloProvider } from '@apollo/client/react';
 import client from './lib/apollo-client';
-import TestPage from './pages/dashboard/test-page';
 import DashboardHome from './pages/dashboard/dashboard-home';
 import { useAuthStore } from './auth/authStore';
 import { Footer, Navbar } from './components/layout/public';
@@ -69,7 +68,6 @@ export default function App() {
                 <Route path='payments' element={<PaymentHistoryManager />} />
                 <Route path='settings' element={<Settings />} />
                 <Route path='messages' element={<DashboardChats />} />
-                <Route path='test-page' element={<TestPage />} />
               </Route>
             </Route>
           </Routes>

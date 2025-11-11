@@ -67,12 +67,6 @@ const data = {
       icon: IconListDetails,
       roles: ['tenant', 'manager', 'landlord'],
     },
-    {
-      title: 'Test Page',
-      url: '/dashboard/test-page',
-      icon: IconUsers,
-      roles: ['tenant'],
-    },
   ] as NavItem[],
   navSecondary: [
     {
