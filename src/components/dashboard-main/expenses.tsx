@@ -18,7 +18,7 @@ const sampleData: Expenses[] = [
     id: 2,
     date: '20-09-2024',
     category: 'Maintentance',
-    amount: '$2500',
+    amount: '$250',
     status: 'pending',
   },
   {
