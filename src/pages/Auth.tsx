@@ -29,7 +29,7 @@ export const Auth = () => {
           {route === '/reset-password' && <ResetPasswordAfterForgetForm />}
         </div>
         <div className='px-8'>
-          <SocialLogin />
+          {/* <SocialLogin /> */}
           {/* <AuthFooter isLogin={isLogin} navigate={navigate} /> */}
         </div>
       </div>

@@ -44,7 +44,7 @@ export type LandlordRequest = {
   id: number;
   date: string;
   property: string;
-  tenant: string;
+  description: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
 };
@@ -58,4 +58,14 @@ export type LandlordRentHistory = {
   method: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
   statement: string;
+};
+
+export type PaymentHistoryManager = {
+  id: number;
+  paymentRef: string;
+  date: string;
+  amountReceived: string;
+  note: string;
+  status: string;
+  docLink: string;
 };

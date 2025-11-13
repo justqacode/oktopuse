@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  IconCamera,
   IconDashboard,
   IconListDetails,
   IconUsers,
@@ -10,9 +9,7 @@ import {
   IconDatabase,
   IconReport,
   IconFileWord,
-  IconFileAi,
-  IconFileDescription,
-  IconFolder,
+  IconPigMoney,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -59,16 +56,16 @@ const data = {
       roles: ['tenant', 'manager', 'landlord'],
     },
     {
+      title: 'Payments',
+      url: '/dashboard/payments',
+      icon: IconPigMoney,
+      roles: ['manager'],
+    },
+    {
       title: 'Messages',
       url: '/dashboard/messages',
       icon: IconListDetails,
       roles: ['tenant', 'manager', 'landlord'],
-    },
-    {
-      title: 'Test Page',
-      url: '/dashboard/test-page',
-      icon: IconUsers,
-      roles: ['tenant'],
     },
   ] as NavItem[],
   navSecondary: [
