@@ -1,4 +1,8 @@
+import { Button } from '@/components/ui/button';
+import { Link, useNavigate } from 'react-router-dom';
+
 export function Home() {
+  const navigate = useNavigate();
   return (
     <div className='w-full min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 relative overflow-hidden'>
       {/* Decorative elements */}
@@ -17,17 +21,9 @@ export function Home() {
             </p>
           </div>
 
-          <button className='group bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3'>
-            <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
-              />
-            </svg>
-            Get Oktopuse
-          </button>
+          <Button className='group bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-8 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3'>
+            <Link to='/register'> Get Oktopuse</Link>
+          </Button>
         </div>
 
         {/* Right Content - Mock Video Interface */}
@@ -320,7 +316,10 @@ export function Home() {
                 no credit card, no questions asked.
               </p>
 
-              <button className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'>
+              <button
+                onClick={() => navigate('/register')}
+                className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
+              >
                 Get Started with a 60-Day Trial
                 <svg
                   className='w-5 h-5 group-hover:translate-x-1 transition-transform'
