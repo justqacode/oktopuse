@@ -12,6 +12,8 @@ import { Footer, Navbar } from './components/layout/public';
 import { Verify } from './pages/Verify';
 import DashboardChats from './components/dashboard-main/chats';
 import PaymentHistoryManager from './pages/dashboard/manager/dashboard-payments-manager';
+import OktopuseTerms from './pages/Terms';
+import OktopusePrivacy from './pages/privacy-policy';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -59,6 +61,8 @@ export default function App() {
               <Route path='/reset-password' element={<Auth />} />
               <Route path='/verify' element={<Verify />} />
               <Route path='/verify/:id' element={<Verify />} />
+              <Route path='/terms' element={<OktopuseTerms />} />
+              <Route path='/privacy-policy' element={<OktopusePrivacy />} />
             </Route>
 
             {/* Protected Dashboard Routes */}

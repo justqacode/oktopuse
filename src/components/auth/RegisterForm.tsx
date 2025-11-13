@@ -6,6 +6,8 @@ import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import { Link } from 'react-router-dom';
 
 const REGISTER_MUTATION = gql`
   mutation Register(
@@ -196,9 +198,15 @@ export const RegisterForm = () => {
         />
         <label htmlFor='agreeToTerms' className='text-sm text-gray-700'>
           I agree to all the{' '}
-          <button type='button' className='text-blue-600 hover:text-blue-800 font-medium underline'>
-            Terms & Conditions
-          </button>
+          {/* <Button
+            type='button'
+            asChild
+            className='text-blue-600 hover:text-blue-800 font-medium underline'
+          > */}
+          <Link to='/terms' className='underline text-blue-600 hover:text-blue-800'>
+            Terms and Conditions
+          </Link>
+          {/* </Button> */}
         </label>
       </div>
       {form.formState.errors.agreeToTerms && (
