@@ -11,7 +11,7 @@ const sampleData: Expenses[] = [
     id: 1,
     date: '20-09-2024',
     category: 'Repairs',
-    amount: '$2500',
+    amount: '$250',
     status: 'paid',
   },
   {
