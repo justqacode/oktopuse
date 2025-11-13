@@ -145,7 +145,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
                     <span className='text-primary-foreground font-bold text-sm'>OP</span>
                   </div>
-                  <span className='font-semibold text-lg'>Octopuse</span>
+                  <span className='font-semibold text-lg'>Oktopuse</span>
                 </div>
               </NavLink>
             </SidebarMenuButton>

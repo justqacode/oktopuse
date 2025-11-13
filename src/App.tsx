@@ -13,7 +13,7 @@ import { Verify } from './pages/Verify';
 import DashboardChats from './components/dashboard-main/chats';
 import PaymentHistoryManager from './pages/dashboard/manager/dashboard-payments-manager';
 import OktopuseTerms from './pages/Terms';
-import OktopusePrivacy from './pages/privacy-policy';
+import OktopusePrivacy from './pages/Privacy-policy';
 
 const checkAuth = () => {
   const { user } = useAuthStore();

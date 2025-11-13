@@ -21,7 +21,7 @@ export const Footer = () => {
                   </div>
                   <span className='font-semibold text-lg'>
                     {/* White<span className='text-primary'>Gloves</span> */}
-                    Octopuse
+                    Oktopuse
                   </span>
                 </div>
               </Link>
@@ -94,7 +94,7 @@ export const Footer = () => {
             Shadcnblocks.com
           </div> */}
           <p className='relative text-sm text-gray-500 text-center'>
-            &copy; {new Date().getFullYear()} Octopuse. All rights reserved.
+            &copy; {new Date().getFullYear()} Oktopuse. All rights reserved.
           </p>
         </div>
       </div>

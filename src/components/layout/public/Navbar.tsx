@@ -84,7 +84,7 @@ export const Navbar = () => {
               </div>
               <span className='font-semibold text-lg'>
                 {/* White<span className='text-primary'>Gloves</span> */}
-                Octopuse
+                Oktopuse
               </span>
             </div>
           </Link>
