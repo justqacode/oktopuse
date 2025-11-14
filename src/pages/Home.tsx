@@ -86,8 +86,8 @@ export function Home() {
                     />
                   </svg>
                 </button>
-                <button className='bg-red-500 text-white px-4 py-1.5 rounded text-sm font-medium'>
-                  End call
+                <button className='bg-blue-500 text-white px-4 py-1.5 rounded text-sm font-medium'>
+                  Send Message
                 </button>
               </div>
             </div>
@@ -142,16 +142,7 @@ export function Home() {
               <div className='w-8 h-8 bg-blue-400 rounded-full flex-shrink-0'></div>
               <div className='flex-1'>
                 <div className='bg-gray-100 rounded-lg p-2 text-xs text-gray-700'>
-                  Good morning! Nice to see everyone today
-                </div>
-              </div>
-            </div>
-
-            <div className='flex items-start gap-2'>
-              <div className='w-8 h-8 bg-green-400 rounded-full flex-shrink-0'></div>
-              <div className='flex-1'>
-                <div className='bg-gray-100 rounded-lg p-2 text-xs text-gray-700'>
-                  Yes, tables have been really amazing this month
+                  PM: Good morning, this is a reminder that HVAC tune-up is in two days.
                 </div>
               </div>
             </div>
@@ -160,7 +151,17 @@ export function Home() {
               <div className='w-8 h-8 bg-purple-400 rounded-full flex-shrink-0'></div>
               <div className='flex-1'>
                 <div className='bg-indigo-500 text-white rounded-lg p-2 text-xs'>
-                  Thanks! I've noticed a lot of positive sign-ups since we updated
+                  Tenant: Thanks for the reminder Ryan. See you soon.
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-2'>
+              <div className='w-8 h-8 bg-green-400 rounded-full flex-shrink-0'></div>
+              <div className='flex-1'>
+                <div className='bg-gray-100 rounded-lg p-2 text-xs text-gray-700'>
+                  Hi Joy, The HVAC tune-up was completely done without inconveniencing the tenant's.
+                  Service statement is in your portal.
                 </div>
               </div>
             </div>
@@ -169,14 +170,14 @@ export function Home() {
               <div className='w-8 h-8 bg-pink-400 rounded-full flex-shrink-0'></div>
               <div className='flex-1'>
                 <div className='bg-indigo-500 text-white rounded-lg p-2 text-xs'>
-                  Update: It is in way this, got a lot of things in total
+                  Thank you and your team for the prompt tune-up service at 412 Brick Way today.
                 </div>
               </div>
             </div>
 
             <div className='flex items-center gap-2 pt-2 border-t'>
               <div className='w-6 h-6 bg-green-400 rounded-full'></div>
-              <div className='text-xs font-medium text-gray-700'>Enter collaborator</div>
+              <div className='text-xs font-medium text-gray-700'>Tenant:</div>
             </div>
 
             <div className='flex items-center gap-2 bg-gray-50 rounded-lg p-2'>
@@ -240,7 +241,7 @@ export function Home() {
                 Oktopuse, manage your own property becomes easier.
               </p>
               <a
-                href='#'
+                href='/register'
                 className='inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group'
               >
                 Create an Account
@@ -280,10 +281,10 @@ export function Home() {
                 tenant and maintainance in one place.
               </p>
               <a
-                href='#'
+                href='/register'
                 className='inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group'
               >
-                Start a Optimizing your process
+                Start Optimizing your process
                 <svg
                   className='w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform'
                   fill='none'
@@ -345,7 +346,7 @@ export function Home() {
 
               <div className='space-y-4'>
                 <a
-                  href='#'
+                  href='/about'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -365,7 +366,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='#'
+                  href='/about'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -385,7 +386,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='#'
+                  href='/about'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
