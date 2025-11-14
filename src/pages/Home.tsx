@@ -225,7 +225,8 @@ export function Home() {
           <div className='bg-white rounded-lg shadow-lg overflow-hidden'>
             <div className='h-64 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden'>
               <img
-                src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=600&fit=crop'
+                // src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=600&fit=crop'
+                src='/home-landlord-manage.jpg'
                 alt='Landlords reviewing documents'
                 className='w-full h-full object-cover'
               />
@@ -264,7 +265,8 @@ export function Home() {
           <div className='bg-white rounded-lg shadow-lg overflow-hidden'>
             <div className='h-64 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden'>
               <img
-                src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop'
+                // src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop'
+                src='/home-manager-manage.jpg'
                 alt='Property manager at business'
                 className='w-full h-full object-cover'
               />
@@ -406,7 +408,8 @@ export function Home() {
               {/* Image */}
               <div className='mt-8 rounded-lg overflow-hidden'>
                 <img
-                  src='https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&h=400&fit=crop'
+                  // src='https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&h=400&fit=crop'
+                  src='/home-section-3.jpg'
                   alt='Person walking in work boots'
                   className='w-full h-64 object-cover'
                 />
