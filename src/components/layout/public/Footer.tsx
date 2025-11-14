@@ -80,8 +80,13 @@ export const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href='#' className='hover:text-white transition'>
+                <a href='/terms' className='hover:text-white transition'>
                   Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href='/privacy-policy' className='hover:text-white transition'>
+                  Privacy Policy
                 </a>
               </li>
             </ul>
