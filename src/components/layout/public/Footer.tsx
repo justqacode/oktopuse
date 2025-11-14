@@ -53,15 +53,22 @@ export const Footer = () => {
 
           {/* Tools Column */}
           <div>
-            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>Home</h3>
+            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>
+              Pages
+            </h3>
             <ul className='space-y-4'>
               <li>
-                <a href='#' className='hover:text-white transition'>
-                  Listing
+                <a href='/register' className='hover:text-white transition'>
+                  Register
                 </a>
               </li>
               <li>
                 <a href='#' className='hover:text-white transition'>
+                  Resources
+                </a>
+              </li>
+              <li>
+                <a href='/about' className='hover:text-white transition'>
                   About Us
                 </a>
               </li>
