@@ -152,7 +152,7 @@ export const Navbar = () => {
         {/* Right side actions */}
         <div className='flex items-center space-x-2 sm:space-x-4'>
           {/* Search Dialog */}
-          <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+          {/* <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
             <DialogTrigger asChild>
               <Button variant='ghost' size='sm' className='h-9 w-9 p-0'>
                 <Search className='h-4 w-4' />
@@ -176,7 +176,7 @@ export const Navbar = () => {
                 </div>
               </form>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
 
           {/* User Menu or Auth Buttons */}
           {user ? (
