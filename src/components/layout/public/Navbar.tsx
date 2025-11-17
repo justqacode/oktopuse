@@ -31,6 +31,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -217,41 +218,79 @@ export const Navbar = () => {
 
           {/* Mobile Menu */}
           <div className='lg:hidden'>
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant='ghost' size='icon'>
+                <Button variant='ghost' size='icon' onClick={() => setOpen(true)}>
                   <Menu className='h-5 w-5' />
                 </Button>
               </SheetTrigger>
+
               <SheetContent side='right' className='w-72 sm:w-80 p-4'>
                 <div className='flex flex-col space-y-4 mt-6'>
-                  <Link to='/' className='text-base font-medium hover:text-primary'>
+                  <Link
+                    to='/'
+                    className='text-base font-medium hover:text-primary'
+                    onClick={() => setOpen(false)}
+                  >
                     Home
                   </Link>
-                  <Link to='/listings' className='text-base font-medium hover:text-primary'>
-                    Listings
-                  </Link>
-                  <Link to='/resources' className='text-base font-medium hover:text-primary'>
+
+                  <Link
+                    to='#'
+                    className='text-base font-medium hover:text-primary'
+                    onClick={() => setOpen(false)}
+                  >
                     Resources
                   </Link>
-                  <Link to='/about' className='text-base font-medium hover:text-primary'>
+
+                  <Link
+                    to='/about'
+                    className='text-base font-medium hover:text-primary'
+                    onClick={() => setOpen(false)}
+                  >
                     About Us
                   </Link>
+
                   {user ? (
                     <>
-                      <Link to='/dashboard' className='text-base font-medium hover:text-primary'>
+                      <Link
+                        to='/dashboard'
+                        className='text-base font-medium hover:text-primary'
+                        onClick={() => setOpen(false)}
+                      >
                         Dashboard
                       </Link>
-                      <Button variant='outline' onClick={handleLogout}>
+
+                      <Button
+                        variant='outline'
+                        onClick={() => {
+                          handleLogout();
+                          setOpen(false);
+                        }}
+                      >
                         Logout
                       </Button>
                     </>
                   ) : (
                     <>
-                      <Button variant='outline' onClick={() => navigate('/login')}>
+                      <Button
+                        variant='outline'
+                        onClick={() => {
+                          navigate('/login');
+                          setOpen(false);
+                        }}
+                      >
                         Log in
                       </Button>
-                      <Button>Sign up</Button>
+
+                      <Button
+                        onClick={() => {
+                          navigate('/register');
+                          setOpen(false);
+                        }}
+                      >
+                        Sign up
+                      </Button>
                     </>
                   )}
                 </div>
