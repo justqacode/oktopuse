@@ -15,6 +15,8 @@ import PaymentHistoryManager from './pages/dashboard/manager/dashboard-payments-
 import OktopuseTerms from './pages/Terms';
 import OktopusePrivacy from './pages/Privacy-policy';
 import AboutUs from './pages/About';
+import GA4RouteTracker from './lib/GA4RouteTracker';
+import { config } from './config/app.config';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -50,6 +52,7 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <Toaster position='top-center' richColors duration={2000} />
+      <GA4RouteTracker measurementId={config.GA4_MEASUREMENT_ID || ''} />
       <TooltipProvider>
         <BrowserRouter>
           <Routes>
