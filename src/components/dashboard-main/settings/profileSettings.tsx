@@ -32,6 +32,19 @@ const PROFILE_MUTATION = gql`
   }
 `;
 
+type UpdateRenterProfileProp = {
+  updateRenterProfile: {
+    firstName: string;
+    lastName: string;
+    tenantInfo: {
+      ACHProfile: {
+        ACHRouting?: number | string | undefined;
+        ACHAccount?: number | string | undefined;
+      };
+    };
+  };
+};
+
 // Profile form schema
 const profileSchema = z.object({
   firstName: z.string().min(1, { message: 'First name is required' }),
@@ -54,15 +67,14 @@ const getRoleDisplay = (role: string) => {
 };
 
 export function ProfileSettings() {
-  const { user } = useAuthStore();
-  // const user = mockUser;
+  const { user, updateUser } = useAuthStore();
 
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState('');
   const [hasProfileChanges, setHasProfileChanges] = useState(false);
 
-  const [profileMutation] = useMutation(PROFILE_MUTATION);
+  const [profileMutation] = useMutation<UpdateRenterProfileProp>(PROFILE_MUTATION);
 
   // Profile form
   const profileForm = useForm<ProfileFormValues>({
@@ -96,7 +108,6 @@ export function ProfileSettings() {
     setProfileSuccess(false);
 
     try {
-      // console.log('Profile Update Data:', { userId: user?.id, ...data });
       const { data: result } = await profileMutation({
         variables: {
           firstName: data.firstName,
@@ -105,7 +116,12 @@ export function ProfileSettings() {
         },
       });
 
-      if (result) {
+      if (result?.updateRenterProfile) {
+        updateUser({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+        });
         setProfileSuccess(true);
         setHasProfileChanges(false);
       }

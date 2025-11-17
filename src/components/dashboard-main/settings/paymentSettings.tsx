@@ -35,17 +35,18 @@ const PAYMENT_MUTATION = gql`
   }
 `;
 
-// const PAYMENT_MUTATION = gql`
-//   mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
-//     updateRenterProfile(oldPassword: $oldPassword, password: $password) {
-//       id
-//       firstName
-//       lastName
-//       email
-//       role
-//     }
-//   }
-// `;
+type UpdateRenterProfileProp = {
+  updateRenterProfile: {
+    firstName: string;
+    lastName: string;
+    tenantInfo: {
+      ACHProfile: {
+        ACHRouting?: number | string | undefined;
+        ACHAccount?: number | string | undefined;
+      };
+    };
+  };
+};
 
 // Profile form schema
 const paymentSchema = z.object({
@@ -59,14 +60,14 @@ const paymentSchema = z.object({
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
 export function PaymentSettings() {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
 
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState('');
   const [hasPaymentChanges, setHasPaymentChanges] = useState(false);
 
-  const [paymentMutation] = useMutation(PAYMENT_MUTATION);
+  const [paymentMutation] = useMutation<UpdateRenterProfileProp>(PAYMENT_MUTATION);
 
   // Profile form
   const paymentForm = useForm<PaymentFormValues>({
@@ -100,7 +101,6 @@ export function PaymentSettings() {
     setPaymentSuccess(false);
 
     try {
-      // console.log('Payment Update Data:', { userId: user?.id, ...data });
       const { data: result } = await paymentMutation({
         variables: {
           tenantInfo: {
@@ -112,7 +112,17 @@ export function PaymentSettings() {
         },
       });
 
-      if (result) {
+      if (result?.updateRenterProfile) {
+        updateUser({
+          tenantInfo: {
+            ...user?.tenantInfo,
+            ACHProfile: {
+              ACHAccount: data.accountNumber,
+              ACHRouting: data.routingNumber,
+            },
+          },
+        });
+
         setPaymentSuccess(true);
         setHasPaymentChanges(false);
       }
