@@ -182,7 +182,7 @@ export const Navbar = () => {
           {user ? (
             <>
               <Button variant='outline' size='sm' className='hidden sm:inline-flex'>
-                Upgrade account
+                Contact Oktopuse
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
