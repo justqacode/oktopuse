@@ -39,6 +39,8 @@ export const Verify = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
     async function fetchVerify() {
       try {
         const res = await verifyMutation({
@@ -47,18 +49,21 @@ export const Verify = () => {
 
         if (res?.data?.verifyAccount?.email) {
           setState('success');
-          setTimeout(() => navigate('/register'), 2500);
+          timer = setTimeout(() => navigate('/register'), 2500);
         } else {
           setState('error');
-          setTimeout(() => navigate('/login'), 8000);
+          timer = setTimeout(() => navigate('/login'), 8000);
         }
       } catch (e) {
         setState('error');
-        setTimeout(() => navigate('/login'), 8000);
+        timer = setTimeout(() => navigate('/login'), 8000);
       }
     }
 
     fetchVerify();
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
