@@ -19,6 +19,17 @@ const VERIFY_MUTATION = gql`
   }
 `;
 
+type VerifyAccountProps = {
+  verifyAccount: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    role: string;
+  };
+};
+
 const RESEND_VERIFY_MUTATION = gql`
   mutation ResendVerification($token: String!) {
     resendVerification(token: $token) {
@@ -32,17 +43,6 @@ type ResendVerifyAccountProps = {
   resendVerification: {
     success: boolean;
     message: string;
-  };
-};
-
-type VerifyAccountProps = {
-  verifyAccount: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    role: string;
   };
 };
 
