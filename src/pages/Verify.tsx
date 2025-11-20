@@ -67,14 +67,14 @@ export const Verify = () => {
 
         if (res?.data?.verifyAccount?.email) {
           setState('success');
-          timer = setTimeout(() => navigate('/register'), 2500);
+          timer = setTimeout(() => navigate('/login'), 2500);
         } else {
           setState('error');
-          timer = setTimeout(() => navigate('/login'), 8000);
+          timer = setTimeout(() => navigate('/register'), 8000);
         }
       } catch (e) {
         setState('error');
-        timer = setTimeout(() => navigate('/login'), 8000);
+        timer = setTimeout(() => navigate('/register'), 8000);
       }
     }
 
