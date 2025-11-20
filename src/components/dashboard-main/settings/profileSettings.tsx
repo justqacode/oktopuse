@@ -126,8 +126,9 @@ export function ProfileSettings() {
         setHasProfileChanges(false);
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setProfileError('Update failed. Please try again later.');
+      setProfileError(
+        error instanceof Error ? error.message : 'Update failed. Please try again later.'
+      );
     } finally {
       setIsProfileLoading(false);
     }
