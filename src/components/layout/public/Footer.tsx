@@ -82,7 +82,7 @@ export const Footer = () => {
             </h3>
             <ul className='space-y-4'>
               <li>
-                <a href='#' className='hover:text-white transition'>
+                <a href='/contact' className='hover:text-white transition'>
                   Contact Us
                 </a>
               </li>

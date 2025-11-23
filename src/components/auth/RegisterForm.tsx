@@ -203,7 +203,7 @@ export const RegisterForm = () => {
             asChild
             className='text-blue-600 hover:text-blue-800 font-medium underline'
           > */}
-          <Link to='/terms' className='underline text-blue-600 hover:text-blue-800'>
+          <Link to='/terms' target='_blank' className='underline text-blue-600 hover:text-blue-800'>
             Terms and Conditions
           </Link>
           {/* </Button> */}
