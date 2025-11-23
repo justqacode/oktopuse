@@ -18,13 +18,14 @@ export type User = {
   profilePhoto?: string;
   // accountNumber?: number | string | undefined;
   // routingNumber?: number | string | undefined;
+  ACHProfile: {
+    ACHRouting?: number | string | undefined;
+    ACHAccount?: number | string | undefined;
+  };
   tenantInfo: {
-    ACHProfile: {
-      ACHRouting?: number | string | undefined;
-      ACHAccount?: number | string | undefined;
-    };
     [key: string]: any;
   };
+  [key: string]: any;
 };
 
 type AuthState = {

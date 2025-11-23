@@ -21,7 +21,14 @@ export const registerSchema = z.object({
     .string()
     .min(10, { message: 'Phone number must be at least 10 digits' })
     .regex(/^[+]?[\d\s\-\(\)]+$/, { message: 'Please enter a valid phone number' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  // password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  password: z
+    .string()
+    .min(9, 'Password must be at least 9 characters')
+    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
   role: z.string().refine((val) => ['tenant', 'landlord', 'manager'].includes(val), {
     message: 'Please select a valid role',
   }),

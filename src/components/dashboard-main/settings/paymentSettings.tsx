@@ -23,13 +23,9 @@ import { useMutation } from '@apollo/client/react';
 const PAYMENT_MUTATION = gql`
   mutation UpdateRenterProfile($tenantInfo: TenantInfoInput) {
     updateRenterProfile(tenantInfo: $tenantInfo) {
-      firstName
-      lastName
-      tenantInfo {
-        ACHProfile {
-          ACHRouting
-          ACHAccount
-        }
+      ACHProfile {
+        ACHRouting
+        ACHAccount
       }
     }
   }
@@ -37,13 +33,9 @@ const PAYMENT_MUTATION = gql`
 
 type UpdateRenterProfileProp = {
   updateRenterProfile: {
-    firstName: string;
-    lastName: string;
-    tenantInfo: {
-      ACHProfile: {
-        ACHRouting?: number | string | undefined;
-        ACHAccount?: number | string | undefined;
-      };
+    ACHProfile: {
+      ACHRouting?: number | string | undefined;
+      ACHAccount?: number | string | undefined;
     };
   };
 };
@@ -74,12 +66,12 @@ export function PaymentSettings() {
     resolver: zodResolver(paymentSchema),
     defaultValues: {
       accountNumber:
-        user && user.tenantInfo.ACHProfile.ACHAccount !== undefined
-          ? String(user.tenantInfo.ACHProfile.ACHAccount)
+        user && user.ACHProfile.ACHAccount !== undefined
+          ? String(user.ACHProfile.ACHAccount)
           : undefined,
       routingNumber:
-        user && user.tenantInfo.ACHProfile.ACHRouting !== undefined
-          ? String(user.tenantInfo.ACHProfile.ACHRouting)
+        user && user.ACHProfile.ACHRouting !== undefined
+          ? String(user.ACHProfile.ACHRouting)
           : undefined,
     },
   });
@@ -88,8 +80,8 @@ export function PaymentSettings() {
   useEffect(() => {
     const subscription = paymentForm.watch((value) => {
       const hasChanged =
-        value.accountNumber !== user?.tenantInfo.ACHProfile.ACHAccount ||
-        value.routingNumber !== user?.tenantInfo.ACHProfile.ACHRouting;
+        value.accountNumber !== user?.ACHProfile.ACHAccount ||
+        value.routingNumber !== user?.ACHProfile.ACHRouting;
       setHasPaymentChanges(hasChanged);
     });
     return () => subscription.unsubscribe();
@@ -103,23 +95,19 @@ export function PaymentSettings() {
     try {
       const { data: result } = await paymentMutation({
         variables: {
-          tenantInfo: {
-            ACHProfile: {
-              ACHAccount: data.accountNumber,
-              ACHRouting: data.routingNumber,
-            },
+          ACHProfile: {
+            ACHAccount: data.accountNumber,
+            ACHRouting: data.routingNumber,
           },
         },
       });
 
       if (result?.updateRenterProfile) {
         updateUser({
-          tenantInfo: {
-            ...user?.tenantInfo,
-            ACHProfile: {
-              ACHAccount: data.accountNumber,
-              ACHRouting: data.routingNumber,
-            },
+          ...user?.tenantInfo,
+          ACHProfile: {
+            ACHAccount: data.accountNumber,
+            ACHRouting: data.routingNumber,
           },
         });
 
