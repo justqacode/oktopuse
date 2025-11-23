@@ -72,7 +72,9 @@ export const RegisterForm = () => {
 
       // console.log('Registration successful:', result);
       if (result) {
-        toast.success('Registration successful! Welcome aboard!');
+        toast.success(
+          'Your registration was successful! Please navigate to your email account to confirm and complete the registration.'
+        );
         setSuccess(true);
         form.reset();
       }
