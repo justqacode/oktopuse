@@ -3,7 +3,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const VERIFY_MUTATION = gql`
@@ -54,10 +54,9 @@ export const Verify = () => {
   const [verifyMutation] = useMutation<VerifyAccountProps>(VERIFY_MUTATION);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading');
-  const navigate = useNavigate();
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
+    // let timer: ReturnType<typeof setTimeout>;
 
     async function fetchVerify() {
       try {
@@ -67,21 +66,21 @@ export const Verify = () => {
 
         if (res?.data?.verifyAccount?.email) {
           setState('success');
-          timer = setTimeout(() => navigate('/login'), 2500);
+          // timer = setTimeout(() => navigate('/login'), 2500);
         } else {
           setState('error');
-          timer = setTimeout(() => navigate('/register'), 8000);
+          // timer = setTimeout(() => navigate('/register'), 8000);
         }
       } catch (e) {
         setState('error');
-        timer = setTimeout(() => navigate('/register'), 8000);
+        // timer = setTimeout(() => navigate('/register'), 8000);
       }
     }
 
     fetchVerify();
-    return () => {
-      clearTimeout(timer);
-    };
+    // return () => {
+    //   clearTimeout(timer);
+    // };
   }, []);
 
   const handleResendLink = async () => {
@@ -127,7 +126,9 @@ export const Verify = () => {
             >
               Resend verification link
             </button>
-            <p className='text-xs'>Redirecting...</p>
+            <Link to='/' className='text-xs hover:underline '>
+              Back to home
+            </Link>
           </div>
         )}
       </div>
