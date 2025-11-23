@@ -49,7 +49,7 @@ export const RegisterForm = () => {
       email: '',
       password: '',
       phone: '',
-      role: 'tenant',
+      role: '',
       agreeToTerms: false,
     },
   });
@@ -181,6 +181,7 @@ export const RegisterForm = () => {
           {...form.register('role')}
           className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
         >
+          <option value=''>--Select an option--</option>
           <option value='tenant'>Tenant</option>
           <option value='landlord'>Landlord</option>
           <option value='manager'>Property Manager</option>
