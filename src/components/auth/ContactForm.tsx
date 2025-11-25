@@ -32,10 +32,11 @@ const CONTACT_MUTATION = gql`
 
 type ContactProps = {
   contact: {
-    id: string;
     firstName: string;
     lastName: string;
     email: string;
+    phone: string;
+    message: string;
   };
 };
 
@@ -108,7 +109,7 @@ export const ContactForm = () => {
 
       {/* Last Name */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Last Name</label>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Last Name (optional)</label>
         <input
           {...form.register('lastName')}
           type='text'
@@ -157,8 +158,8 @@ export const ContactForm = () => {
           placeholder='Enter your message'
           className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
         />
-        {form.formState.errors.email && (
-          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.email.message}</p>
+        {form.formState.errors.message && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.message.message}</p>
         )}
       </div>
 
