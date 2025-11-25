@@ -54,9 +54,10 @@ export const Verify = () => {
   const [verifyMutation] = useMutation<VerifyAccountProps>(VERIFY_MUTATION);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // let timer: ReturnType<typeof setTimeout>;
+    let timer: ReturnType<typeof setTimeout>;
 
     async function fetchVerify() {
       try {
@@ -66,7 +67,7 @@ export const Verify = () => {
 
         if (res?.data?.verifyAccount?.email) {
           setState('success');
-          // timer = setTimeout(() => navigate('/login'), 2500);
+          timer = setTimeout(() => navigate('/login'), 2500);
         } else {
           setState('error');
           // timer = setTimeout(() => navigate('/register'), 8000);
