@@ -36,12 +36,8 @@ type UpdateRenterProfileProp = {
   updateRenterProfile: {
     firstName: string;
     lastName: string;
-    tenantInfo: {
-      ACHProfile: {
-        ACHRouting?: number | string | undefined;
-        ACHAccount?: number | string | undefined;
-      };
-    };
+    phone: string;
+    address?: string;
   };
 };
 

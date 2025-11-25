@@ -66,12 +66,20 @@ export function SiteHeader() {
         {manager && (
           <div className='ml-auto flex items-center gap-2'>
             <Button
-              variant='default'
+              variant='outline'
               size='sm'
               className='hidden sm:flex'
               onClick={() => setOpen(true)}
             >
               Send Notice
+            </Button>
+            <Button
+              variant='default'
+              size='sm'
+              className='hidden sm:flex'
+              onClick={() => setOpenAddProperty(true)}
+            >
+              + Add Property
             </Button>
           </div>
         )}
