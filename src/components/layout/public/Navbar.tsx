@@ -182,8 +182,8 @@ export const Navbar = () => {
           {/* User Menu or Auth Buttons */}
           {user ? (
             <>
-              <Button variant='outline' size='sm' className='hidden sm:inline-flex'>
-                Contact Oktopuse
+              <Button asChild variant='outline' size='sm' className='hidden sm:inline-flex'>
+                <Link to='/contact'>Contact Oktopuse</Link>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
