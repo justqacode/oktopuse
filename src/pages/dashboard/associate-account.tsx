@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 const ASSOCIATE_MUTATION = gql`
   mutation associateUserWithProperty($userId: String!, $propertyId: String!, $role: String!) {
@@ -97,6 +98,7 @@ export default function AssociateAccount() {
           propertyId: data.propertyId,
         },
       });
+      toast.success('Account associated successfully!');
 
       setTimeout(() => setSuccess(false), 3000);
     } catch (e) {
