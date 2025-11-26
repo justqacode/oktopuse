@@ -99,7 +99,8 @@ const ADD_PROPERTY_MUTATION = gql`
     $amount: Float!
     $leaseEndDate: String!
     $leaseStartDate: String!
-    $description: String
+    $description: String!
+    $occupancy: String!
     $images: [String!]
     $managerID: ID
   ) {
@@ -110,6 +111,7 @@ const ADD_PROPERTY_MUTATION = gql`
       amount: $amount
       leaseStartDate: $leaseStartDate
       leaseEndDate: $leaseEndDate
+      occupancy: $occupancy
       description: $description
       images: $images
       managerID: $managerID
