@@ -21,7 +21,7 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 
 const PAYMENT_MUTATION = gql`
-  mutation UpdateRenterProfile($ACHProfile: ACHProfile) {
+  mutation UpdateRenterProfile($ACHProfile: ACHProfileInput) {
     updateRenterProfile(ACHProfile: $ACHProfile) {
       ACHProfile {
         ACHRouting
