@@ -17,6 +17,7 @@ import OktopusePrivacy from './pages/Privacy-policy';
 import AboutUs from './pages/About';
 import GA4RouteTracker from './lib/GA4RouteTracker';
 import { config } from './config/app.config';
+import AssociateAccount from './pages/dashboard/associate-account';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -76,6 +77,7 @@ export default function App() {
               <Route path='/dashboard' element={<DashboardLayoutV />}>
                 <Route index element={<DashboardHome />} />
                 <Route path='payments' element={<PaymentHistoryManager />} />
+                <Route path='associate-accounts' element={<AssociateAccount />} />
                 <Route path='settings' element={<Settings />} />
                 <Route path='messages' element={<DashboardChats />} />
               </Route>

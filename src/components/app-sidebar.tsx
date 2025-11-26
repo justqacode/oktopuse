@@ -62,6 +62,12 @@ const data = {
       roles: ['manager'],
     },
     {
+      title: 'Associate Accounts',
+      url: '/dashboard/associate-accounts',
+      icon: IconUsers,
+      roles: ['manager', 'landlord'],
+    },
+    {
       title: 'Messages',
       url: '/dashboard/messages',
       icon: IconListDetails,

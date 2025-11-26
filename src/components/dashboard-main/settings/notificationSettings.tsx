@@ -34,7 +34,7 @@ type NotificationProps = {
 };
 
 const notificationSchema = z.object({
-  mode: z.enum(['Email', 'SMS']),
+  notificationPreferences: z.enum(['Email', 'SMS']),
 });
 
 type NotificationFormValues = z.infer<typeof notificationSchema>;
@@ -51,7 +51,7 @@ export function NotificationSettings() {
   const form = useForm<NotificationFormValues>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
-      mode: 'Email',
+      notificationPreferences: user?.notificationPreferences,
     },
   });
 
@@ -68,13 +68,13 @@ export function NotificationSettings() {
 
     try {
       const { data: result } = await notificationPref({
-        variables: { notificationPreferences: data.mode },
+        variables: { notificationPreferences: data.notificationPreferences },
       });
 
       if (result?.updateRenterProfile) {
         updateUser({
           ...user?.tenantInfo,
-          notificationPreferences: data.mode,
+          notificationPreferences: data.notificationPreferences,
         });
 
         setSuccess(true);
@@ -112,7 +112,7 @@ export function NotificationSettings() {
           <div className='space-y-4'>
             <FormField
               control={form.control}
-              name='mode'
+              name='notificationPreferences'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-base'>Choose Notification Method</FormLabel>
