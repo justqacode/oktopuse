@@ -52,7 +52,7 @@ function DashboardLayoutV() {
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <Toaster position='top-center' richColors duration={2000} />
+      <Toaster position='top-center' expand={true} richColors duration={2000} />
       <TooltipProvider>
         <BrowserRouter>
           <GA4RouteTracker measurementId={config.GA4_MEASUREMENT_ID || ''} />

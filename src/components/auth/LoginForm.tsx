@@ -5,23 +5,55 @@ import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
 import type z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
+import { toast } from 'sonner';
+import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
+import { useMutation } from '@apollo/client/react';
 
 type FormValues = z.infer<typeof loginSchema>;
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthStore();
+  const { login, isLoading, user } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
+  const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
 
+  const resendVerificationEmail = async (email: string) => {
+    try {
+      const res = await resendVerifyMutation({ variables: { token: email } });
+      if (res?.data?.resendVerification?.success) {
+        toast.success('Verification link resent successfully.');
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to resend verification link.');
+    }
+  };
+
   const onSubmit = async (data: FormValues) => {
     await login(data.email, data.password, navigate);
+
+    if (user && !user.verificationStatus) {
+      toast.warning('You need to verify your account!', {
+        classNames: {
+          toast: 'flex-col !items-start ',
+          actionButton: ' !justify-start mt-2',
+        },
+        description: 'Click on the button below to resend the verification email.',
+        action: {
+          label: <div>Resend Verification Email</div>,
+          onClick: () => {
+            resendVerificationEmail(data.email);
+          },
+        },
+        duration: 8000,
+      });
+    }
   };
 
   return (

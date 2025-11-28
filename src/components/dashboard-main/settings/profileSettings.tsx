@@ -37,7 +37,9 @@ type UpdateRenterProfileProp = {
     firstName: string;
     lastName: string;
     phone: string;
-    address?: string;
+    managerInfo?: {
+      companyAddress?: string;
+    };
   };
 };
 
@@ -64,6 +66,7 @@ const getRoleDisplay = (role: string) => {
 
 export function ProfileSettings() {
   const { user, updateUser } = useAuthStore();
+  const manager = user?.role.includes('manager');
 
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState(false);
@@ -109,6 +112,9 @@ export function ProfileSettings() {
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
+          managerInfo: {
+            companyAddress: data.address,
+          },
         },
       });
 
@@ -117,6 +123,9 @@ export function ProfileSettings() {
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
+          managerInfo: {
+            companyAddress: data.address,
+          },
         });
         setProfileSuccess(true);
         setHasProfileChanges(false);
@@ -228,20 +237,21 @@ export function ProfileSettings() {
               <p className='text-sm text-muted-foreground mt-2'>Your role cannot be changed</p>
             </div>
 
-            <FormField
-              control={profileForm.control}
-              name='address'
-              disabled
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {manager && (
+              <FormField
+                control={profileForm.control}
+                name='address'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className='flex justify-end'>
               <Button

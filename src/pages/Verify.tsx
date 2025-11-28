@@ -30,7 +30,7 @@ type VerifyAccountProps = {
   };
 };
 
-const RESEND_VERIFY_MUTATION = gql`
+export const RESEND_VERIFY_MUTATION = gql`
   mutation ResendVerification($token: String!) {
     resendVerification(token: $token) {
       success
@@ -39,7 +39,7 @@ const RESEND_VERIFY_MUTATION = gql`
   }
 `;
 
-type ResendVerifyAccountProps = {
+export type ResendVerifyAccountProps = {
   resendVerification: {
     success: boolean;
     message: string;

@@ -166,7 +166,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (data?.login) {
             const { token, user } = data.login;
-            const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 1 week from now
+            const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hr from now
 
             set({ token, user, expiresAt });
 
