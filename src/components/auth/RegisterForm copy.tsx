@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from './schemas';
@@ -38,7 +38,6 @@ export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [passwordValue, setPasswordValue] = useState('');
   const [registerMutation] = useMutation(REGISTER_MUTATION);
 
   const form = useForm({
@@ -53,14 +52,6 @@ export const RegisterForm = () => {
       agreeToTerms: false,
     },
   });
-
-  const passwordChecks = {
-    minLength: passwordValue.length >= 9,
-    hasUppercase: /[A-Z]/.test(passwordValue),
-    hasLowercase: /[a-z]/.test(passwordValue),
-    hasNumber: /[0-9]/.test(passwordValue),
-    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue),
-  };
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -94,21 +85,12 @@ export const RegisterForm = () => {
     }
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const value = e.target.value;
-    setPasswordValue(value);
-    form.setValue('password', value);
-  };
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
       {/* Success Message */}
       {success && (
         <div className='bg-green-50 border border-green-200 rounded-lg p-4'>
-          <p className='text-green-800 text-sm'>
-            Your registration was successful! Please navigate to your email account to confirm and
-            complete the registration.
-          </p>
+          <p className='text-green-800 text-sm'>Registration successful! Welcome aboard!</p>
         </div>
       )}
 
@@ -176,8 +158,6 @@ export const RegisterForm = () => {
             {...form.register('password')}
             type={showPassword ? 'text' : 'password'}
             placeholder='Enter your password'
-            value={passwordValue}
-            onChange={handlePasswordChange}
             className='w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
           />
           <button
@@ -188,86 +168,6 @@ export const RegisterForm = () => {
             {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
           </button>
         </div>
-
-        {/* Password Requirements Checklist */}
-        {passwordValue && (
-          <div className='mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200'>
-            <p className='text-xs font-medium text-gray-700 mb-2'>Password requirements:</p>
-            <div className='space-y-1'>
-              <div className='flex items-center space-x-2'>
-                {passwordChecks.minLength ? (
-                  <Check className='w-4 h-4 text-green-600' />
-                ) : (
-                  <X className='w-4 h-4 text-gray-400' />
-                )}
-                <span
-                  className={`text-xs ${
-                    passwordChecks.minLength ? 'text-green-600' : 'text-gray-600'
-                  }`}
-                >
-                  Minimum 9 characters
-                </span>
-              </div>
-              <div className='flex items-center space-x-2'>
-                {passwordChecks.hasUppercase ? (
-                  <Check className='w-4 h-4 text-green-600' />
-                ) : (
-                  <X className='w-4 h-4 text-gray-400' />
-                )}
-                <span
-                  className={`text-xs ${
-                    passwordChecks.hasUppercase ? 'text-green-600' : 'text-gray-600'
-                  }`}
-                >
-                  One uppercase letter (A–Z)
-                </span>
-              </div>
-              <div className='flex items-center space-x-2'>
-                {passwordChecks.hasLowercase ? (
-                  <Check className='w-4 h-4 text-green-600' />
-                ) : (
-                  <X className='w-4 h-4 text-gray-400' />
-                )}
-                <span
-                  className={`text-xs ${
-                    passwordChecks.hasLowercase ? 'text-green-600' : 'text-gray-600'
-                  }`}
-                >
-                  One lowercase letter (a–z)
-                </span>
-              </div>
-              <div className='flex items-center space-x-2'>
-                {passwordChecks.hasNumber ? (
-                  <Check className='w-4 h-4 text-green-600' />
-                ) : (
-                  <X className='w-4 h-4 text-gray-400' />
-                )}
-                <span
-                  className={`text-xs ${
-                    passwordChecks.hasNumber ? 'text-green-600' : 'text-gray-600'
-                  }`}
-                >
-                  One number (0–9)
-                </span>
-              </div>
-              <div className='flex items-center space-x-2'>
-                {passwordChecks.hasSpecial ? (
-                  <Check className='w-4 h-4 text-green-600' />
-                ) : (
-                  <X className='w-4 h-4 text-gray-400' />
-                )}
-                <span
-                  className={`text-xs ${
-                    passwordChecks.hasSpecial ? 'text-green-600' : 'text-gray-600'
-                  }`}
-                >
-                  One special character (!@#$%^&* etc.)
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {form.formState.errors.password && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.password.message}</p>
         )}

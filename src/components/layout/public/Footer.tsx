@@ -21,7 +21,7 @@ export const Footer = () => {
                   </div>
                   <span className='font-semibold text-lg'>
                     {/* White<span className='text-primary'>Gloves</span> */}
-                    Octopuse
+                    Oktopuse
                   </span>
                 </div>
               </Link>
@@ -53,15 +53,22 @@ export const Footer = () => {
 
           {/* Tools Column */}
           <div>
-            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>Home</h3>
+            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>
+              Pages
+            </h3>
             <ul className='space-y-4'>
               <li>
-                <a href='#' className='hover:text-white transition'>
-                  Listing
+                <a href='/register' className='hover:text-white transition'>
+                  Register
                 </a>
               </li>
               <li>
                 <a href='#' className='hover:text-white transition'>
+                  Resources
+                </a>
+              </li>
+              <li>
+                <a href='/about' className='hover:text-white transition'>
                   About Us
                 </a>
               </li>
@@ -75,13 +82,18 @@ export const Footer = () => {
             </h3>
             <ul className='space-y-4'>
               <li>
-                <a href='#' className='hover:text-white transition'>
+                <a href='/contact' className='hover:text-white transition'>
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href='#' className='hover:text-white transition'>
+                <a href='/terms' className='hover:text-white transition'>
                   Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href='/privacy-policy' className='hover:text-white transition'>
+                  Privacy Policy
                 </a>
               </li>
             </ul>
@@ -94,7 +106,7 @@ export const Footer = () => {
             Shadcnblocks.com
           </div> */}
           <p className='relative text-sm text-gray-500 text-center'>
-            &copy; {new Date().getFullYear()} Octopuse. All rights reserved.
+            &copy; {new Date().getFullYear()} Oktopuse. All rights reserved.
           </p>
         </div>
       </div>

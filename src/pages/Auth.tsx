@@ -6,6 +6,7 @@ import {
   RegisterForm,
   SocialLogin,
 } from '@/components/auth';
+import { ContactForm } from '@/components/auth/ContactForm';
 import { ForgotPasswordForm } from '@/components/auth/ForgotPassword';
 import { ResetPasswordAfterForgetForm } from '@/components/auth/ResetPasswordAfterForget';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -28,6 +29,7 @@ export const Auth = () => {
         <div className='px-8'>
           {route === '/reset-password' && <ResetPasswordAfterForgetForm />}
         </div>
+        <div className='px-8'>{route === '/contact' && <ContactForm />}</div>
         <div className='px-8'>
           {/* <SocialLogin /> */}
           {/* <AuthFooter isLogin={isLogin} navigate={navigate} /> */}

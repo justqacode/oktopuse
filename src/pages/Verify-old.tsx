@@ -54,7 +54,6 @@ export const Verify = () => {
   const [verifyMutation] = useMutation<VerifyAccountProps>(VERIFY_MUTATION);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
   const [state, setState] = useState<'loading' | 'success' | 'error'>('loading');
-  const [apiMessage, setApiMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,108 +61,37 @@ export const Verify = () => {
 
     async function fetchVerify() {
       try {
-        const res = await verifyMutation({ variables: { token } });
-        const data = res?.data?.verifyAccount;
+        const res = await verifyMutation({
+          variables: { token },
+        });
 
-        if (data) {
+        if (res?.data?.verifyAccount?.email) {
           setState('success');
           timer = setTimeout(() => navigate('/login'), 2500);
         } else {
           setState('error');
+          // timer = setTimeout(() => navigate('/register'), 8000);
         }
       } catch (e) {
-        if (e instanceof Error) {
-          console.log('Verification error:', e.message);
-          setApiMessage(e.message);
-        } else {
-          console.log('Verification error:', e);
-          setApiMessage(
-            'Something went wrong. Please register your account or attempt a password reset.'
-          );
-        }
         setState('error');
+        // timer = setTimeout(() => navigate('/register'), 8000);
       }
     }
 
     fetchVerify();
-    return () => {
-      clearTimeout(timer);
-    };
+    // return () => {
+    //   clearTimeout(timer);
+    // };
   }, []);
 
   const handleResendLink = async () => {
     try {
       const res = await resendVerifyMutation({ variables: { token } });
-      const data = res?.data?.resendVerification;
-
-      if (data?.success) {
-        toast.success(data.message || 'Verification link resent successfully.');
-      } else {
-        toast.error(data?.message || 'Failed to resend verification link.');
+      if (res?.data?.resendVerification?.success) {
+        toast.success('Verification link resent successfully.');
       }
     } catch (e) {
-      toast.error('Failed to resend verification link.');
-    }
-  };
-
-  const renderErrorActions = () => {
-    switch (apiMessage) {
-      case 'User not found':
-        return (
-          <Link
-            to='/register'
-            className='text-sm px-3 py-2 bg-black text-white rounded-md hover:bg-blue-400/70'
-          >
-            Go to Register
-          </Link>
-        );
-
-      case 'Something went wrong. Please register your account or attempt a password reset.':
-        return (
-          <Link
-            to='/register'
-            className='text-sm px-3 py-2 bg-black text-white rounded-md hover:bg-blue-400/70'
-          >
-            Go to Register
-          </Link>
-        );
-
-      case 'Account already verified.':
-        return (
-          <Link
-            to='/login'
-            className='text-sm px-3 py-2 bg-black text-white rounded-md hover:bg-blue-400/70'
-          >
-            Go to Login
-          </Link>
-        );
-
-      case 'Something went wrong. Please reset your password to get a new verification email.':
-        return (
-          <Link
-            to='/forgot-password'
-            className='text-sm px-3 py-2 bg-black text-white rounded-md hover:bg-blue-400/70'
-          >
-            Reset Password
-          </Link>
-        );
-
-      case 'A new verification email has been successfully sent.':
-        return (
-          <p className='text-sm text-green-700'>
-            A new verification email has been successfully sent.
-          </p>
-        );
-
-      default:
-        return (
-          <button
-            onClick={handleResendLink}
-            className='px-2 py-2 rounded-md bg-black hover:bg-blue-400/70 text-white text-sm'
-          >
-            Resend verification link
-          </button>
-        );
+      toast.error(e instanceof Error ? e.message : 'Failed to resend verification link.');
     }
   };
 
@@ -192,9 +120,14 @@ export const Verify = () => {
 
         {state === 'error' && (
           <div className='flex flex-col gap-4 text-center p-4 bg-red-100 text-red-800 rounded-md'>
-            <p>{apiMessage}</p>
-            {renderErrorActions()}
-            <Link to='/' className='text-xs hover:underline'>
+            <p>Your link is invalid or has expired.</p>
+            <button
+              onClick={handleResendLink}
+              className='px-2 py-2 rounded-md bg-black hover:bg-blue-400/70 text-white text-sm'
+            >
+              Resend verification link
+            </button>
+            <Link to='/' className='text-xs hover:underline '>
               Back to home
             </Link>
           </div>

@@ -21,31 +21,24 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 
 const PAYMENT_MUTATION = gql`
-  mutation UpdateRenterProfile($tenantInfo: TenantInfoInput) {
-    updateRenterProfile(tenantInfo: $tenantInfo) {
-      firstName
-      lastName
-      tenantInfo {
-        ACHProfile {
-          ACHRouting
-          ACHAccount
-        }
+  mutation UpdateRenterProfile($ACHProfile: ACHProfileInput) {
+    updateRenterProfile(ACHProfile: $ACHProfile) {
+      ACHProfile {
+        ACHRouting
+        ACHAccount
       }
     }
   }
 `;
 
-// const PAYMENT_MUTATION = gql`
-//   mutation UpdateRenterProfile($oldPassword: String!, $password: String!) {
-//     updateRenterProfile(oldPassword: $oldPassword, password: $password) {
-//       id
-//       firstName
-//       lastName
-//       email
-//       role
-//     }
-//   }
-// `;
+type UpdateRenterProfileProp = {
+  updateRenterProfile: {
+    ACHProfile: {
+      ACHRouting?: number | string | undefined;
+      ACHAccount?: number | string | undefined;
+    };
+  };
+};
 
 // Profile form schema
 const paymentSchema = z.object({
@@ -59,26 +52,26 @@ const paymentSchema = z.object({
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
 export function PaymentSettings() {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
 
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState('');
   const [hasPaymentChanges, setHasPaymentChanges] = useState(false);
 
-  const [paymentMutation] = useMutation(PAYMENT_MUTATION);
+  const [paymentMutation] = useMutation<UpdateRenterProfileProp>(PAYMENT_MUTATION);
 
   // Profile form
   const paymentForm = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
       accountNumber:
-        user && user.tenantInfo.ACHProfile.ACHAccount !== undefined
-          ? String(user.tenantInfo.ACHProfile.ACHAccount)
+        user && user.ACHProfile.ACHAccount !== undefined
+          ? String(user.ACHProfile.ACHAccount)
           : undefined,
       routingNumber:
-        user && user.tenantInfo.ACHProfile.ACHRouting !== undefined
-          ? String(user.tenantInfo.ACHProfile.ACHRouting)
+        user && user.ACHProfile.ACHRouting !== undefined
+          ? String(user.ACHProfile.ACHRouting)
           : undefined,
     },
   });
@@ -87,8 +80,8 @@ export function PaymentSettings() {
   useEffect(() => {
     const subscription = paymentForm.watch((value) => {
       const hasChanged =
-        value.accountNumber !== user?.tenantInfo.ACHProfile.ACHAccount ||
-        value.routingNumber !== user?.tenantInfo.ACHProfile.ACHRouting;
+        value.accountNumber !== user?.ACHProfile.ACHAccount ||
+        value.routingNumber !== user?.ACHProfile.ACHRouting;
       setHasPaymentChanges(hasChanged);
     });
     return () => subscription.unsubscribe();
@@ -100,19 +93,24 @@ export function PaymentSettings() {
     setPaymentSuccess(false);
 
     try {
-      // console.log('Payment Update Data:', { userId: user?.id, ...data });
       const { data: result } = await paymentMutation({
         variables: {
-          tenantInfo: {
-            ACHProfile: {
-              ACHAccount: data.accountNumber,
-              ACHRouting: data.routingNumber,
-            },
+          ACHProfile: {
+            ACHAccount: data.accountNumber,
+            ACHRouting: data.routingNumber,
           },
         },
       });
 
-      if (result) {
+      if (result?.updateRenterProfile) {
+        updateUser({
+          ...user?.tenantInfo,
+          ACHProfile: {
+            ACHAccount: data.accountNumber,
+            ACHRouting: data.routingNumber,
+          },
+        });
+
         setPaymentSuccess(true);
         setHasPaymentChanges(false);
       }

@@ -4,6 +4,7 @@ import {
   PasswordSettings,
   NotificationSettings,
 } from '@/components/dashboard-main/settings';
+import { EmergencySettings } from '@/components/dashboard-main/settings/emergencyContactSettings';
 
 export default function Settings() {
   return (
@@ -25,6 +26,9 @@ export default function Settings() {
 
               {/* Payment Information Card */}
               <PaymentSettings />
+
+              {/* Emergency Contact Card */}
+              <EmergencySettings />
 
               {/* Change Password Card */}
               <PasswordSettings />

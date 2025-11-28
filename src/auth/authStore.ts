@@ -18,13 +18,14 @@ export type User = {
   profilePhoto?: string;
   // accountNumber?: number | string | undefined;
   // routingNumber?: number | string | undefined;
+  ACHProfile: {
+    ACHRouting?: number | string | undefined;
+    ACHAccount?: number | string | undefined;
+  };
   tenantInfo: {
-    ACHProfile: {
-      ACHRouting?: number | string | undefined;
-      ACHAccount?: number | string | undefined;
-    };
     [key: string]: any;
   };
+  [key: string]: any;
 };
 
 type AuthState = {
@@ -52,9 +53,54 @@ type AuthState = {
 //     }
 //   }
 // `;
+// const LOGIN_MUTATION = gql`
+//   mutation Login($email: String!, $password: String!, $tenantInfo: TenantInfoInput) {
+//     login(email: $email, password: $password, tenantInfo: $tenantInfo) {
+//       token
+//       user {
+//         id
+//         firstName
+//         lastName
+//         email
+//         phone
+//         role
+//         managerInfo {
+//           companyName
+//         }
+//         landlordInfo {
+//           ownedProperties
+//         }
+//         tenantInfo {
+//           propertyId
+//           leaseStartDate
+//           leaseEndDate
+//           rentAmount
+//           balanceDue
+//           paymentFrequency
+//           notificationPreferences
+//           emergencyContact {
+//             name
+//             phone
+//             relationship
+//           }
+//           ACHProfile {
+//             ACHRouting
+//             ACHAccount
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
+
 const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!, $tenantInfo: TenantInfoInput) {
-    login(email: $email, password: $password, tenantInfo: $tenantInfo) {
+  mutation Login(
+    $email: String!
+    $password: String!
+    $tenantInfo: TenantInfoInput
+    $managerInfo: ManagerInfoInput
+  ) {
+    login(email: $email, password: $password, tenantInfo: $tenantInfo, managerInfo: $managerInfo) {
       token
       user {
         id
@@ -63,10 +109,23 @@ const LOGIN_MUTATION = gql`
         email
         phone
         role
+        verificationStatus
+        notificationPreferences
+        emergencyContact {
+          name
+          phone
+          relationship
+        }
+        ACHProfile {
+          ACHRouting
+          ACHAccount
+        }
         managerInfo {
+          managerID
           companyName
         }
         landlordInfo {
+          ownerID
           ownedProperties
         }
         tenantInfo {
@@ -76,16 +135,6 @@ const LOGIN_MUTATION = gql`
           rentAmount
           balanceDue
           paymentFrequency
-          notificationPreferences
-          emergencyContact {
-            name
-            phone
-            relationship
-          }
-          ACHProfile {
-            ACHRouting
-            ACHAccount
-          }
         }
       }
     }
@@ -117,7 +166,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (data?.login) {
             const { token, user } = data.login;
-            const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 1 week from now
+            const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hr from now
 
             set({ token, user, expiresAt });
 

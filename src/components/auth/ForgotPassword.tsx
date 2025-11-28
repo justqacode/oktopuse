@@ -49,7 +49,6 @@ export const ForgotPasswordForm = () => {
       });
 
       if (result) {
-        // console.log('Registration successful:', result);
         toast.success('Request sent successfully! Check your email');
         setSuccess(true);
         form.reset();

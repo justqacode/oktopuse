@@ -34,6 +34,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
+import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per image
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -53,6 +54,8 @@ const formSchema = z.object({
     .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
       message: 'Rent amount must be a valid positive number',
     }),
+  leaseStartDate: z.string().min(1, { message: 'Lease start date is required' }),
+  leaseEndDate: z.string().min(1, { message: 'Lease end date is required' }),
   occupancyStatus: z.string().min(1, { message: 'Please select occupancy status' }),
   managementId: z.string().optional(),
   images: z
@@ -94,7 +97,10 @@ const ADD_PROPERTY_MUTATION = gql`
     $propertyType: String!
     $address: AddressInput!
     $amount: Float!
-    $description: String
+    $leaseEndDate: String!
+    $leaseStartDate: String!
+    $description: String!
+    $occupancy: String!
     $images: [String!]
     $managerID: ID
   ) {
@@ -103,6 +109,9 @@ const ADD_PROPERTY_MUTATION = gql`
       propertyType: $propertyType
       address: $address
       amount: $amount
+      leaseStartDate: $leaseStartDate
+      leaseEndDate: $leaseEndDate
+      occupancy: $occupancy
       description: $description
       images: $images
       managerID: $managerID
@@ -130,6 +139,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [addPropertyMutation] = useMutation(ADD_PROPERTY_MUTATION);
+  const { uploadImages, isUploading, progress } = useCloudinaryUpload();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -142,105 +152,75 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
       zipCode: '',
       description: '',
       rentAmount: '',
+      leaseStartDate: '',
+      leaseEndDate: '',
       occupancyStatus: '',
       managementId: '',
       images: undefined,
     },
   });
 
+  // ================== FILE HANDLERS ==================
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const validFiles = Array.from(files).filter((file) => ACCEPTED_IMAGE_TYPES.includes(file.type));
+
+    if (validFiles.length === 0) {
+      toast.error('Only JPG and PNG images are allowed');
+      return;
+    }
+
+    const newImages = [...selectedImages, ...validFiles].slice(0, MAX_IMAGES);
+    setSelectedImages(newImages);
+
+    // Update form value for validation
+    const dataTransfer = new DataTransfer();
+    newImages.forEach((file) => dataTransfer.items.add(file));
+    form.setValue('images', dataTransfer.files);
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = selectedImages.filter((_, i) => i !== index);
+    setSelectedImages(newImages);
+
+    const dataTransfer = new DataTransfer();
+    newImages.forEach((file) => dataTransfer.items.add(file));
+    form.setValue('images', dataTransfer.files);
+  };
+
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
 
     try {
-      // Prepare form data including images
+      const imageUrls = await uploadImages(selectedImages);
+
       // const formData = new FormData();
-      // formData.append('propertyName', data.propertyName);
+      // formData.append('name', data.propertyName);
       // formData.append('propertyType', data.propertyType);
-      // formData.append('address', data.address);
-      // formData.append('city', data.city);
-      // formData.append('state', data.state);
-      // formData.append('zipCode', data.zipCode);
+      // formData.append('address[street]', data.address);
+      // formData.append('address[city]', data.city);
+      // formData.append('address[state]', data.state);
+      // formData.append('address[zip]', data.zipCode);
+      // formData.append('amount', data.rentAmount);
+      // formData.append('leaseStartDate', data.leaseStartDate);
+      // formData.append('leaseEndDate', data.leaseEndDate);
+      // formData.append('occupancy', data.occupancyStatus);
       // formData.append('description', data.description || '');
-      // formData.append('rentAmount', data.rentAmount);
-      // formData.append('occupancyStatus', data.occupancyStatus);
-      // formData.append('managementId', data.managementId || '');
+
+      // if (data.managementId) {
+      //   formData.append('managerID', data.managementId);
+      // }
 
       // // Append all images
-      // selectedImages.forEach((image, index) => {
-      //   formData.append(`images[${index}]`, image);
+      // selectedImages.forEach((image) => {
+      //   formData.append('images', image);
       // });
-
-      // // Simulate API call
-      // await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // // Here you would make your actual API call:
-      // // const response = await fetch('/api/properties', {
-      // //   method: 'POST',
-      // //   body: formData,
-      // // });
-
-      // console.log('Property Data:', {
-      //   ...data,
-      //   imagesCount: selectedImages.length,
-      //   imageNames: selectedImages.map((img) => img.name),
-      // });
-
-      // // Show success message
-      // setShowSuccess(true);
-
-      // // Reset form and close modal after 2 seconds
-      // setTimeout(() => {
-      //   setShowSuccess(false);
-      //   form.reset();
-      //   setSelectedImages([]);
-      //   onOpenChange(false);
-      // }, 2000);
-
-      const formData = new FormData();
-      formData.append('name', data.propertyName);
-      formData.append('propertyType', data.propertyType);
-      formData.append('address[street]', data.address);
-      formData.append('address[city]', data.city);
-      formData.append('address[state]', data.state);
-      formData.append('address[zip]', data.zipCode);
-      formData.append('amount', data.rentAmount);
-      formData.append('occupancy', data.occupancyStatus);
-      formData.append('description', data.description || '');
-
-      if (data.managementId) {
-        formData.append('managerID', data.managementId);
-      }
-
-      // Append all images
-      selectedImages.forEach((image) => {
-        formData.append('images', image);
-      });
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Here you would make your actual API call:
-      // const response = await fetch('/api/properties', {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      // console.log('Property Data (API Format):', {
-      //   name: data.propertyName,
-      //   propertyType: data.propertyType,
-      //   address: {
-      //     street: data.address,
-      //     city: data.city,
-      //     state: data.state,
-      //     zip: data.zipCode,
-      //   },
-      //   amount: parseFloat(data.rentAmount),
-      //   occupancy: data.occupancyStatus,
-      //   description: data.description || '',
-      //   managerID: data.managementId || undefined,
-      //   // imagesCount: selectedImages.length,
-      //   imageNames: selectedImages.map((img) => img.name),
-      // });
       const { data: result } = await addPropertyMutation({
         variables: {
           name: data.propertyName,
@@ -252,11 +232,14 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
             zip: data.zipCode,
           },
           amount: parseFloat(data.rentAmount),
+          leaseStartDate: data.leaseStartDate,
+          leaseEndDate: data.leaseEndDate,
           occupancy: data.occupancyStatus,
           description: data.description || '',
           managerID: data.managementId || undefined || '68dfbacf320e9616e949fcdf',
           // imagesCount: selectedImages.length,
-          imageNames: selectedImages.map((img) => img.name),
+          // image: selectedImages.map((img) => img.name),
+          images: imageUrls,
         },
       });
 
@@ -286,24 +269,6 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
   const handleClear = () => {
     form.reset();
     setSelectedImages([]);
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const filesArray = Array.from(files);
-      setSelectedImages(filesArray);
-    }
-  };
-
-  const removeImage = (index: number) => {
-    const newImages = selectedImages.filter((_, i) => i !== index);
-    setSelectedImages(newImages);
-
-    // Update form value
-    const dataTransfer = new DataTransfer();
-    newImages.forEach((file) => dataTransfer.items.add(file));
-    form.setValue('images', dataTransfer.files);
   };
 
   return (
@@ -379,7 +344,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                     <FormControl>
                       <Textarea
                         placeholder='Enter full street address'
-                        className='min-h-[80px] resize-none'
+                        className='min-h-20 resize-none'
                         {...field}
                       />
                     </FormControl>
@@ -458,6 +423,46 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                 )}
               />
 
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                <FormField
+                  control={form.control}
+                  name='leaseStartDate'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lease Start Date *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='date'
+                          {...field}
+                          min={new Date().toISOString().split('T')[0]}
+                          className='w-full block'
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='leaseEndDate'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lease End Date *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='date'
+                          {...field}
+                          min={new Date().toISOString().split('T')[0]}
+                          className='w-full block'
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name='occupancyStatus'
@@ -529,10 +534,11 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                             multiple
                             className='hidden'
                             id='image-upload'
-                            onChange={(e) => {
-                              onChange(e.target.files);
-                              handleImageChange(e);
-                            }}
+                            // onChange={(e) => {
+                            //   onChange(e.target.files);
+                            //   handleImageChange(e);
+                            // }}
+                            onChange={handleFileChange}
                             {...field}
                           />
                           <Button

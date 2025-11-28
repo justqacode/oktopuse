@@ -174,6 +174,7 @@ export default function MaintenanceRequestModal({
 
     try {
       const imageUrls = await uploadImages(selectedImages);
+      console.log('Uploaded image URLs:', imageUrls);
 
       const { data: result } = await maintenanceRequest({
         variables: {
@@ -182,7 +183,8 @@ export default function MaintenanceRequestModal({
           preferedDateOfResolution: data.preferredDate,
           preferedTimeOfResolution: data.preferredTime,
           canManagementAccess: data.allowEntry === 'yes',
-          images: selectedImages.map((img) => img.name),
+          // images: selectedImages.map((img) => img.url),
+          images: imageUrls,
         },
       });
 
