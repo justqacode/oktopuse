@@ -11,7 +11,7 @@ import type { ReactNode } from 'react';
 
 type CardTypes = {
   cardDescription: string;
-  cardMainContent: string;
+  cardMainContent: string | number;
   topright?: ReactNode;
   footerTop?: ReactNode;
   footerBottom?: ReactNode;

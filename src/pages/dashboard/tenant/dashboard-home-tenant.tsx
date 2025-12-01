@@ -4,6 +4,9 @@ import MaintenanceRequests from '@/components/dashboard-main/maintenance-request
 import LeaseDoc from '@/components/dashboard-main/lease-doc';
 import { useState } from 'react';
 import { DashCard } from '@/components/dashboard-card';
+import { useAuthStore } from '@/auth/authStore';
+import { formatCurrency } from '@/utils/format-currency';
+import formatDate, { monthNames } from '@/utils/format-date';
 
 const tabs = [
   { value: 'rent-history', label: 'Rent History' },
@@ -13,6 +16,10 @@ const tabs = [
 
 export default function DashboardHomeTenant() {
   const [activeTab, setActiveTab] = useState('rent-history');
+  const { user } = useAuthStore();
+
+  const TD = user?.tenantInfo;
+  const leaseDate = formatDate(TD?.leaseEndDate);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -21,17 +28,21 @@ export default function DashboardHomeTenant() {
           <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
             <DashCard
               cardDescription='Unit'
-              cardMainContent='12B'
-              footerTop='Marple Apt.'
-              footerBottom='12 Mario Street, Invict drive.'
+              cardMainContent={TD?.rentalAddress || 'N/A'}
+              footerTop={TD?.rentalZip || 'N/A'}
+              footerBottom={`${TD?.rentalCity}, ${TD?.rentalState}` || 'N/A'}
             />
             <DashCard
               cardDescription='Lease End'
-              cardMainContent='31st'
-              footerTop='December'
-              footerBottom='2025'
+              cardMainContent={leaseDate?.day ?? 'N/A'}
+              footerTop={leaseDate?.month != null ? monthNames[leaseDate.month] : 'N/A'}
+              footerBottom={leaseDate?.year ?? 'N/A'}
             />
-            <DashCard cardDescription='Montly rent' cardMainContent='$0' />
+
+            <DashCard
+              cardDescription='Montly rent'
+              cardMainContent={formatCurrency(TD?.rentAmount || 0)}
+            />
           </div>
           <div className='py-4 lg:py-6 px-8'>
             <TabsLayout

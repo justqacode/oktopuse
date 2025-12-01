@@ -67,13 +67,13 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 // Mock data - replace with actual data from your auth/property store
-const mockPropertyData = {
-  propertyName: 'Sunset View Apartments - Unit 204',
-  fullRentAmount: 1500.0,
-  tenantId: 'tenant-123',
-  propertyId: 'property-001',
-  unitId: 'unit-204',
-};
+// const mockPropertyData = {
+//   propertyName: 'Sunset View Apartments - Unit 204',
+//   fullRentAmount: 1500.0,
+//   tenantId: 'tenant-123',
+//   propertyId: 'property-001',
+//   unitId: 'unit-204',
+// };
 
 interface PaymentModalProps {
   open: boolean;
@@ -105,6 +105,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   const [showSuccess, setShowSuccess] = useState(false);
   const [rentMutation] = useMutation(RENT_MUTATION);
   const { user } = useAuthStore();
+  const mon = user?.tenantInfo?.rentalAddress;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -125,8 +126,10 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
   const getPaymentAmount = () => {
     const type = form.getValues('amountType');
-    if (type === 'full') return mockPropertyData.fullRentAmount;
-    if (type === 'half') return mockPropertyData.fullRentAmount / 2;
+    // if (type === 'full') return mockPropertyData.fullRentAmount;
+    // if (type === 'half') return mockPropertyData.fullRentAmount / 2;
+    if (type === 'full') return user?.tenantInfo?.rentAmount;
+    if (type === 'half') return user?.tenantInfo?.fullRentAmount / 2;
     return parseFloat(form.getValues('customAmount') || '0');
   };
 
@@ -180,7 +183,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         <DialogHeader>
           <DialogTitle className='text-xl font-bold flex items-center gap-2'>Pay Rent</DialogTitle>
           <DialogDescription className='text-base font-medium text-foreground pt-2'>
-            {mockPropertyData.propertyName}
+            {mon}
           </DialogDescription>
         </DialogHeader>
 
@@ -211,13 +214,15 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
                           <div className='flex items-center space-x-2'>
                             <RadioGroupItem value='full' id='full' />
                             <label htmlFor='full' className='text-sm font-medium cursor-pointer'>
-                              Full Rent (${mockPropertyData.fullRentAmount.toFixed(2)})
+                              {/* Full Rent (${mockPropertyData.fullRentAmount.toFixed(2)}) */}
+                              Full Rent (${user?.tenantInfo?.rentAmount.toFixed(2)})
                             </label>
                           </div>
                           <div className='flex items-center space-x-2'>
                             <RadioGroupItem value='half' id='half' />
                             <label htmlFor='half' className='text-sm font-medium cursor-pointer'>
-                              Half Rent (${(mockPropertyData.fullRentAmount / 2).toFixed(2)})
+                              {/* Half Rent (${(mockPropertyData.fullRentAmount / 2).toFixed(2)}) */}
+                              Half Rent (${(user?.tenantInfo?.rentAmount / 2).toFixed(2)})
                             </label>
                           </div>
                           <div className='flex items-center space-x-2'>
