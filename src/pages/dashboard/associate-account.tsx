@@ -211,7 +211,7 @@ export default function AssociateAccount() {
                               Saving...
                             </span>
                           ) : (
-                            'Associatte Property'
+                            'Associate Property'
                           )}
                         </Button>
                       </div>
