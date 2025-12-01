@@ -476,8 +476,9 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value='vacant'>Vacant</SelectItem>
-                        <SelectItem value='occupied'>Occupied</SelectItem>
+                        <SelectItem value='Vacant'>Vacant</SelectItem>
+                        <SelectItem value='Occupied'>Occupied</SelectItem>
+                        <SelectItem value='Pending'>Pending</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

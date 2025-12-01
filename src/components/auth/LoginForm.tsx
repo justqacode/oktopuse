@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from './schemas';
-import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 import type z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
-import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
 import { useMutation } from '@apollo/client/react';
