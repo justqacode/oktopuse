@@ -8,9 +8,13 @@ export type Expenses = {
 
 export type Properties = {
   id: number;
-  propertyName: string;
-  tenant: string;
-  status: 'paid' | 'pending' | 'overdue';
+  name: string;
+  description?: string;
+  date: string;
+  images?: string;
+  propertyType: string;
+  amount: string;
+  address: string;
 };
 
 export type Messages = {

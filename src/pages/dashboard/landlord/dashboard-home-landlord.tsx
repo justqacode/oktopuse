@@ -5,9 +5,11 @@ import { DashCard } from '@/components/dashboard-card';
 import ExpensesHistory from '@/components/dashboard-main/expenses';
 import MaintenanceRequestsLandlord from '@/components/dashboard-main/maintenance-requests-landlord';
 import PaymentHistoryLandlord from '@/components/dashboard-main/payment-history-landlord';
+import Properties from '@/components/dashboard-main/properties';
 
 const tabs = [
   { value: 'payment-history', label: 'Payment History' },
+  { value: 'properties', label: 'Properties' },
   { value: 'expenses', label: 'Expenses' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
   { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
@@ -35,6 +37,10 @@ export default function DashboardHomeLandlord() {
             >
               <TabsContent value='payment-history'>
                 <PaymentHistoryLandlord />
+              </TabsContent>
+
+              <TabsContent value='properties'>
+                <Properties />
               </TabsContent>
 
               <TabsContent value='expenses'>

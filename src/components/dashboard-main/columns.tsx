@@ -275,15 +275,15 @@ export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
       </Badge>
     ),
   },
-  {
-    accessorKey: 'method',
-    header: 'Payment Method',
-    cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
-        {row.original.method}
-      </Badge>
-    ),
-  },
+  // {
+  //   accessorKey: 'method',
+  //   header: 'Payment Method',
+  //   cell: ({ row }) => (
+  //     <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
+  //       {row.original.method}
+  //     </Badge>
+  //   ),
+  // },
   {
     accessorKey: 'status',
     header: 'Status',
@@ -398,35 +398,48 @@ export const expensesColumn: ColumnDef<Expenses>[] = [
 
 export const propertiesColumn: ColumnDef<Properties>[] = [
   {
-    accessorKey: 'propertyName',
-    header: 'Property Name',
+    accessorKey: 'id',
+    header: 'Property ID',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.propertyName}
+        {row.original.id}
       </Button>
     ),
   },
   {
-    accessorKey: 'tenant',
-    header: 'Tenant',
+    accessorKey: 'date',
+    header: 'Date Added',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground w-fit px-1.5 text-left'>
-        {row.original.tenant}
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'name',
+    header: 'Property Name',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.name}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'propertyType',
+    header: 'Property Type',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.propertyType}
       </Badge>
     ),
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: 'amount',
+    header: 'Amount',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground px-1.5'>
-        {row.original.status === 'paid' ? (
-          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
-        ) : (
-          <IconLoader />
-        )}
-        {capitalizeFirstLetter(row.original.status)}
-      </Badge>
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.amount}
+      </Button>
     ),
   },
 ];
