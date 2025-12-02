@@ -157,7 +157,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Account Number *</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder='0123456789123456' {...field} />
+                    <Input type='text' placeholder='0123456789123456' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -170,7 +170,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Routing Number *</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder='123456789' {...field} />
+                    <Input type='text' placeholder='123456789' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
