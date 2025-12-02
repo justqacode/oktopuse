@@ -13,9 +13,9 @@ export function SiteHeader() {
   const [openAddProperty, setOpenAddProperty] = useState(false);
   const dueDate = new Date('2024-09-30');
   const today = new Date();
-  const sixMonths = 365 / 2;
+  // const sixMonths = 365 / 2;
 
-  const daysLeft = dueDate.getDate() - today.getDate();
+  // const daysLeft = dueDate.getDate() - today.getDate();
 
   const landlord = user?.role.includes('landlord');
   const tenant = user?.role.includes('tenant');

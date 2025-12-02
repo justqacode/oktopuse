@@ -94,7 +94,14 @@ export function ProfileSettings() {
       lastName: user?.lastName || '',
       email: user?.email || '',
       phone: user?.phone || '',
-      address: user?.managerInfo?.companyAddress || '',
+      address: user?.address || '',
+    },
+  });
+
+  const addressForm = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      address: user?.address || '',
     },
   });
 
@@ -106,11 +113,19 @@ export function ProfileSettings() {
         value.lastName !== user?.lastName ||
         value.email !== user?.email ||
         value.phone !== user?.phone ||
-        value.address !== user?.managerInfo?.companyAddress;
+        value.address !== user?.address;
       setHasProfileChanges(hasChanged);
     });
     return () => subscription.unsubscribe();
   }, [profileForm, user]);
+
+  useEffect(() => {
+    const subscription = addressForm.watch((value) => {
+      const hasChanged = value.address !== user?.address;
+      setHasProfileChanges(hasChanged);
+    });
+    return () => subscription.unsubscribe();
+  }, [addressForm, user]);
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
     setIsProfileLoading(true);
@@ -157,6 +172,38 @@ export function ProfileSettings() {
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
+        });
+        setProfileSuccess(true);
+        setHasProfileChanges(false);
+      }
+    } catch (error) {
+      setProfileError(
+        error instanceof Error ? error.message : 'Update failed. Please try again later.'
+      );
+    } finally {
+      setIsProfileLoading(false);
+    }
+  };
+
+  const onAddressSubmit = async (data: ProfileFormValues) => {
+    setIsProfileLoading(true);
+    setProfileError('');
+    setProfileSuccess(false);
+
+    try {
+      const { data: result } = await addressMutation({
+        variables: {
+          managerInfo: {
+            companyAddress: data.address,
+          },
+        },
+      });
+
+      if (result?.updateRenterProfile) {
+        updateUser({
+          managerInfo: {
+            companyAddress: data.address,
+          },
         });
         setProfileSuccess(true);
         setHasProfileChanges(false);
@@ -275,7 +322,7 @@ export function ProfileSettings() {
                   name='address'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Company Address</FormLabel>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -305,6 +352,63 @@ export function ProfileSettings() {
           </Form>
         </CardContent>
       </Card>
+
+      {manager && (
+        <Card>
+          <CardContent>
+            {profileSuccess && (
+              <Alert className='mb-6 bg-green-50 border-green-200'>
+                <CheckCircle2 className='h-4 w-4 text-green-600' />
+                <AlertDescription className='text-green-800'>
+                  Address updated successfully!
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div>Monalisa</div>
+
+            {profileError && (
+              <Alert className='mb-6 bg-red-50 border-red-200'>
+                <AlertCircle className='h-4 w-4 text-red-600' />
+                <AlertDescription className='text-red-800'>{profileError}</AlertDescription>
+              </Alert>
+            )}
+
+            <Form {...addressForm}>
+              <FormField
+                control={addressForm.control}
+                name='address'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Business Address</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className='flex justify-end'>
+                <Button
+                  type='button'
+                  onClick={addressForm.handleSubmit(onAddressSubmit)}
+                  disabled={isProfileLoading || !hasProfileChanges}
+                >
+                  {isProfileLoading ? (
+                    <span className='flex items-center'>
+                      <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
+                      Saving...
+                    </span>
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+              </div>
+            </Form>
+          </CardContent>
+        </Card>
+      )}
     </>
   );
 }

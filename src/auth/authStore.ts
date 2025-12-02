@@ -66,6 +66,7 @@ const LOGIN_MUTATION = gql`
         managerInfo {
           managerID
           companyName
+          companyAddress
         }
         landlordInfo {
           ownerID
