@@ -28,15 +28,16 @@ export default function DashboardHomeTenant() {
           <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
             <DashCard
               cardDescription='Unit'
-              cardMainContent={TD?.rentalAddress || 'N/A'}
-              footerTop={TD?.rentalZip || 'N/A'}
-              footerBottom={`${TD?.rentalCity}, ${TD?.rentalState}` || 'N/A'}
+              cardMainContent={TD?.rentalAddress || 'Pending Assignment'}
+              footerTop={TD?.rentalZip || ''}
+              footerBottom={`${TD?.rentalCity || ''}, ${TD?.rentalState || ''}`}
             />
+
             <DashCard
               cardDescription='Lease End'
-              cardMainContent={leaseDate?.day ?? 'N/A'}
-              footerTop={leaseDate?.month != null ? monthNames[leaseDate.month] : 'N/A'}
-              footerBottom={leaseDate?.year ?? 'N/A'}
+              cardMainContent={leaseDate?.day ?? 'No Active Lease'}
+              footerTop={leaseDate?.month != null ? monthNames[leaseDate.month] : ''}
+              footerBottom={leaseDate?.year ?? ''}
             />
 
             <DashCard

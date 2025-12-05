@@ -58,10 +58,10 @@ export function NavUser({
               <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
             </div>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <button onClick={() => logout(navigate)} className='ml-auto'>
-                  <LogOutIcon className='size-4' />
-                </button>
+              <TooltipTrigger asChild onClick={() => logout(navigate)}>
+                {/* <button onClick={() => logout(navigate)} className='ml-auto'> */}
+                <LogOutIcon className='size-4' />
+                {/* </button> */}
               </TooltipTrigger>
               <TooltipContent>Log out</TooltipContent>
             </Tooltip>

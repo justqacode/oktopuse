@@ -18,8 +18,10 @@ export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
 
-  console.log('User after login attempt:', user);
-  console.log('Verification status:', user?.verificationStatus);
+  // console.log('User after login attempt:', user);
+  // console.log('Verification status:', user?.verificationStatus);
+  const userAgent = navigator.userAgent || 'N/A';
+  console.log('User Agent:', userAgent);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
