@@ -73,26 +73,32 @@ const data = {
       icon: IconListDetails,
       roles: ['tenant', 'manager', 'landlord'],
     },
-  ] as NavItem[],
-  navSecondary: [
     {
       title: 'Settings',
       url: '/dashboard/settings',
       icon: IconSettings,
       roles: ['tenant', 'manager', 'landlord'],
     },
-    {
-      title: 'Get Help',
-      url: '#',
-      icon: IconHelp,
-      roles: ['tenant', 'manager', 'landlord'],
-    },
-    {
-      title: 'Search',
-      url: '#',
-      icon: IconSearch,
-      roles: ['tenant', 'manager', 'landlord'],
-    },
+  ] as NavItem[],
+  navSecondary: [
+    // {
+    //   title: 'Settings',
+    //   url: '/dashboard/settings',
+    //   icon: IconSettings,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
+    // {
+    //   title: 'Get Help',
+    //   url: '#',
+    //   icon: IconHelp,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
+    // {
+    //   title: 'Search',
+    //   url: '#',
+    //   icon: IconSearch,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
   ] as NavItem[],
   documents: [
     {

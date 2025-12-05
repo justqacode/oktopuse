@@ -24,6 +24,8 @@ import {
 } from '@/components/ui/sidebar';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
+import { LogOutIcon } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 
 export function NavUser({
   user,
@@ -42,61 +44,28 @@ export function NavUser({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-            >
-              <Avatar className='h-8 w-8 rounded-lg grayscale'>
-                <AvatarImage src={user.profilePhoto} alt={user.firstName} />
-                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-              </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{user.firstName}</span>
-                <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
-              </div>
-              <IconDotsVertical className='ml-auto size-4' />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
-            side={isMobile ? 'bottom' : 'right'}
-            align='end'
-            sideOffset={4}
+          {/* <DropdownMenuTrigger asChild> */}
+          <SidebarMenuButton
+            size='lg'
+            className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
           >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.profilePhoto} alt={user.firstName} />
-                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-                </Avatar>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>{user.firstName}</span>
-                  <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout(navigate)}>
-              <IconLogout />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+            <Avatar className='h-8 w-8 rounded-lg grayscale'>
+              <AvatarImage src={user.profilePhoto} alt={user.firstName} />
+              <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+            </Avatar>
+            <div className='grid flex-1 text-left text-sm leading-tight'>
+              <span className='truncate font-medium'>{user.firstName}</span>
+              <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
+            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button onClick={() => logout(navigate)} className='ml-auto'>
+                  <LogOutIcon className='size-4' />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>Log out</TooltipContent>
+            </Tooltip>
+          </SidebarMenuButton>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
