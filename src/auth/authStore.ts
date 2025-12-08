@@ -31,19 +31,34 @@ type AuthState = {
   user: User | null;
   isLoading: boolean;
   expiresAt: number | null;
-  login: (email: string, password: string, navigate: NavigateFunction) => Promise<void>;
+  login: (
+    email: string,
+    password: string,
+    ipa: string,
+    ua: string,
+    navigate: NavigateFunction
+  ) => Promise<void>;
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
 };
 
 const LOGIN_MUTATION = gql`
   mutation Login(
+    $ipa: String
+    $ua: String
     $email: String!
     $password: String!
     $tenantInfo: TenantInfoInput
     $managerInfo: ManagerInfoInput
   ) {
-    login(email: $email, password: $password, tenantInfo: $tenantInfo, managerInfo: $managerInfo) {
+    login(
+      ipa: $ipa
+      ua: $ua
+      email: $email
+      password: $password
+      tenantInfo: $tenantInfo
+      managerInfo: $managerInfo
+    ) {
       token
       user {
         id
@@ -98,7 +113,7 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       expiresAt: null,
 
-      login: async (email, password, navigate) => {
+      login: async (email, password, ipa, ua, navigate) => {
         set({ isLoading: true });
         try {
           type LoginMutationResponse = {
@@ -110,7 +125,7 @@ export const useAuthStore = create<AuthState>()(
 
           const { data } = await client.mutate<LoginMutationResponse>({
             mutation: LOGIN_MUTATION,
-            variables: { email, password },
+            variables: { email, password, ipa, ua },
           });
 
           if (data?.login) {

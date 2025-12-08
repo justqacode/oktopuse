@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
 import { useMutation } from '@apollo/client/react';
+import { useIP } from '@/hooks/user-ip';
 
 type FormValues = z.infer<typeof loginSchema>;
 
@@ -18,10 +19,11 @@ export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
 
-  // console.log('User after login attempt:', user);
-  // console.log('Verification status:', user?.verificationStatus);
-  // const userAgent = navigator.userAgent || 'N/A';
-  // console.log('User Agent:', userAgent);
+  const userAgent = navigator.userAgent || 'N/A';
+  console.log('User Agent:', userAgent);
+
+  const ip = useIP();
+  console.log('User IP:', ip);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -59,7 +61,7 @@ export const LoginForm = () => {
   }, [user]);
 
   const onSubmit = async (data: FormValues) => {
-    await login(data.email, data.password, navigate);
+    await login(data.email, data.password, ip, userAgent, navigate);
   };
 
   return (
