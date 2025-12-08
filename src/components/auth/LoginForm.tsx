@@ -20,8 +20,8 @@ export const LoginForm = () => {
 
   // console.log('User after login attempt:', user);
   // console.log('Verification status:', user?.verificationStatus);
-  const userAgent = navigator.userAgent || 'N/A';
-  console.log('User Agent:', userAgent);
+  // const userAgent = navigator.userAgent || 'N/A';
+  // console.log('User Agent:', userAgent);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),

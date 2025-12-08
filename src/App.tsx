@@ -55,7 +55,9 @@ export default function App() {
       <Toaster position='top-center' expand={true} richColors duration={2000} />
       <TooltipProvider>
         <BrowserRouter>
-          <GA4RouteTracker measurementId={config.GA4_MEASUREMENT_ID || ''} />
+          {process.env.NODE_ENV === 'production' && (
+            <GA4RouteTracker measurementId={config.GA4_MEASUREMENT_ID || ''} />
+          )}
           <Routes>
             {/* Public Routes */}
             <Route element={<PublicLayout />}>
