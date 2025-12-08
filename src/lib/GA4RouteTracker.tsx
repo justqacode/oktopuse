@@ -14,6 +14,7 @@ export default function GA4RouteTracker({ measurementId }: GA4RouteTrackerProps)
     if (!gtag || !measurementId) return;
 
     gtag('config', measurementId, {
+      event: 'page_view',
       page_location: window.location.href,
       page_path: location.pathname + location.search,
       page_title: document.title,
