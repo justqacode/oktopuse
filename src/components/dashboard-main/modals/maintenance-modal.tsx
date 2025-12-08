@@ -37,6 +37,7 @@ import { toast } from 'sonner';
 import { useMutation } from '@apollo/client/react';
 import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
 import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
+import { useAuthStore } from '@/auth/authStore';
 
 // ================== CONSTANTS ==================
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -99,14 +100,14 @@ const MAINTENANCE_MUTATION = gql`
 `;
 
 // Mock property/tenant info
-const mockApartmentData = {
-  apartmentName: 'Sunset View Apartments - Unit 204',
-  unitId: 'unit-204',
-  propertyId: 'property-001',
-  tenantId: 'tenant-123',
-  tenantEmail: 'tenant@example.com',
-  managerEmail: 'manager@example.com',
-};
+// const mockApartmentData = {
+//   apartmentName: 'Sunset View Apartments - Unit 204',
+//   unitId: 'unit-204',
+//   propertyId: 'property-001',
+//   tenantId: 'tenant-123',
+//   tenantEmail: 'tenant@example.com',
+//   managerEmail: 'manager@example.com',
+// };
 
 // ================== COMPONENT ==================
 interface MaintenanceRequestModalProps {
@@ -121,6 +122,8 @@ export default function MaintenanceRequestModal({
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const { user } = useAuthStore();
+  const mon = user?.tenantInfo?.rentalAddress;
 
   const [maintenanceRequest] = useMutation(MAINTENANCE_MUTATION);
   const { uploadImages, isUploading, progress } = useCloudinaryUpload();
@@ -213,7 +216,8 @@ export default function MaintenanceRequestModal({
             Maintenance Request
           </DialogTitle>
           <DialogDescription className='text-base font-medium text-foreground pt-2'>
-            {mockApartmentData.apartmentName}
+            {/* {mockApartmentData.apartmentName} */}
+            {mon}
           </DialogDescription>
         </DialogHeader>
 

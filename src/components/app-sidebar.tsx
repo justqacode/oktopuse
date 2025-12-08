@@ -73,26 +73,32 @@ const data = {
       icon: IconListDetails,
       roles: ['tenant', 'manager', 'landlord'],
     },
-  ] as NavItem[],
-  navSecondary: [
     {
       title: 'Settings',
       url: '/dashboard/settings',
       icon: IconSettings,
       roles: ['tenant', 'manager', 'landlord'],
     },
-    {
-      title: 'Get Help',
-      url: '#',
-      icon: IconHelp,
-      roles: ['tenant', 'manager', 'landlord'],
-    },
-    {
-      title: 'Search',
-      url: '#',
-      icon: IconSearch,
-      roles: ['tenant', 'manager', 'landlord'],
-    },
+  ] as NavItem[],
+  navSecondary: [
+    // {
+    //   title: 'Settings',
+    //   url: '/dashboard/settings',
+    //   icon: IconSettings,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
+    // {
+    //   title: 'Get Help',
+    //   url: '#',
+    //   icon: IconHelp,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
+    // {
+    //   title: 'Search',
+    //   url: '#',
+    //   icon: IconSearch,
+    //   roles: ['tenant', 'manager', 'landlord'],
+    // },
   ] as NavItem[],
   documents: [
     {
@@ -148,10 +154,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
               <NavLink to='/'>
                 <div className='flex items-center space-x-2'>
-                  <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
+                  {/* <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
                     <span className='text-primary-foreground font-bold text-sm'>OP</span>
                   </div>
-                  <span className='font-semibold text-lg'>Oktopuse</span>
+                  <span className='font-semibold text-lg'>Oktopuse</span> */}
+
+                  <img
+                    src='/oktopuse-logo-cropped.png'
+                    alt='Oktopuse Logo'
+                    className='h-8 w-auto'
+                  />
                 </div>
               </NavLink>
             </SidebarMenuButton>

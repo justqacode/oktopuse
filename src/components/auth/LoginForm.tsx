@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from './schemas';
-import { Eye, EyeOff, LogIn, Check } from 'lucide-react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 import type z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/auth/authStore';
 import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
 import { useMutation } from '@apollo/client/react';
@@ -18,6 +17,11 @@ export const LoginForm = () => {
   const { login, isLoading, user } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
+
+  // console.log('User after login attempt:', user);
+  // console.log('Verification status:', user?.verificationStatus);
+  // const userAgent = navigator.userAgent || 'N/A';
+  // console.log('User Agent:', userAgent);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -35,10 +39,8 @@ export const LoginForm = () => {
     }
   };
 
-  const onSubmit = async (data: FormValues) => {
-    await login(data.email, data.password, navigate);
-
-    if (user && !user.verificationStatus) {
+  useEffect(() => {
+    if (user && user.verificationStatus === false) {
       toast.warning('You need to verify your account!', {
         classNames: {
           toast: 'flex-col !items-start ',
@@ -48,12 +50,16 @@ export const LoginForm = () => {
         action: {
           label: <div>Resend Verification Email</div>,
           onClick: () => {
-            resendVerificationEmail(data.email);
+            resendVerificationEmail(user.email);
           },
         },
         duration: 8000,
       });
     }
+  }, [user]);
+
+  const onSubmit = async (data: FormValues) => {
+    await login(data.email, data.password, navigate);
   };
 
   return (

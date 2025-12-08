@@ -54,6 +54,8 @@ type PaymentFormValues = z.infer<typeof paymentSchema>;
 export function PaymentSettings() {
   const { user, updateUser } = useAuthStore();
 
+  console.log('User ACH Profile:', user?.ACHProfile);
+
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState('');
@@ -65,16 +67,12 @@ export function PaymentSettings() {
   const paymentForm = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      accountNumber:
-        user && user.ACHProfile.ACHAccount !== undefined
-          ? String(user.ACHProfile.ACHAccount)
-          : undefined,
-      routingNumber:
-        user && user.ACHProfile.ACHRouting !== undefined
-          ? String(user.ACHProfile.ACHRouting)
-          : undefined,
+      accountNumber: user?.ACHProfile?.ACHAccount as string,
+      routingNumber: user?.ACHProfile?.ACHRouting as string,
     },
   });
+
+  console.log('Payment Form Values:', paymentForm.getValues());
 
   // Track payment form changes
   useEffect(() => {
@@ -159,7 +157,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Account Number *</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder='0123456789123456' {...field} />
+                    <Input type='text' placeholder='0123456789123456' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -172,7 +170,7 @@ export function PaymentSettings() {
                 <FormItem>
                   <FormLabel>Routing Number *</FormLabel>
                   <FormControl>
-                    <Input type='number' placeholder='123456789' {...field} />
+                    <Input type='text' placeholder='123456789' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

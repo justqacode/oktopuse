@@ -32,6 +32,16 @@ const PROFILE_MUTATION = gql`
   }
 `;
 
+const ADDRESS_MUTATION = gql`
+  mutation UpdateRenterProfile($managerInfo: ManagerInfoInput) {
+    updateRenterProfile(managerInfo: $managerInfo) {
+      managerInfo {
+        companyAddress
+      }
+    }
+  }
+`;
+
 type UpdateRenterProfileProp = {
   updateRenterProfile: {
     firstName: string;
@@ -74,6 +84,7 @@ export function ProfileSettings() {
   const [hasProfileChanges, setHasProfileChanges] = useState(false);
 
   const [profileMutation] = useMutation<UpdateRenterProfileProp>(PROFILE_MUTATION);
+  const [addressMutation] = useMutation<UpdateRenterProfileProp>(ADDRESS_MUTATION);
 
   // Profile form
   const profileForm = useForm<ProfileFormValues>({
@@ -83,7 +94,7 @@ export function ProfileSettings() {
       lastName: user?.lastName || '',
       email: user?.email || '',
       phone: user?.phone || '',
-      address: user?.address || '',
+      address: user?.managerInfo?.companyAddress || '',
     },
   });
 
@@ -95,7 +106,7 @@ export function ProfileSettings() {
         value.lastName !== user?.lastName ||
         value.email !== user?.email ||
         value.phone !== user?.phone ||
-        value.address !== user?.address;
+        value.address !== user?.managerInfo?.companyAddress;
       setHasProfileChanges(hasChanged);
     });
     return () => subscription.unsubscribe();
@@ -107,14 +118,37 @@ export function ProfileSettings() {
     setProfileSuccess(false);
 
     try {
+      if (manager) {
+        const { data: result } = await addressMutation({
+          variables: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            managerInfo: {
+              companyAddress: data.address,
+            },
+          },
+        });
+
+        if (result?.updateRenterProfile) {
+          updateUser({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            managerInfo: {
+              companyAddress: data.address,
+            },
+          });
+          setProfileSuccess(true);
+          setHasProfileChanges(false);
+        }
+      }
+
       const { data: result } = await profileMutation({
         variables: {
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
-          managerInfo: {
-            companyAddress: data.address,
-          },
         },
       });
 
@@ -123,9 +157,6 @@ export function ProfileSettings() {
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
-          managerInfo: {
-            companyAddress: data.address,
-          },
         });
         setProfileSuccess(true);
         setHasProfileChanges(false);
@@ -140,138 +171,140 @@ export function ProfileSettings() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className='flex items-center gap-2'>
-          <User className='h-5 w-5' />
-          Profile Information
-        </CardTitle>
-        <CardDescription>Update your personal information and contact details</CardDescription>
-      </CardHeader>
-      <CardContent>
-        {profileSuccess && (
-          <Alert className='mb-6 bg-green-50 border-green-200'>
-            <CheckCircle2 className='h-4 w-4 text-green-600' />
-            <AlertDescription className='text-green-800'>
-              Profile updated successfully!
-            </AlertDescription>
-          </Alert>
-        )}
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <User className='h-5 w-5' />
+            Profile Information
+          </CardTitle>
+          <CardDescription>Update your personal information and contact details</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {profileSuccess && (
+            <Alert className='mb-6 bg-green-50 border-green-200'>
+              <CheckCircle2 className='h-4 w-4 text-green-600' />
+              <AlertDescription className='text-green-800'>
+                Profile updated successfully!
+              </AlertDescription>
+            </Alert>
+          )}
 
-        {profileError && (
-          <Alert className='mb-6 bg-red-50 border-red-200'>
-            <AlertCircle className='h-4 w-4 text-red-600' />
-            <AlertDescription className='text-red-800'>{profileError}</AlertDescription>
-          </Alert>
-        )}
+          {profileError && (
+            <Alert className='mb-6 bg-red-50 border-red-200'>
+              <AlertCircle className='h-4 w-4 text-red-600' />
+              <AlertDescription className='text-red-800'>{profileError}</AlertDescription>
+            </Alert>
+          )}
 
-        <Form {...profileForm}>
-          <div className='space-y-4'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <Form {...profileForm}>
+            <div className='space-y-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <FormField
+                  control={profileForm.control}
+                  name='firstName'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name *</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={profileForm.control}
+                  name='lastName'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name *</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={profileForm.control}
-                name='firstName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={profileForm.control}
-                name='lastName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={profileForm.control}
-              name='email'
-              disabled
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email *</FormLabel>
-                  <FormControl>
-                    <Input type='email' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={profileForm.control}
-              name='phone'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number *</FormLabel>
-                  <FormControl>
-                    <Input type='tel' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div>
-              <FormLabel>Role</FormLabel>
-              <Input
-                value={getRoleDisplay(
-                  Array.isArray(user?.role) ? user?.role[0] ?? '' : user?.role ?? ''
-                )}
+                name='email'
                 disabled
-                className='bg-muted cursor-not-allowed'
-              />
-              <p className='text-sm text-muted-foreground mt-2'>Your role cannot be changed</p>
-            </div>
-
-            {manager && (
-              <FormField
-                control={profileForm.control}
-                name='address'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Email *</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input type='email' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            )}
 
-            <div className='flex justify-end'>
-              <Button
-                type='button'
-                onClick={profileForm.handleSubmit(onProfileSubmit)}
-                disabled={isProfileLoading || !hasProfileChanges}
-              >
-                {isProfileLoading ? (
-                  <span className='flex items-center'>
-                    <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
-                    Saving...
-                  </span>
-                ) : (
-                  'Save Changes'
+              <FormField
+                control={profileForm.control}
+                name='phone'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number *</FormLabel>
+                    <FormControl>
+                      <Input type='tel' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </Button>
+              />
+
+              <div>
+                <FormLabel>Role</FormLabel>
+                <Input
+                  value={getRoleDisplay(
+                    Array.isArray(user?.role) ? user?.role[0] ?? '' : user?.role ?? ''
+                  )}
+                  disabled
+                  className='bg-muted cursor-not-allowed'
+                />
+                <p className='text-sm text-muted-foreground mt-2'>Your role cannot be changed</p>
+              </div>
+
+              {manager && (
+                <FormField
+                  control={profileForm.control}
+                  name='address'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company Address</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              <div className='flex justify-end'>
+                <Button
+                  type='button'
+                  onClick={profileForm.handleSubmit(onProfileSubmit)}
+                  disabled={isProfileLoading || !hasProfileChanges}
+                >
+                  {isProfileLoading ? (
+                    <span className='flex items-center'>
+                      <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
+                      Saving...
+                    </span>
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+              </div>
             </div>
-          </div>
-        </Form>
-      </CardContent>
-    </Card>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

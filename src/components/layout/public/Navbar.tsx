@@ -64,10 +64,11 @@ export const Navbar = () => {
       <div className='container mx-auto px-4 lg:px-8 flex items-center justify-between h-16'>
         {/* Logo */}
         <Link to='/' className='flex items-center space-x-2'>
-          <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
+          {/* <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
             <span className='text-primary-foreground font-bold text-sm'>OP</span>
           </div>
-          <span className='font-semibold text-lg'>Oktopuse</span>
+          <span className='font-semibold text-lg'>Oktopuse</span> */}
+          <img src='/oktopuse-logo-cropped.png' alt='Oktopuse Logo' className='h-8 w-auto' />
         </Link>
 
         {/* Desktop Navigation */}
