@@ -20,10 +20,10 @@ export const LoginForm = () => {
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
 
   const userAgent = navigator.userAgent || 'N/A';
-  console.log('User Agent:', userAgent);
+  // console.log('User Agent:', userAgent);
 
   const ip = useIP();
-  console.log('User IP:', ip);
+  // console.log('User IP:', ip);
 
   const form = useForm({
     resolver: zodResolver(loginSchema),

@@ -38,12 +38,6 @@ type AuthState = {
     ua: string,
     navigate: NavigateFunction
   ) => Promise<void>;
-  loginWithGoogle: (
-    credential: string,
-    ipa: string,
-    ua: string,
-    navigate: NavigateFunction
-  ) => Promise<void>;
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
 };
@@ -65,55 +59,6 @@ const LOGIN_MUTATION = gql`
       tenantInfo: $tenantInfo
       managerInfo: $managerInfo
     ) {
-      token
-      user {
-        id
-        firstName
-        lastName
-        email
-        phone
-        role
-        verificationStatus
-        notificationPreferences
-        emergencyContact {
-          name
-          phone
-          relationship
-        }
-        ACHProfile {
-          ACHRouting
-          ACHAccount
-        }
-        managerInfo {
-          managerID
-          companyName
-          companyAddress
-        }
-        landlordInfo {
-          ownerID
-          ownedProperties
-        }
-        tenantInfo {
-          propertyId
-          leaseStartDate
-          leaseEndDate
-          rentAmount
-          balanceDue
-          paymentFrequency
-          rentalAddress
-          rentAmount
-          rentalZip
-          rentalState
-          rentalCity
-        }
-      }
-    }
-  }
-`;
-
-const GOOGLE_LOGIN_MUTATION = gql`
-  mutation GoogleLogin($token: String!, $ipa: String, $ua: String) {
-    googleLogin(token: $token, ipa: $ipa, ua: $ua) {
       token
       user {
         id
@@ -197,39 +142,6 @@ export const useAuthStore = create<AuthState>()(
         } catch (err: any) {
           toast('Login failed');
           console.error('Login error:', err.message);
-        } finally {
-          set({ isLoading: false });
-        }
-      },
-
-      loginWithGoogle: async (credential, ipa, ua, navigate) => {
-        set({ isLoading: true });
-        try {
-          type GoogleLoginResponse = {
-            googleLogin: {
-              token: string;
-              user: User;
-            };
-          };
-
-          const { data } = await client.mutate<GoogleLoginResponse>({
-            mutation: GOOGLE_LOGIN_MUTATION,
-            variables: { token: credential, ipa, ua },
-          });
-
-          if (data?.googleLogin) {
-            const { token: authToken, user } = data.googleLogin;
-            const expiresAt = Date.now() + 60 * 60 * 1000;
-
-            set({ token: authToken, user, expiresAt });
-            toast.success('Logged in with Google');
-            navigate('/dashboard');
-          } else {
-            toast('Google login failed');
-          }
-        } catch (err: any) {
-          toast('Google login failed');
-          console.error('Google login error:', err.message);
         } finally {
           set({ isLoading: false });
         }
