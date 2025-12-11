@@ -31,7 +31,6 @@ function RequireAuth() {
 }
 
 function PublicLayout() {
-  //This is for redeployment
   return (
     <>
       <Navbar />
