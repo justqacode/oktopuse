@@ -16,6 +16,7 @@ export const SocialLogin001 = () => {
 
     try {
       if (provider === 'Google') {
+        //trigger redep
         const res = await fetch('https://oauth2.googleapis.com/token', {
           method: 'POST',
           headers: {
