@@ -112,8 +112,8 @@ const LOGIN_MUTATION = gql`
 `;
 
 const GOOGLE_LOGIN_MUTATION = gql`
-  mutation GoogleLogin($token: String!, $ipa: String, $ua: String) {
-    googleLogin(token: $token, ipa: $ipa, ua: $ua) {
+  mutation Login($googleToken: String!, $ipa: String, $ua: String) {
+    login(googleToken: $googleToken, ipa: $ipa, ua: $ua) {
       token
       user {
         id
@@ -206,7 +206,7 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           type GoogleLoginResponse = {
-            googleLogin: {
+            login: {
               token: string;
               user: User;
             };
@@ -214,11 +214,11 @@ export const useAuthStore = create<AuthState>()(
 
           const { data } = await client.mutate<GoogleLoginResponse>({
             mutation: GOOGLE_LOGIN_MUTATION,
-            variables: { token: credential, ipa, ua },
+            variables: { googleToken: credential, ipa, ua },
           });
 
-          if (data?.googleLogin) {
-            const { token: authToken, user } = data.googleLogin;
+          if (data?.login) {
+            const { token: authToken, user } = data.login;
             const expiresAt = Date.now() + 60 * 60 * 1000;
 
             set({ token: authToken, user, expiresAt });

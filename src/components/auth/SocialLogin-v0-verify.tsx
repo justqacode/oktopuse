@@ -26,7 +26,7 @@ export const SocialLogin001 = () => {
             code: 'code',
             client_id: config.GOOGLE_CLIENT_ID,
             client_secret: config.GOOGLE_CLIENT_SECRET,
-            redirect_uri: window.location.href,
+            redirect_uri: window.location.origin,
             grant_type: 'authorization_code',
           }),
         });
