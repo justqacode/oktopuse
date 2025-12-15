@@ -9,6 +9,7 @@ import type { Role } from '@/types';
 
 export type User = {
   id: string;
+  oktoID: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -68,6 +69,7 @@ const LOGIN_MUTATION = gql`
       token
       user {
         id
+        oktoID
         firstName
         lastName
         email
@@ -117,6 +119,7 @@ const GOOGLE_LOGIN_MUTATION = gql`
       token
       user {
         id
+        oktoID
         firstName
         lastName
         email
