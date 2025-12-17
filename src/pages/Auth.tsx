@@ -9,7 +9,6 @@ import {
 import { ContactForm } from '@/components/auth/ContactForm';
 import { ForgotPasswordForm } from '@/components/auth/ForgotPassword';
 import { ResetPasswordAfterForgetForm } from '@/components/auth/ResetPasswordAfterForget';
-import { SocialLogin001 } from '@/components/auth/SocialLogin-v0-verify';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Auth = () => {
@@ -33,7 +32,6 @@ export const Auth = () => {
         <div className='px-8'>{route === '/contact' && <ContactForm />}</div>
         <div className='px-8'>
           <SocialLogin />
-          {/* <SocialLogin001 /> */}
           {/* <AuthFooter isLogin={isLogin} navigate={navigate} /> */}
         </div>
       </div>

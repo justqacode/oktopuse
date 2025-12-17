@@ -19,6 +19,7 @@ import GA4RouteTracker from './lib/GA4RouteTracker';
 import { config } from './config/app.config';
 import AssociateAccount from './pages/dashboard/associate-account';
 import { useSEO } from './hooks/useSEO';
+import NotFound from './pages/NotFound';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -195,6 +196,7 @@ export default function App() {
               <Route path='/about' element={<AboutPage />} />
               <Route path='/terms' element={<TermsPage />} />
               <Route path='/privacy-policy' element={<PrivacyPage />} />
+              <Route path='*' element={<NotFound />} />
             </Route>
 
             {/* Protected Dashboard Routes */}
