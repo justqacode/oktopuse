@@ -31,6 +31,7 @@ type AuthState = {
   token: string | null;
   user: User | null;
   isLoading: boolean;
+  isLoadingGoogle: boolean;
   expiresAt: number | null;
   login: (
     email: string,
@@ -169,6 +170,7 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isLoading: false,
+      isLoadingGoogle: false,
       expiresAt: null,
 
       login: async (email, password, ipa, ua, navigate) => {
@@ -206,7 +208,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       loginWithGoogle: async (credential, ipa, ua, navigate) => {
-        set({ isLoading: true });
+        set({ isLoadingGoogle: true });
         try {
           type GoogleLoginResponse = {
             login: {
@@ -234,7 +236,7 @@ export const useAuthStore = create<AuthState>()(
           toast('Google login failed');
           console.error('Google login error:', err.message);
         } finally {
-          set({ isLoading: false });
+          set({ isLoadingGoogle: false });
         }
       },
 

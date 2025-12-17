@@ -8,7 +8,7 @@ import { config } from '@/config/app.config';
 
 export const SocialLogin = () => {
   const navigate = useNavigate();
-  const { loginWithGoogle, isLoading } = useAuthStore();
+  const { loginWithGoogle, isLoadingGoogle } = useAuthStore();
   const ip = useIP();
   const userAgent = navigator.userAgent || 'N/A';
   const googleConfigured = Boolean(config.GOOGLE_CLIENT_ID);
@@ -55,11 +55,11 @@ export const SocialLogin = () => {
         <button
           type='button'
           onClick={handleGoogleClick}
-          disabled={isLoading || !googleConfigured}
+          disabled={isLoadingGoogle || !googleConfigured}
           className='w-full inline-flex justify-center items-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-70'
         >
           <FcGoogle className='w-6 h-6 mr-2' />
-          {isLoading ? 'Connecting...' : 'Continue with Google'}
+          {isLoadingGoogle ? 'Connecting...' : 'Continue with Google'}
         </button>
       </div>
     </div>
