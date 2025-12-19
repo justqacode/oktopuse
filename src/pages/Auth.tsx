@@ -31,7 +31,7 @@ export const Auth = () => {
         </div>
         <div className='px-8'>{route === '/contact' && <ContactForm />}</div>
         <div className='px-8'>
-          {/* <SocialLogin /> */}
+          <SocialLogin />
           {/* <AuthFooter isLogin={isLogin} navigate={navigate} /> */}
         </div>
       </div>

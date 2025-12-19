@@ -435,7 +435,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                           type='date'
                           {...field}
                           min={new Date().toISOString().split('T')[0]}
-                          className='w-full block'
+                          className='w-full block bg-white'
                         />
                       </FormControl>
                       <FormMessage />
@@ -454,7 +454,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                           type='date'
                           {...field}
                           min={new Date().toISOString().split('T')[0]}
-                          className='w-full block'
+                          className='w-full block bg-white'
                         />
                       </FormControl>
                       <FormMessage />

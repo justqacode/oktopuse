@@ -50,7 +50,7 @@ type AssociateProps = {
 const associateSchema = z.object({
   role: z.string().min(2, { message: 'Name is required' }),
   userId: z.string().min(2, { message: 'Relationship is required' }),
-  propertyId: z.string().min(10, { message: 'Enter a valid PropertyId number' }),
+  propertyId: z.string().min(10, { message: 'Enter a valid Property ID' }),
 });
 
 type AssociateFormValues = z.infer<typeof associateSchema>;
@@ -190,9 +190,12 @@ export default function AssociateAccount() {
                         name='propertyId'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Proprty name or Id *</FormLabel>
+                            <FormLabel>Property ID *</FormLabel>
                             <FormControl>
-                              <Input placeholder='Enter property name or ID' {...field} />
+                              <Input
+                                placeholder='Enter property ID - 6941f890876c34abc390c0d0'
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

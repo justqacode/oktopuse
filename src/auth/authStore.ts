@@ -9,6 +9,7 @@ import type { Role } from '@/types';
 
 export type User = {
   id: string;
+  oktoID: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -30,23 +31,96 @@ type AuthState = {
   token: string | null;
   user: User | null;
   isLoading: boolean;
+  isLoadingGoogle: boolean;
   expiresAt: number | null;
-  login: (email: string, password: string, navigate: NavigateFunction) => Promise<void>;
+  login: (
+    email: string,
+    password: string,
+    ipa: string,
+    ua: string,
+    navigate: NavigateFunction
+  ) => Promise<void>;
+  loginWithGoogle: (
+    credential: string,
+    ipa: string,
+    ua: string,
+    navigate: NavigateFunction
+  ) => Promise<void>;
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
 };
 
 const LOGIN_MUTATION = gql`
   mutation Login(
+    $ipa: String
+    $ua: String
     $email: String!
     $password: String!
     $tenantInfo: TenantInfoInput
     $managerInfo: ManagerInfoInput
   ) {
-    login(email: $email, password: $password, tenantInfo: $tenantInfo, managerInfo: $managerInfo) {
+    login(
+      ipa: $ipa
+      ua: $ua
+      email: $email
+      password: $password
+      tenantInfo: $tenantInfo
+      managerInfo: $managerInfo
+    ) {
       token
       user {
         id
+        oktoID
+        firstName
+        lastName
+        email
+        phone
+        role
+        verificationStatus
+        notificationPreferences
+        emergencyContact {
+          name
+          phone
+          relationship
+        }
+        ACHProfile {
+          ACHRouting
+          ACHAccount
+        }
+        managerInfo {
+          managerID
+          companyName
+          companyAddress
+        }
+        landlordInfo {
+          ownerID
+          ownedProperties
+        }
+        tenantInfo {
+          propertyId
+          leaseStartDate
+          leaseEndDate
+          rentAmount
+          balanceDue
+          paymentFrequency
+          rentalAddress
+          rentAmount
+          rentalZip
+          rentalState
+          rentalCity
+        }
+      }
+    }
+  }
+`;
+
+const GOOGLE_LOGIN_MUTATION = gql`
+  mutation Login($googleToken: String!, $ipa: String, $ua: String) {
+    login(googleToken: $googleToken, ipa: $ipa, ua: $ua) {
+      token
+      user {
+        id
+        oktoID
         firstName
         lastName
         email
@@ -96,9 +170,10 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       user: null,
       isLoading: false,
+      isLoadingGoogle: false,
       expiresAt: null,
 
-      login: async (email, password, navigate) => {
+      login: async (email, password, ipa, ua, navigate) => {
         set({ isLoading: true });
         try {
           type LoginMutationResponse = {
@@ -110,7 +185,7 @@ export const useAuthStore = create<AuthState>()(
 
           const { data } = await client.mutate<LoginMutationResponse>({
             mutation: LOGIN_MUTATION,
-            variables: { email, password },
+            variables: { email, password, ipa, ua },
           });
 
           if (data?.login) {
@@ -129,6 +204,39 @@ export const useAuthStore = create<AuthState>()(
           console.error('Login error:', err.message);
         } finally {
           set({ isLoading: false });
+        }
+      },
+
+      loginWithGoogle: async (credential, ipa, ua, navigate) => {
+        set({ isLoadingGoogle: true });
+        try {
+          type GoogleLoginResponse = {
+            login: {
+              token: string;
+              user: User;
+            };
+          };
+
+          const { data } = await client.mutate<GoogleLoginResponse>({
+            mutation: GOOGLE_LOGIN_MUTATION,
+            variables: { googleToken: credential, ipa, ua },
+          });
+
+          if (data?.login) {
+            const { token: authToken, user } = data.login;
+            const expiresAt = Date.now() + 60 * 60 * 1000;
+
+            set({ token: authToken, user, expiresAt });
+            toast.success('Logged in with Google');
+            navigate('/dashboard');
+          } else {
+            toast('Google login failed');
+          }
+        } catch (err: any) {
+          toast('Google login failed');
+          console.error('Google login error:', err.message);
+        } finally {
+          set({ isLoadingGoogle: false });
         }
       },
 

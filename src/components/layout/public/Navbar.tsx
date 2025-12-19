@@ -33,8 +33,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState('');
+  // const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user, logout } = useAuthStore();
 
   useEffect(() => {
@@ -43,12 +43,12 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSearch = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    console.log('Searching for:', searchQuery);
-    setIsSearchOpen(false);
-    setSearchQuery('');
-  };
+  // const handleSearch = (e?: React.FormEvent) => {
+  //   e?.preventDefault();
+  //   console.log('Searching for:', searchQuery);
+  //   setIsSearchOpen(false);
+  //   setSearchQuery('');
+  // };
 
   const handleLogout = () => logout(navigate);
 
@@ -187,7 +187,7 @@ export const Navbar = () => {
                 <Link to='/contact'>Contact Oktopuse</Link>
               </Button>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger>
                   <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
                     <Avatar className='h-8 w-8'>
                       <AvatarFallback>{user?.firstName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
