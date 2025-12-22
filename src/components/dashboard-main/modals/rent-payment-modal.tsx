@@ -49,9 +49,13 @@ const formSchema = z
     scheduleDate: z.string().min(1, 'Please select a payment month'),
     notes: z.string().optional(),
     // Bank details fields
-    accountNumber: z.string().optional(),
-    routingNumber: z.string().optional(),
-    accountHolderName: z.string().optional(),
+    accountNumber: z
+      .string()
+      .min(6, { message: 'Account number must be between 6-17 digits' })
+      .max(17, { message: 'Account number must be between 6-17 digits' })
+      .optional(),
+    routingNumber: z.string().min(9, { message: 'Routing number must be 9 digits' }).optional(),
+    accountHolderName: z.string().min(1, 'Please enter a valid holder name').optional(),
     accountHolderType: z.enum(['individual', 'business']).optional(),
   })
   .refine(
