@@ -74,10 +74,16 @@ const data = {
       roles: ['tenant', 'manager', 'landlord'],
     },
     {
+      title: 'Users',
+      url: '/dashboard/admin/users',
+      icon: IconUsers,
+      roles: ['manager', 'admin'],
+    },
+    {
       title: 'Settings',
       url: '/dashboard/settings',
       icon: IconSettings,
-      roles: ['tenant', 'manager', 'landlord'],
+      roles: ['tenant', 'manager', 'landlord', 'admin'],
     },
   ] as NavItem[],
   navSecondary: [

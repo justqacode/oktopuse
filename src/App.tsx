@@ -20,6 +20,7 @@ import { config } from './config/app.config';
 import AssociateAccount from './pages/dashboard/associate-account';
 import { useSEO } from './hooks/useSEO';
 import NotFound from './pages/NotFound';
+import UsersPage from './pages/dashboard/admin/users';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -205,6 +206,7 @@ export default function App() {
                 <Route index element={<DashboardHomePage />} />
                 <Route path='payments' element={<PaymentsPage />} />
                 <Route path='associate-accounts' element={<AssociateAccountPage />} />
+                <Route path='users' element={<UsersPage />} />
                 <Route path='settings' element={<SettingsPage />} />
                 <Route path='messages' element={<MessagesPage />} />
               </Route>

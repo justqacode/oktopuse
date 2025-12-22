@@ -73,3 +73,13 @@ export type PaymentHistoryManager = {
   status: string;
   docLink: string;
 };
+
+export type UserAdmin = {
+  userName: string;
+  email: string;
+  role: 'Admin' | 'PM' | 'Landlord' | 'Tenant';
+  accountStatus: 'Active' | 'Suspended' | 'Pending Verification' | 'Not Verified';
+  registerdDate: string;
+  lastLogin: string;
+  verified: boolean;
+};

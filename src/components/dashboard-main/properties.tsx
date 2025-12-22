@@ -50,7 +50,7 @@ export default function Properties() {
       enablePagination
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
       loading={loading}
     />
   );

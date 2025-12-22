@@ -1,4 +1,13 @@
-import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
+import {
+  IconCircleCheckFilled,
+  IconCircleXFilled,
+  IconCreditCard,
+  IconDotsVertical,
+  IconLoader,
+  IconLogout,
+  IconNotification,
+  IconUserCircle,
+} from '@tabler/icons-react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,7 +21,21 @@ import type {
   PaymentHistoryManager,
   Properties,
   TenantRequest,
+  UserAdmin,
 } from './types';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { SidebarMenuButton } from '../ui/sidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useAuthStore } from '@/auth/authStore';
+import { Check, TicketCheck } from 'lucide-react';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -553,5 +576,155 @@ export const paymentHistoryManagerColumn: ColumnDef<PaymentHistoryManager>[] = [
         {row.original.docLink}
       </Button>
     ),
+  },
+];
+
+export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
+  {
+    accessorKey: 'userName',
+    header: 'User Name',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.userName}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => (
+      <div className='text-muted-foreground w-fit text-left'>{row.original.email}</div>
+    ),
+  },
+  {
+    accessorKey: 'role',
+    header: 'Role',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.role}
+      </Button>
+    ),
+  },
+
+  {
+    accessorKey: 'accountStatus',
+    header: 'Account Status',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5'>
+        {row.original.accountStatus === 'Active' ? (
+          <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+        ) : (
+          <IconLoader />
+        )}
+        {capitalizeFirstLetter(row.original.accountStatus)}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'registerdDate',
+    header: 'Registered Date',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.registerdDate}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'lastLogin',
+    header: 'Last Login',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.lastLogin}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'verified',
+    header: 'Verified',
+    cell: ({ row }) => (
+      <Badge variant='outline' className='text-muted-foreground px-1.5 border  rounded-full'>
+        {row.original.verified === true ? (
+          <span className='flex items-center text-green-500 [&>svg]:size-4'>
+            <Check className='mr-1' /> Verified
+          </span>
+        ) : (
+          'Unverified'
+        )}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => {
+      const { user } = useAuthStore();
+
+      if (user === null) return '';
+
+      return (
+        // <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
+
+        //   Download
+        // </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size='lg'
+              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+            >
+              <Avatar className='h-8 w-8 rounded-lg grayscale'>
+                <AvatarImage src={user.profilePhoto} alt={user.firstName} />
+                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+              </Avatar>
+              <div className='grid flex-1 text-left text-sm leading-tight'>
+                <span className='truncate font-medium'>{user.firstName}</span>
+                <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
+              </div>
+              <IconDotsVertical className='ml-auto size-4' />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
+            // side={isMobile ? 'bottom' : 'right'}
+            align='end'
+            sideOffset={4}
+          >
+            <DropdownMenuLabel className='p-0 font-normal'>
+              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                <Avatar className='h-8 w-8 rounded-lg'>
+                  <AvatarImage src={user.profilePhoto} alt={user.firstName} />
+                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                </Avatar>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-medium'>{user.firstName}</span>
+                  <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <IconUserCircle />
+                Account
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <IconCreditCard />
+                Billing
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <IconNotification />
+                Notifications
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => console.log('log out')}>
+              <IconLogout />
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

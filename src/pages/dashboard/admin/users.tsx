@@ -2,10 +2,11 @@ import { DataTable } from '@/components/data-table';
 import { useAuthStore } from '@/auth/authStore';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
-import { paymentHistoryManagerColumn } from '@/components/dashboard-main/columns';
+import { paymentHistoryManagerColumn, usersAdminColumn } from '@/components/dashboard-main/columns';
 import formatDate from '@/utils/format-date';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/utils/format-currency';
+import { usersAdminMockData } from '@/components/dashboard-main/chats';
 
 const GET_ALL_MANAGER_PAYMENTS = gql`
   query GetRentHistoryForManager {
@@ -22,23 +23,12 @@ const GET_ALL_MANAGER_PAYMENTS = gql`
   }
 `;
 
-export default function PaymentHistoryManager() {
+export default function UsersPage() {
   const { user } = useAuthStore();
   const { data, loading } = useQuery<any>(GET_ALL_MANAGER_PAYMENTS, {
     fetchPolicy: 'cache-and-network',
     variables: { managerID: user?.id },
   });
-
-  const rentHistoryData = data?.getRentHistoryForManager || [];
-  const rentHistoryFormatted = rentHistoryData.map((item: any) => ({
-    id: '...' + item._id.slice(-6),
-    paymentRef: item.paymentRef,
-    date: formatDate(item.date),
-    amountReceived: formatCurrency(item.amountReceived) || 0,
-    note: item.note?.split(0, 22) || 'N/A',
-    docLink: item.docLink || 'N/A',
-    status: item.status || 'pending',
-  }));
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -46,19 +36,19 @@ export default function PaymentHistoryManager() {
         <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
           <div className='py-4 lg:py-6 px-8'>
             <div className='flex justify-between text-lg font-semibold mb-2'>
-              <p>Payment History</p>
+              <p>Registered Users</p>
               <Button
                 variant='default'
                 size='sm'
                 className='hidden sm:flex'
-                onClick={() => console.log('pay landlord')}
+                onClick={() => console.log('should be search')}
               >
-                Pay landlord
+                Should be search
               </Button>
             </div>
             <DataTable
-              columns={paymentHistoryManagerColumn}
-              data={rentHistoryFormatted}
+              columns={usersAdminColumn}
+              data={usersAdminMockData}
               enablePagination
               enableColumnVisibility
               enableSorting

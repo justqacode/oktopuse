@@ -81,7 +81,7 @@ export default function MaintenanceRequestsManager() {
       enableColumnVisibility
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
       loading={loading}
     />
   );

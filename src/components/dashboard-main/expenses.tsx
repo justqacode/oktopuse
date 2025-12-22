@@ -38,7 +38,7 @@ export default function ExpensesHistory() {
       enablePagination
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
     />
   );
 }
