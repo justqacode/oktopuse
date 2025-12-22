@@ -4,6 +4,20 @@
 
 React + Vite + Typescript + Tailwind
 
+### Commit pattern from 2025-12-22
+
+- **feat** – A new feature is introduced with the changes.
+- **fix** – A bug fix has occurred.
+- **chore** – Changes that do not relate to a fix or feature and do not modify `src` or test files (for example, updating dependencies).
+- **refactor** – Code changes that neither fix a bug nor add a feature.
+- **docs** – Updates to documentation, such as the README or other Markdown files.
+- **style** – Changes that do not affect the meaning of the code, typically related to formatting (white-space, missing semicolons, etc.).
+- **test** – Adding new tests or correcting existing tests.
+- **perf** – Performance improvements.
+- **ci** – Changes related to continuous integration.
+- **build** – Changes that affect the build system or external dependencies.
+- **revert** – Reverts a previous commit.
+
 # 📊 DataTable & TabsLayout
 
 A flexible set of components for building **interactive tables** and
