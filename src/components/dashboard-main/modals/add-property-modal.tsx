@@ -40,50 +40,66 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per image
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 const MAX_IMAGES = 15;
 
-const formSchema = z.object({
-  propertyName: z.string().min(1, { message: 'Property name is required' }),
-  propertyType: z.string().min(1, { message: 'Please select a property type' }),
-  address: z.string().min(10, { message: 'Address must be at least 10 characters' }),
-  city: z.string().min(1, { message: 'City is required' }),
-  state: z.string().min(2, { message: 'State is required' }),
-  zipCode: z.string().min(5, { message: 'Zip code must be at least 5 digits' }),
-  description: z.string().optional(),
-  rentAmount: z
-    .string()
-    .min(1, { message: 'Rent amount is required' })
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-      message: 'Rent amount must be a valid positive number',
-    }),
-  leaseStartDate: z.string().min(1, { message: 'Lease start date is required' }),
-  leaseEndDate: z.string().min(1, { message: 'Lease end date is required' }),
-  occupancyStatus: z.string().min(1, { message: 'Please select occupancy status' }),
-  managementId: z.string().optional(),
-  images: z
-    .any()
-    .optional()
-    .refine(
-      (files) => {
-        if (!files || files.length === 0) return true;
-        return files.length <= MAX_IMAGES;
-      },
-      { message: `You can upload up to ${MAX_IMAGES} images` }
-    )
-    .refine(
-      (files) => {
-        if (!files || files.length === 0) return true;
-        return Array.from(files).every((file: any) => file.size <= MAX_FILE_SIZE);
-      },
-      { message: 'Each image must be less than 5MB' }
-    )
-    .refine(
-      (files) => {
-        if (!files || files.length === 0) return true;
-        return Array.from(files).every((file: any) => ACCEPTED_IMAGE_TYPES.includes(file.type));
-      },
-      { message: 'Only .jpg and .png files are accepted' }
-    ),
-});
+const formSchema = z
+  .object({
+    propertyName: z.string().min(1, { message: 'Property name is required' }),
+    propertyType: z.string().min(1, { message: 'Please select a property type' }),
+    address: z.string().min(10, { message: 'Address must be at least 10 characters' }),
+    city: z.string().min(1, { message: 'City is required' }),
+    state: z.string().min(2, { message: 'State is required' }),
+    zipCode: z.string().min(5, { message: 'Zip code must be at least 5 digits' }),
+    description: z.string().optional(),
+    rentAmount: z
+      .string()
+      .min(1, { message: 'Rent amount is required' })
+      .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
+        message: 'Rent amount must be a valid positive number',
+      }),
+    leaseStartDate: z.string().min(1, { message: 'Lease start date is required' }),
+    leaseEndDate: z.string().min(1, { message: 'Lease end date is required' }),
+    occupancyStatus: z.string().min(1, { message: 'Please select occupancy status' }),
+    managementId: z.string().optional(),
+    images: z
+      .any()
+      .optional()
+      .refine(
+        (files) => {
+          if (!files || files.length === 0) return true;
+          return files.length <= MAX_IMAGES;
+        },
+        { message: `You can upload up to ${MAX_IMAGES} images` }
+      )
+      .refine(
+        (files) => {
+          if (!files || files.length === 0) return true;
+          return Array.from(files).every((file: any) => file.size <= MAX_FILE_SIZE);
+        },
+        { message: 'Each image must be less than 5MB' }
+      )
+      .refine(
+        (files) => {
+          if (!files || files.length === 0) return true;
+          return Array.from(files).every((file: any) => ACCEPTED_IMAGE_TYPES.includes(file.type));
+        },
+        { message: 'Only .jpg and .png files are accepted' }
+      ),
+  })
+  .superRefine((data, ctx) => {
+    const startDate = new Date(data.leaseStartDate);
+    const endDate = new Date(data.leaseEndDate);
 
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return;
+    }
+
+    if (endDate <= startDate) {
+      ctx.addIssue({
+        path: ['leaseEndDate'],
+        message: 'Lease end date must be after lease start date',
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });
 type FormValues = z.infer<typeof formSchema>;
 
 interface AddPropertyModalProps {
@@ -423,7 +439,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                 )}
               />
 
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <FormField
                   control={form.control}
                   name='leaseStartDate'
