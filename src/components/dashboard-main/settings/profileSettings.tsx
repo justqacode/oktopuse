@@ -53,13 +53,44 @@ type UpdateRenterProfileProp = {
   };
 };
 
+const nameRegex = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+
 // Profile form schema
 const profileSchema = z.object({
-  firstName: z.string().min(1, { message: 'First name is required' }),
-  lastName: z.string().min(1, { message: 'Last name is required' }),
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  phone: z.string().min(10, { message: 'Phone number must be at least 10 digits' }),
-  address: z.string().optional(),
+  firstName: z
+    .string()
+    .trim()
+    .min(1, { message: 'First name is required' })
+    .max(50, { message: 'First name is too long' })
+    .regex(nameRegex, {
+      message: 'First name can only contain letters, spaces, hyphens, or apostrophes',
+    }),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, { message: 'Last name is required' })
+    .max(50, { message: 'Last name is too long' })
+    .regex(nameRegex, {
+      message: 'Last name can only contain letters, spaces, hyphens, or apostrophes',
+    }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: 'Please enter a valid email address' })
+    .max(254, { message: 'Email is too long' }),
+  phone: z
+    .string()
+    .trim()
+    .refine((val) => phoneRegex.test(val.replace(/\s|-/g, '')), {
+      message: 'Please enter a valid phone number',
+    }),
+  address: z
+    .string()
+    .trim()
+    .min(5, { message: 'Address is too short' })
+    .max(255, { message: 'Address is too long' })
+    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
