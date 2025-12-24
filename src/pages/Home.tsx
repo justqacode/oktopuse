@@ -419,6 +419,391 @@ export function Home() {
           </div>
         </div>
       </div>
+
+      {/* Pricing Section */}
+      <div className='max-w-7xl mx-auto px-6 py-20'>
+        <div className='text-center mb-16'>
+          <h2 className='text-5xl font-light text-slate-800 mb-4'>Select a Plan</h2>
+          <p className='text-xl text-slate-600'>
+            Choose a plan that best fits your property management needs.
+          </p>
+        </div>
+
+        {/* Billing Toggle */}
+        {/* <div className='flex items-center justify-center gap-4 mb-12'>
+          <span className='text-slate-700 font-medium'>Billed Monthly</span>
+          <button className='relative inline-flex h-7 w-12 items-center rounded-full bg-blue-600'>
+            <span className='inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-6'></span>
+          </button>
+          <span className='text-slate-700 font-medium'>Billed Annually</span>
+          <span className='inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800'>
+            Save 20%
+          </span>
+        </div> */}
+
+        {/* Pricing Cards */}
+        <div className='grid md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+          {/* Free Trial */}
+          <div className='bg-white rounded-2xl shadow-lg p-8 flex flex-col hover:bg-blue hover:border hover:border-blue-200 transition-colors duration-300'>
+            <div className='text-center mb-6'>
+              <div className='inline-block p-4 bg-gray-100 rounded-full mb-4'>
+                <svg
+                  className='w-12 h-12 text-gray-600'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={1.5}
+                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
+                  />
+                </svg>
+              </div>
+              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Free Trial</h3>
+              <div className='mb-4'>
+                <span className='text-5xl font-bold text-slate-900'>$0</span>
+                <span className='text-slate-600 ml-2'>forever</span>
+              </div>
+            </div>
+
+            <div className='space-y-4 mb-8 flex-grow'>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Manage 1 Property</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Limited to 5 Units</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>View Payments Only</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Basic Support</span>
+              </div>
+            </div>
+
+            <button className='w-full py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed'>
+              Current Plan
+            </button>
+          </div>
+
+          {/* Basic Plan */}
+          <div className='bg-white rounded-2xl shadow-2xl p-8 flex flex-col border-4 border-blue-600 hover:bg-blue hover:border relative transform scale-105'>
+            <div className='absolute -top-4 left-1/2 transform -translate-x-1/2'>
+              <span className='bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full text-sm font-bold'>
+                POPULAR
+              </span>
+            </div>
+
+            <div className='text-center mb-6'>
+              <div className='inline-block p-4 bg-blue-100 rounded-full mb-4'>
+                <svg
+                  className='w-12 h-12 text-blue-600'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={1.5}
+                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
+                  />
+                </svg>
+              </div>
+              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Basic</h3>
+              <div className='mb-4'>
+                <span className='text-5xl font-bold text-slate-900'>$25</span>
+                <span className='text-slate-600 ml-2'>/mo</span>
+              </div>
+            </div>
+
+            <div className='space-y-4 mb-8 flex-grow'>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700 font-medium'>Manage Up to 3 Properties</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Up to 20 Units</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Collect Rent Payments</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Maintenance Management</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Standard Support</span>
+              </div>
+            </div>
+
+            <Link to='/register'>
+              <div className='w-full flex justify-center  py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'>
+                Upgrade
+              </div>
+            </Link>
+          </div>
+
+          {/* Pro Plan */}
+          <div className='bg-white rounded-2xl shadow-lg p-8 flex flex-col hover:bg-blue hover:border'>
+            <div className='text-center mb-6'>
+              <div className='inline-block p-4 bg-amber-100 rounded-full mb-4'>
+                <svg
+                  className='w-12 h-12 text-amber-600'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={1.5}
+                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
+                  />
+                </svg>
+              </div>
+              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Pro</h3>
+              <div className='mb-4'>
+                <span className='text-5xl font-bold text-slate-900'>$50</span>
+                <span className='text-slate-600 ml-2'>/mo</span>
+              </div>
+            </div>
+
+            <div className='space-y-4 mb-8 flex-grow'>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700 font-medium'>Manage Unlimited Properties</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Unlimited Units</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Collect Rent Payments</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>File Uploads for Payments</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Advanced Reporting</span>
+              </div>
+              <div className='flex items-start gap-3'>
+                <svg
+                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M5 13l4 4L19 7'
+                  />
+                </svg>
+                <span className='text-slate-700'>Priority Support</span>
+              </div>
+            </div>
+
+            <Link to='/register'>
+              <div className='w-full flex justify-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'>
+                Upgrade
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Contact Section */}
+        <div className='text-center mt-12'>
+          <p className='text-slate-600 text-lg'>
+            Need a custom plan?{' '}
+            <a href='/contact' className='text-blue-600 hover:text-blue-700 font-medium underline'>
+              Contact
+            </a>{' '}
+            us for personalized solutions.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

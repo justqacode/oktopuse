@@ -585,17 +585,20 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
     header: 'User Name',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.userName}
+        <div className='grid flex-1 text-left text-sm leading-tight'>
+          <span className='truncate font-medium text-black'> {row.original.userName}</span>
+          <span className='text-muted-foreground truncate text-xs'>{row.original.email}</span>
+        </div>
       </Button>
     ),
   },
-  {
-    accessorKey: 'email',
-    header: 'Email',
-    cell: ({ row }) => (
-      <div className='text-muted-foreground w-fit text-left'>{row.original.email}</div>
-    ),
-  },
+  // {
+  //   accessorKey: 'email',
+  //   header: 'Email',
+  //   cell: ({ row }) => (
+  //     <div className='text-muted-foreground w-fit text-left'>{row.original.email}</div>
+  //   ),
+  // },
   {
     accessorKey: 'role',
     header: 'Role',
@@ -625,19 +628,25 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
     header: 'Registered Date',
     cell: ({ row }) => (
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.registerdDate}
+        {/* {row.original.registerdDate} */}
+        <div className='grid flex-1 text-left text-sm leading-tight'>
+          <span className='truncate font-medium text-black'> {row.original.registerdDate}</span>
+          <span className='text-muted-foreground truncate text-xs'>
+            Last login: {row.original.lastLogin}
+          </span>
+        </div>
       </Button>
     ),
   },
-  {
-    accessorKey: 'lastLogin',
-    header: 'Last Login',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.lastLogin}
-      </Button>
-    ),
-  },
+  // {
+  //   accessorKey: 'lastLogin',
+  //   header: 'Last Login',
+  //   cell: ({ row }) => (
+  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+  //       {row.original.lastLogin}
+  //     </Button>
+  //   ),
+  // },
   {
     accessorKey: 'verified',
     header: 'Verified',
@@ -673,14 +682,14 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
               size='lg'
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
-              <Avatar className='h-8 w-8 rounded-lg grayscale'>
+              {/* <Avatar className='h-8 w-8 rounded-lg grayscale'>
                 <AvatarImage src={user.profilePhoto} alt={user.firstName} />
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>{user.firstName}</span>
                 <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
-              </div>
+              </div> */}
               <IconDotsVertical className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>

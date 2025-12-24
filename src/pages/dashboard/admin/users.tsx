@@ -55,6 +55,7 @@ export default function UsersPage() {
               enableFiltering
               pageSize={10}
               loading={loading}
+              emptyState='No registered users found.'
             />
           </div>
         </div>
