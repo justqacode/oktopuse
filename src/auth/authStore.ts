@@ -200,7 +200,10 @@ export const useAuthStore = create<AuthState>()(
             toast('Login failed');
           }
         } catch (err: any) {
-          toast('Login failed');
+          toast('Login failed', {
+            className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
+            duration: 10000,
+          });
           console.error('Login error:', err.message);
         } finally {
           set({ isLoading: false });
@@ -233,7 +236,10 @@ export const useAuthStore = create<AuthState>()(
             toast('Google login failed');
           }
         } catch (err: any) {
-          toast('Google login failed');
+          toast('Google login failed', {
+            className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
+            duration: 10000,
+          });
           console.error('Google login error:', err.message);
         } finally {
           set({ isLoadingGoogle: false });
