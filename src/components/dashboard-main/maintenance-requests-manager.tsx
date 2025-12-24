@@ -1,52 +1,29 @@
 import { DataTable } from '@/components/data-table';
 import { maintenanceRequestsManagerColumn } from './columns';
-import type { ManagerRequest } from './types';
 import { useAuthStore } from '@/auth/authStore';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
-
-const sampleData: ManagerRequest[] = [
-  {
-    id: 1,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'in-progress',
-  },
-  {
-    id: 2,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'completed',
-  },
-  {
-    id: 4,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'rejected',
-  },
-];
+import formatDate from '@/utils/format-date';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
-  query GetHistory($managerID: ID!) {
-    getMaintenanceHistoryByManager(managerID: $managerID) {
+  query GetMaintenanceHistoryByManager {
+    getMaintenanceHistoryByManager {
       _id
       description
       status
       createdAt
+      category
+      images
+      propertyDetails {
+        name
+        propertyType
+        address {
+          street
+          city
+          state
+          zip
+        }
+      }
     }
   }
 `;
@@ -61,13 +38,13 @@ export default function MaintenanceRequestsManager() {
 
   // console.log('Landlord Maintenance Requests:', data);
 
-  const maintenanceHistoryData = data?.getMaintenanceHistoryByLandLord || [];
+  const maintenanceHistoryData = data?.getMaintenanceHistoryByManager || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
-    date: item.createdAt,
-    property: item.description.split(0, 22) || 0,
-    tenant: item.description.split(0, 22) || 0,
-    category: 'needs fix from sam',
+    date: formatDate(item.createdAt),
+    property: item,
+    tenant: item.propertyDetails.name || 0,
+    category: item.category || 'Others',
     status: item.status || 'pending',
   }));
 

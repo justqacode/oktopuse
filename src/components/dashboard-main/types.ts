@@ -38,10 +38,20 @@ export type TenantRequest = {
 export type ManagerRequest = {
   id: number;
   date: string;
-  property: string;
+  property: any;
   tenant: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+  propertyDetails: {
+    name: string;
+    propertyType: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
+  };
 };
 
 export type LandlordRequest = {

@@ -35,7 +35,7 @@ import {
 import { SidebarMenuButton } from '../ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAuthStore } from '@/auth/authStore';
-import { Check, TicketCheck } from 'lucide-react';
+import { Check, DotIcon, EllipsisVertical, TicketCheck } from 'lucide-react';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -164,7 +164,18 @@ export const maintenanceRequestsManagerColumn: ColumnDef<ManagerRequest>[] = [
     header: 'Property',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.property}
+        <div className='grid flex-1 text-left text-sm leading-tight'>
+          <span className='truncate font-medium text-black'>
+            {row.original.property.propertyDetails.propertyType}
+          </span>
+          <span className='text-muted-foreground truncate text-xs'>
+            {row.original.property.propertyDetails.address.street}
+          </span>
+          <span className='text-muted-foreground truncate text-xs'>
+            {row.original.property.propertyDetails.address.city},{' '}
+            {row.original.property.propertyDetails.address.state}
+          </span>
+        </div>
       </Button>
     ),
   },
@@ -200,6 +211,16 @@ export const maintenanceRequestsManagerColumn: ColumnDef<ManagerRequest>[] = [
         )}
         {capitalizeFirstLetter(row.original.status)}
       </Badge>
+    ),
+  },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
+        {/* {row.original.type} */}
+        <EllipsisVertical />
+      </Button>
     ),
   },
 ];
