@@ -174,6 +174,14 @@ function MessagesPage() {
   return <DashboardChats />;
 }
 
+function UsersAdminPage() {
+  useSEO({
+    title: 'Admin - Users',
+    description: 'View your messages and conversations',
+  });
+  return <UsersPage />;
+}
+
 export default function App() {
   return (
     <ApolloProvider client={client}>
@@ -206,9 +214,12 @@ export default function App() {
                 <Route index element={<DashboardHomePage />} />
                 <Route path='payments' element={<PaymentsPage />} />
                 <Route path='associate-accounts' element={<AssociateAccountPage />} />
-                <Route path='users' element={<UsersPage />} />
                 <Route path='settings' element={<SettingsPage />} />
                 <Route path='messages' element={<MessagesPage />} />
+
+                <Route path='admin'>
+                  <Route path='users' element={<UsersAdminPage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>
