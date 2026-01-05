@@ -1,8 +1,20 @@
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export function Home() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/pricing') {
+      const pricingSection = document.getElementById('pricing');
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
+
   return (
     <div className='w-full min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 relative overflow-hidden'>
       {/* Decorative elements */}
@@ -421,7 +433,7 @@ export function Home() {
       </div>
 
       {/* Pricing Section */}
-      <div className='max-w-7xl mx-auto px-6 py-20'>
+      <div id='pricing' className='max-w-7xl mx-auto px-6 py-20'>
         <div className='text-center mb-16'>
           <h2 className='text-5xl font-light text-slate-800 mb-4'>Select a Plan</h2>
           <p className='text-xl text-slate-600'>
