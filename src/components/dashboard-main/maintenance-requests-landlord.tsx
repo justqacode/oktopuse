@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DataTable } from '@/components/data-table';
-import { maintenanceRequestsLandlordColumn } from './columns';
+import { maintenanceRequestsLandlordColumn, maintenanceRequestsManagerColumn } from './columns';
 import type { LandlordRequest, ManagerRequest } from './types';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
@@ -8,76 +8,18 @@ import { useAuthStore } from '@/auth/authStore';
 import formatDate from '@/utils/format-date';
 import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
 
-const sampleData: ManagerRequest[] = [
-  {
-    id: 1,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'in-progress',
-  },
-  {
-    id: 2,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'completed',
-  },
-  {
-    id: 4,
-    date: '20-09-2024',
-    property: 'Mariot 43',
-    tenant: 'Peter McMayers',
-    category: 'Executive Summary',
-    status: 'rejected',
-  },
-];
-
-// const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
-//   query GetMaintenanceHistoryByLandLord {
-//     getMaintenanceHistoryByLandLord {
-//       _id
-//       description
-//       status
-//       createdAt
-//       category
-//       images
-//       propertyDetails {
-//         name
-//         propertyType
-//         address {
-//           street
-//           city
-//           state
-//           zip
-//         }
-//       }
-//     }
-//   }
-// `;
-
 const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
-  query GetMaintenanceHistoryByLandLord {
-    getMaintenanceHistoryByLandLord {
+  query GetMaintenanceHistoryByManager {
+    getMaintenanceHistoryByManager {
       _id
       description
       status
       createdAt
       category
       images
-      property
       propertyDetails {
         name
+        propertyType
         address {
           street
           city
@@ -89,6 +31,29 @@ const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
   }
 `;
 
+// const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
+//   query GetMaintenanceHistoryByLandLord {
+//     getMaintenanceHistoryByLandLord {
+//       _id
+//       description
+//       status
+//       createdAt
+//       category
+//       images
+//       property
+//       propertyDetails {
+//         name
+//         address {
+//           street
+//           city
+//           state
+//           zip
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export default function MaintenanceRequestsLandlord() {
   const { user } = useAuthStore();
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
@@ -99,15 +64,25 @@ export default function MaintenanceRequestsLandlord() {
     variables: { ownerID: user?.id },
   });
 
-  const maintenanceHistoryData = data?.getMaintenanceHistoryByLandLord || [];
+  // const maintenanceHistoryData = data?.getMaintenanceHistoryByLandLord || [];
+  // const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
+  //   id: '...' + item._id.slice(-6),
+  //   date: formatDate(item.createdAt) || '',
+  //   property: item.propertyDetails.name,
+  //   description: item.description.split(0, 22) || 0,
+  //   category: item.category,
+  //   status: item.status || 'pending',
+  //   tenant: item.propertyDetails.address,
+  // }));
+
+  const maintenanceHistoryData = data?.getMaintenanceHistoryByManager || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
-    date: formatDate(item.createdAt) || '',
-    property: item.propertyDetails.name,
-    description: item.description.split(0, 22) || 0,
-    category: item.category,
+    date: formatDate(item.createdAt),
+    property: item,
+    tenant: item.propertyDetails.name || 0,
+    category: item.category || 'Others',
     status: item.status || 'pending',
-    tenant: item.propertyDetails.address,
   }));
 
   const handleRowClick = (request: any) => {
@@ -118,7 +93,9 @@ export default function MaintenanceRequestsLandlord() {
   return (
     <>
       <DataTable
-        columns={maintenanceRequestsLandlordColumn}
+        // columns={maintenanceRequestsLandlordColumn}
+        // data={maintenanceHistoryFormatted}
+        columns={maintenanceRequestsManagerColumn}
         data={maintenanceHistoryFormatted}
         enablePagination
         enableColumnVisibility
