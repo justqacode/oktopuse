@@ -116,6 +116,7 @@ const ADD_PROPERTY_MUTATION = gql`
     $amount: Float!
     $leaseEndDate: String!
     $leaseStartDate: String!
+    $listingDate: String!
     $description: String!
     $occupancy: String!
     $images: [String!]
