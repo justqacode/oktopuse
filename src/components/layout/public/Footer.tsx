@@ -72,6 +72,11 @@ export const Footer = () => {
                   About Us
                 </a>
               </li>
+              <li>
+                <a href='/pricing' className='hover:text-white transition'>
+                  Pricing
+                </a>
+              </li>
             </ul>
           </div>
 
