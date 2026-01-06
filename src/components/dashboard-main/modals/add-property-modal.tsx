@@ -57,6 +57,7 @@ const formSchema = z
       }),
     leaseStartDate: z.string().min(1, { message: 'Lease start date is required' }),
     leaseEndDate: z.string().min(1, { message: 'Lease end date is required' }),
+    listingDate: z.string().min(1, { message: 'Listing date is required' }),
     occupancyStatus: z.string().min(1, { message: 'Please select occupancy status' }),
     managementId: z.string().optional(),
     images: z
@@ -127,6 +128,7 @@ const ADD_PROPERTY_MUTATION = gql`
       amount: $amount
       leaseStartDate: $leaseStartDate
       leaseEndDate: $leaseEndDate
+      listingDate: $listingDate
       occupancy: $occupancy
       description: $description
       images: $images
@@ -170,6 +172,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
       rentAmount: '',
       leaseStartDate: '',
       leaseEndDate: '',
+      listingDate: '',
       occupancyStatus: '',
       managementId: '',
       images: undefined,
@@ -250,6 +253,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
           amount: parseFloat(data.rentAmount),
           leaseStartDate: data.leaseStartDate,
           leaseEndDate: data.leaseEndDate,
+          listingDate: data.listingDate,
           occupancy: data.occupancyStatus,
           description: data.description || '',
           managerID: data.managementId || undefined || '68dfbacf320e9616e949fcdf',
@@ -439,7 +443,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                 )}
               />
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-start'>
+              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
                 <FormField
                   control={form.control}
                   name='leaseStartDate'
@@ -465,6 +469,25 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Lease End Date *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type='date'
+                          {...field}
+                          min={new Date().toISOString().split('T')[0]}
+                          className='w-full block bg-white'
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='listingDate'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Listing Date *</FormLabel>
                       <FormControl>
                         <Input
                           type='date'
