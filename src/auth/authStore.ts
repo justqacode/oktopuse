@@ -76,6 +76,7 @@ const LOGIN_MUTATION = gql`
         email
         phone
         role
+        status
         verificationStatus
         notificationPreferences
         emergencyContact {
@@ -126,6 +127,7 @@ const GOOGLE_LOGIN_MUTATION = gql`
         email
         phone
         role
+        status
         verificationStatus
         notificationPreferences
         emergencyContact {
