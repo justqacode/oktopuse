@@ -35,7 +35,8 @@ import {
 import { SidebarMenuButton } from '../ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAuthStore } from '@/auth/authStore';
-import { Check, DotIcon, EllipsisVertical, TicketCheck } from 'lucide-react';
+import { Check, DotIcon, EllipsisVertical, MoreHorizontal, TicketCheck } from 'lucide-react';
+import { getStatusIcon } from './maintenance-requests-manager';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -148,7 +149,139 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
   },
 ];
 
-export const maintenanceRequestsManagerColumn: ColumnDef<ManagerRequest>[] = [
+export const maintenanceRequestsManagerColumn = (
+  onStatusUpdate: (maintenanceId: string, newStatus: string) => void
+): ColumnDef<ManagerRequest>[] => [
+  {
+    accessorKey: 'date',
+    header: 'Date Submitted',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+        {row.original.date}
+      </Button>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'property',
+    header: 'Property',
+    cell: ({ row }) => (
+      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+        <div className='grid flex-1 text-left text-sm leading-tight'>
+          <span className='truncate font-medium text-black'>
+            {row.original.property.propertyDetails.propertyType}
+          </span>
+          <span className='text-muted-foreground truncate text-xs'>
+            {row.original.property.propertyDetails.address.street}
+          </span>
+          <span className='text-muted-foreground truncate text-xs'>
+            {row.original.property.propertyDetails.address.city},{' '}
+            {row.original.property.propertyDetails.address.state}
+          </span>
+        </div>
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'tenant',
+    header: 'Tenant',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.tenant}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    cell: ({ row }) => (
+      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+        {row.original.category}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => (
+      <div className='flex items-center gap-2'>
+        {getStatusIcon(row.original.status)}
+        {capitalizeFirstLetter(row.original.status)}
+      </div>
+    ),
+    // cell: ({ row }) => (
+    //   <Badge variant='outline' className='text-muted-foreground px-1.5'>
+    //     {row.original.status === 'completed' ? (
+    //       <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
+    //     ) : row.original.status === 'rejected' ? (
+    //       <IconCircleXFilled className='fill-red-500 dark:fill-red-400' />
+    //     ) : (
+    //       <IconLoader />
+    //     )}
+    //     {capitalizeFirstLetter(row.original.status)}
+    //   </Badge>
+    // ),
+  },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => {
+      const statuses = [
+        { value: 'pending', label: 'Pending', color: 'text-yellow-600' },
+        { value: 'in-progress', label: 'In Progress', color: 'text-blue-600' },
+        { value: 'resolved', label: 'Resolved', color: 'text-green-600' },
+        { value: 'rejected', label: 'Rejected', color: 'text-red-600' },
+      ];
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant='ghost' className='h-8 w-8 p-0'>
+              <MoreHorizontal className='h-4 w-4' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            {statuses.map((status) => (
+              <DropdownMenuItem
+                key={status.value}
+                onClick={() => onStatusUpdate(row.original.maintenanceId, status.value)}
+                className={`flex items-center gap-2 ${status.color}`}
+                disabled={status.value === row.original.status}
+              >
+                {getStatusIcon(status.value)}
+                <span>{status.label}</span>
+                {status.value === row.original.status && (
+                  <span className='ml-auto text-xs text-gray-500'>(Current)</span>
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+          {/* <DropdownMenuContent align='end' className='z-50'>
+            {statuses.map((status) => (
+              <DropdownMenuItem
+                key={status.value}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onStatusUpdate(row.original.maintenanceId, status.value);
+                }}
+                className={`flex items-center gap-2 cursor-pointer ${status.color}`}
+                disabled={status.value === row.original.status}
+              >
+                {getStatusIcon(status.value)}
+                <span>{status.label}</span>
+                {status.value === row.original.status && (
+                  <span className='ml-auto text-xs text-gray-500'>(Current)</span>
+                )}
+              </DropdownMenuItem>
+            ))} */}
+          {/* </DropdownMenuContent> */}
+        </DropdownMenu>
+      );
+    },
+  },
+];
+
+export const maintenanceRequestsLandlordColumn2: ColumnDef<ManagerRequest>[] = [
   {
     accessorKey: 'date',
     header: 'Date Submitted',
@@ -211,16 +344,6 @@ export const maintenanceRequestsManagerColumn: ColumnDef<ManagerRequest>[] = [
         )}
         {capitalizeFirstLetter(row.original.status)}
       </Badge>
-    ),
-  },
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
-        {/* {row.original.type} */}
-        <EllipsisVertical />
-      </Button>
     ),
   },
 ];

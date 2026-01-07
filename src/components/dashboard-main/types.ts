@@ -42,6 +42,7 @@ export type ManagerRequest = {
   tenant: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+  maintenanceId: string;
   propertyDetails: {
     name: string;
     propertyType: string;
