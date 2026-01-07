@@ -213,6 +213,12 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
 
+    if (!selectedImages || selectedImages.length === 0) {
+      toast.error('Please select at least one image');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const imageUrls = await uploadImages(selectedImages);
 
@@ -264,7 +270,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
         },
       });
 
-      console.log('Mutation result:', result);
+      // console.log('Mutation result:', result);
 
       // Show success message
       setShowSuccess(true);

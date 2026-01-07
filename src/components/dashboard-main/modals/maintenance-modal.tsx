@@ -175,9 +175,15 @@ export default function MaintenanceRequestModal({
     setIsLoading(true);
     const { triggerRefetch } = useMaintenanceStore.getState();
 
+    if (!selectedImages || selectedImages.length === 0) {
+      toast.error('Please select at least one image');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const imageUrls = await uploadImages(selectedImages);
-      console.log('Uploaded image URLs:', imageUrls);
+      // console.log('Uploaded image URLs:', imageUrls);
 
       const { data: result } = await maintenanceRequest({
         variables: {
@@ -199,7 +205,8 @@ export default function MaintenanceRequestModal({
         onOpenChange(false);
       }
 
-      setTimeout(() => setShowSuccess(false), 2000);
+      // setTimeout(() => setShowSuccess(false), 2000);
+      toast.success('Maintenance request submitted successfully');
     } catch (error: any) {
       toast.error('Error submitting maintenance request');
     } finally {
@@ -286,7 +293,7 @@ export default function MaintenanceRequestModal({
               />
 
               {/* Date + Time */}
-              <div className='grid grid-cols-2 gap-4'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-start'>
                 <FormField
                   control={form.control}
                   name='preferredDate'

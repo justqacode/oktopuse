@@ -256,25 +256,6 @@ export const maintenanceRequestsManagerColumn = (
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
-          {/* <DropdownMenuContent align='end' className='z-50'>
-            {statuses.map((status) => (
-              <DropdownMenuItem
-                key={status.value}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onStatusUpdate(row.original.maintenanceId, status.value);
-                }}
-                className={`flex items-center gap-2 cursor-pointer ${status.color}`}
-                disabled={status.value === row.original.status}
-              >
-                {getStatusIcon(status.value)}
-                <span>{status.label}</span>
-                {status.value === row.original.status && (
-                  <span className='ml-auto text-xs text-gray-500'>(Current)</span>
-                )}
-              </DropdownMenuItem>
-            ))} */}
-          {/* </DropdownMenuContent> */}
         </DropdownMenu>
       );
     },
