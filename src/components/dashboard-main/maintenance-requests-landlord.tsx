@@ -9,8 +9,8 @@ import formatDate from '@/utils/format-date';
 import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
 
 const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
-  query GetMaintenanceHistoryByManager {
-    getMaintenanceHistoryByManager {
+  query GetMaintenanceHistoryStakeHolder {
+    getMaintenanceHistoryStakeHolder {
       _id
       description
       status
@@ -75,7 +75,7 @@ export default function MaintenanceRequestsLandlord() {
   //   tenant: item.propertyDetails.address,
   // }));
 
-  const maintenanceHistoryData = data?.getMaintenanceHistoryByManager || [];
+  const maintenanceHistoryData = data?.getMaintenanceHistoryStakeHolder || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
     date: formatDate(item.createdAt),

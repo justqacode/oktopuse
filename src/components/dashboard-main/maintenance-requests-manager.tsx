@@ -6,8 +6,8 @@ import { gql } from '@apollo/client';
 import formatDate from '@/utils/format-date';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
-  query GetMaintenanceHistoryByManager {
-    getMaintenanceHistoryByManager {
+  query GetMaintenanceHistoryStakeHolder {
+    getMaintenanceHistoryStakeHolder {
       _id
       description
       status
@@ -28,6 +28,29 @@ const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   }
 `;
 
+// const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
+//   query GetMaintenanceHistoryByManager {
+//     getMaintenanceHistoryByManager {
+//       _id
+//       description
+//       status
+//       createdAt
+//       category
+//       images
+//       propertyDetails {
+//         name
+//         propertyType
+//         address {
+//           street
+//           city
+//           state
+//           zip
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export default function MaintenanceRequestsManager() {
   const { user } = useAuthStore();
   const { data, loading } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
@@ -38,7 +61,8 @@ export default function MaintenanceRequestsManager() {
 
   // console.log('Landlord Maintenance Requests:', data);
 
-  const maintenanceHistoryData = data?.getMaintenanceHistoryByManager || [];
+  const maintenanceHistoryData = data?.getMaintenanceHistoryStakeHolder || [];
+  // const maintenanceHistoryData = data?.getMaintenanceHistoryByManager || [];
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
     date: formatDate(item.createdAt),
