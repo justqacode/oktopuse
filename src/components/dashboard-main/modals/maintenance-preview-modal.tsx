@@ -4,17 +4,22 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon } from 'lucide-react';
 import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
+import formatDate from '@/utils/format-date';
 
 // Types
 interface MaintenanceRequestPreview {
   id: string;
   date: string;
-  property: string;
-  tenant: {
-    street: string;
-    city?: string;
-    state?: string;
-    zip?: string;
+  createdAt: string;
+  propertyDetails: {
+    name: string;
+    propertyType: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
   };
   category: string;
   status: string;
@@ -28,14 +33,23 @@ interface MaintenanceRequestPreview {
 interface PreviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  request: MaintenanceRequestPreview | null;
+  requests: {
+    id: string;
+    date: string;
+    property: MaintenanceRequestPreview | null;
+  };
 }
 
 function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: PreviewModalProps) {
+export function MaintenanceRequestPreviewModal({
+  open,
+  onOpenChange,
+  requests,
+}: PreviewModalProps) {
+  const request = requests?.property;
   if (!request) return null;
 
   const getStatusIcon = () => {
@@ -81,7 +95,7 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
           {/* Request ID */}
           <div className='flex items-center gap-2 text-sm text-muted-foreground'>
             <span className='font-medium'>Request ID:</span>
-            <code className='bg-muted px-2 py-1 rounded'>{request.id}</code>
+            <code className='bg-muted px-2 py-1 rounded'>{requests.id}</code>
           </div>
 
           {/* Grid Info */}
@@ -91,7 +105,7 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
               <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Date Submitted</p>
-                <p className='text-base font-semibold'>{request.date}</p>
+                <p className='text-base font-semibold'>{formatDate(request.createdAt)}</p>
               </div>
             </div>
 
@@ -109,7 +123,7 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
               <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Property</p>
-                <p className='text-base font-semibold'>{request.property}</p>
+                <p className='text-base font-semibold'>{request.propertyDetails?.name || 'N/A'}</p>
               </div>
             </div>
 
@@ -118,9 +132,11 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
               <User className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Address</p>
-                <p className='text-base font-semibold'>{`${request?.tenant?.street || 'N/A'}, ${
-                  request?.tenant?.city || 'N/A'
-                }, ${request?.tenant?.state || 'N/A'}`}</p>
+                <p className='text-base font-semibold'>{`${
+                  request?.propertyDetails?.address?.street || 'N/A'
+                }, ${request?.propertyDetails?.address?.city || 'N/A'}, ${
+                  request?.propertyDetails?.address?.state || 'N/A'
+                }`}</p>
               </div>
             </div>
           </div>
@@ -203,7 +219,7 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
           )}
 
           {/* Actions */}
-          <div className='flex justify-end gap-2 pt-4 border-t'>
+          {/* <div className='flex justify-end gap-2 pt-4 border-t'>
             <Button variant='outline' onClick={() => onOpenChange(false)}>
               Close
             </Button>
@@ -213,7 +229,7 @@ export function MaintenanceRequestPreviewModal({ open, onOpenChange, request }: 
                 <Button>Approve</Button>
               </>
             )}
-          </div>
+          </div> */}
         </div>
       </DialogContent>
     </Dialog>

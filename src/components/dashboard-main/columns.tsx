@@ -35,7 +35,7 @@ import {
 import { SidebarMenuButton } from '../ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAuthStore } from '@/auth/authStore';
-import { Check, DotIcon, EllipsisVertical, MoreHorizontal, TicketCheck } from 'lucide-react';
+import { Check, DotIcon, EllipsisVertical, Eye, MoreHorizontal, TicketCheck } from 'lucide-react';
 import { getStatusIcon } from './maintenance-requests-manager';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
@@ -150,7 +150,8 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
 ];
 
 export const maintenanceRequestsManagerColumn = (
-  onStatusUpdate: (maintenanceId: string, newStatus: string) => void
+  onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
+  viewItem: (maintenanceId: {}) => void
 ): ColumnDef<ManagerRequest>[] => [
   {
     accessorKey: 'date',
@@ -224,7 +225,7 @@ export const maintenanceRequestsManagerColumn = (
   },
   {
     accessorKey: 'action',
-    header: 'Action',
+    header: 'Actions',
     cell: ({ row }) => {
       const statuses = [
         { value: 'pending', label: 'Pending', color: 'text-yellow-600' },
@@ -236,16 +237,24 @@ export const maintenanceRequestsManagerColumn = (
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
+            <span className='h-8 w-8 p-0'>
               <MoreHorizontal className='h-4 w-4' />
-            </Button>
+            </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
+            <span
+              onClick={() => viewItem(row.original)}
+              className='flex items-center p-2 text-sm cursor-pointer gap-2 hover:text-blue-400 hover:underline'
+            >
+              <Eye className='w-4 h-4 text-gray-500' />
+              View the heros
+            </span>
+            <hr />
             {statuses.map((status) => (
               <DropdownMenuItem
                 key={status.value}
                 onClick={() => onStatusUpdate(row.original.maintenanceId, status.value)}
-                className={`flex items-center gap-2 ${status.color}`}
+                className={`flex items-center gap-2 cursor-pointer ${status.color}`}
                 disabled={status.value === row.original.status}
               >
                 {getStatusIcon(status.value)}

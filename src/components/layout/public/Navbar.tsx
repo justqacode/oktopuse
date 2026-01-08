@@ -10,14 +10,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -230,11 +222,14 @@ export const Navbar = () => {
           {/* Mobile Menu */}
           <div className='lg:hidden'>
             <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant='ghost' size='icon' onClick={() => setOpen(true)}>
-                  <Menu className='h-5 w-5' />
-                </Button>
-              </SheetTrigger>
+              {/* <SheetTrigger> */}
+              <Button variant='ghost' size='icon' onClick={() => setOpen(true)}>
+                <Menu className='h-5 w-5' />
+              </Button>
+              {/* <div>
+                  <Menu className='h-6 w-6' />
+                </div> */}
+              {/* </SheetTrigger> */}
 
               <SheetContent side='right' className='w-72 sm:w-80 p-4'>
                 <div className='flex flex-col space-y-4 mt-6'>
@@ -315,20 +310,20 @@ export const Navbar = () => {
 };
 
 // Small helper component for repeated nav items
-const NavItem = ({
-  icon: Icon,
-  title,
-  desc,
-}: {
-  icon: any;
-  title: React.ReactNode;
-  desc: string;
-}) => (
-  <div className='group grid grid-cols-[auto_1fr] gap-4 rounded-md p-3 hover:bg-accent cursor-pointer'>
-    <Icon className='h-5 w-5 mt-1 text-muted-foreground' />
-    <div className='grid gap-1'>
-      <div className='font-medium leading-none'>{title}</div>
-      <div className='text-sm text-muted-foreground'>{desc}</div>
-    </div>
-  </div>
-);
+// const NavItem = ({
+//   icon: Icon,
+//   title,
+//   desc,
+// }: {
+//   icon: any;
+//   title: React.ReactNode;
+//   desc: string;
+// }) => (
+//   <div className='group grid grid-cols-[auto_1fr] gap-4 rounded-md p-3 hover:bg-accent cursor-pointer'>
+//     <Icon className='h-5 w-5 mt-1 text-muted-foreground' />
+//     <div className='grid gap-1'>
+//       <div className='font-medium leading-none'>{title}</div>
+//       <div className='text-sm text-muted-foreground'>{desc}</div>
+//     </div>
+//   </div>
+// );

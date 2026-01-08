@@ -71,7 +71,7 @@ export default function MaintenanceRequestsLandlord() {
       <MaintenanceRequestPreviewModal
         open={previewOpen}
         onOpenChange={setPreviewOpen}
-        request={selectedRequest}
+        requests={selectedRequest}
       />
     </>
   );

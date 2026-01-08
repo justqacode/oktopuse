@@ -5,6 +5,8 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import formatDate from '@/utils/format-date';
 import { CheckCircle, Clock, PlayCircle, XCircle } from 'lucide-react';
+import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
+import { useState } from 'react';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryStakeHolder {
@@ -60,6 +62,8 @@ export const getStatusIcon = (status: string) => {
 
 export default function MaintenanceRequestsManager() {
   const { user } = useAuthStore();
+  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const { data, loading, refetch } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
     fetchPolicy: 'cache-and-network',
     variables: { managerID: user?.id },
@@ -98,17 +102,32 @@ export default function MaintenanceRequestsManager() {
     }
   };
 
+  const viewItem = (request: {}) => {
+    // Implement the logic to view the maintenance request details
+    console.log('View maintenance request:', request);
+    setSelectedRequest(request);
+    setPreviewOpen(true);
+  };
+
   return (
-    <DataTable
-      // columns={maintenanceRequestsManagerColumn}
-      columns={maintenanceRequestsManagerColumn(handleStatusUpdate)}
-      data={maintenanceHistoryFormatted}
-      enablePagination
-      enableColumnVisibility
-      enableSorting
-      enableFiltering
-      pageSize={10}
-      loading={loading || updating}
-    />
+    <>
+      <DataTable
+        // columns={maintenanceRequestsManagerColumn}
+        columns={maintenanceRequestsManagerColumn(handleStatusUpdate, viewItem)}
+        data={maintenanceHistoryFormatted}
+        enablePagination
+        enableColumnVisibility
+        enableSorting
+        enableFiltering
+        pageSize={10}
+        loading={loading || updating}
+      />
+
+      <MaintenanceRequestPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        requests={selectedRequest}
+      />
+    </>
   );
 }
