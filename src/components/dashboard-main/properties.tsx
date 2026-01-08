@@ -5,6 +5,9 @@ import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { formatCurrency } from '@/utils/format-currency';
 import formatDate from '@/utils/format-date';
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import PropertyPreviewModal from './modals/property-preview-modal';
 
 const GET_PROPERTIES = gql`
   query GetMyProperties {
@@ -31,6 +34,9 @@ export default function Properties() {
     fetchPolicy: 'cache-and-network',
   });
 
+  const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
   const propertyData = data?.getMyProperties || [];
   const propertyDataFormatted = propertyData.map((item: any) => ({
     id: '...' + item.id.slice(-6),
@@ -41,17 +47,32 @@ export default function Properties() {
     propertyType: item.propertyType || 'N/A',
     amount: formatCurrency(item.amount) || 'N/A',
     address: `${item.address.street}, ${item.address.city}, ${item.address.state} ${item.address.zip}`,
+    propertyAll: item,
   }));
 
+  const handleRowClick = (property: any) => {
+    setSelectedProperty(property?.propertyAll);
+    setPreviewOpen(true);
+  };
+
   return (
-    <DataTable
-      columns={propertiesColumn}
-      data={propertyDataFormatted}
-      enablePagination
-      enableSorting
-      enableFiltering
-      pageSize={10}
-      loading={loading}
-    />
+    <>
+      <DataTable
+        columns={propertiesColumn}
+        data={propertyDataFormatted}
+        enablePagination
+        enableSorting
+        enableFiltering
+        pageSize={10}
+        loading={loading}
+        onRowClick={handleRowClick}
+      />
+
+      <PropertyPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        requests={selectedProperty}
+      />
+    </>
   );
 }

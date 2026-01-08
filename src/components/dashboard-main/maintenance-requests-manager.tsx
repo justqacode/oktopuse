@@ -7,6 +7,7 @@ import formatDate from '@/utils/format-date';
 import { CheckCircle, Clock, PlayCircle, XCircle } from 'lucide-react';
 import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryStakeHolder {
@@ -98,13 +99,12 @@ export default function MaintenanceRequestsManager() {
         },
       });
     } catch (error) {
-      console.error('Failed to update status:', error);
+      // console.error('Failed to update status:', error);
+      toast.error('Failed to update status. Please try again.');
     }
   };
 
   const viewItem = (request: {}) => {
-    // Implement the logic to view the maintenance request details
-    console.log('View maintenance request:', request);
     setSelectedRequest(request);
     setPreviewOpen(true);
   };
