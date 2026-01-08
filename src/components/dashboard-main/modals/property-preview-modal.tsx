@@ -47,7 +47,7 @@ export function PropertyPreviewModal({ open, onOpenChange, requests }: any) {
           {/* Request ID */}
           <div className='flex items-center gap-2 text-sm text-muted-foreground'>
             <span className='font-medium'>Property name:</span>
-            <code className='bg-muted px-2 py-1 rounded'>{requests.name}</code>
+            <code className='bg-muted px-2 py-1 rounded'>{request?.name}</code>
           </div>
 
           {/* Grid Info */}
