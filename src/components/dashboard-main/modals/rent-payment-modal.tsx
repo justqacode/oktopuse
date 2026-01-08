@@ -121,9 +121,9 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       customAmount: '',
       scheduleDate: new Date().toISOString().slice(0, 7),
       notes: '',
-      accountNumber: '',
-      routingNumber: '',
-      accountHolderName: '',
+      accountNumber: undefined,
+      routingNumber: undefined,
+      accountHolderName: undefined,
       accountHolderType: 'individual',
     },
   });
