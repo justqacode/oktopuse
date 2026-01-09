@@ -37,6 +37,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useAuthStore } from '@/auth/authStore';
 import { Check, DotIcon, EllipsisVertical, Eye, MoreHorizontal, TicketCheck } from 'lucide-react';
 import { getStatusIcon } from './maintenance-requests-manager';
+import formatDate from '@/utils/format-date';
 
 export const rentHistoryColumn: ColumnDef<any>[] = [
   {
@@ -247,7 +248,7 @@ export const maintenanceRequestsManagerColumn = (
               className='flex items-center p-2 text-sm cursor-pointer gap-2 hover:text-blue-400 hover:underline'
             >
               <Eye className='w-4 h-4 text-gray-500' />
-              View the heros
+              View
             </span>
             <hr />
             {statuses.map((status) => (
@@ -713,14 +714,21 @@ export const paymentHistoryManagerColumn: ColumnDef<PaymentHistoryManager>[] = [
   },
 ];
 
-export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
+// export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
+export const usersAdminColumn = (
+  onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
+  viewItem: (maintenanceId: {}) => void
+): ColumnDef<any>[] => [
   {
     accessorKey: 'userName',
-    header: 'User Name',
+    header: 'Name',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
         <div className='grid flex-1 text-left text-sm leading-tight'>
-          <span className='truncate font-medium text-black'> {row.original.userName}</span>
+          <span className='truncate font-medium text-black'>
+            {' '}
+            {`${row.original.firstName} ${row.original.lastName}`}
+          </span>
           <span className='text-muted-foreground truncate text-xs'>{row.original.email}</span>
         </div>
       </Button>
@@ -748,12 +756,12 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
     header: 'Account Status',
     cell: ({ row }) => (
       <Badge variant='outline' className='text-muted-foreground px-1.5'>
-        {row.original.accountStatus === 'Active' ? (
+        {row.original.status === 'Active' ? (
           <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400' />
         ) : (
           <IconLoader />
         )}
-        {capitalizeFirstLetter(row.original.accountStatus)}
+        {capitalizeFirstLetter(row.original.status)}
       </Badge>
     ),
   },
@@ -764,9 +772,15 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
       <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
         {/* {row.original.registerdDate} */}
         <div className='grid flex-1 text-left text-sm leading-tight'>
-          <span className='truncate font-medium text-black'> {row.original.registerdDate}</span>
+          <span className='truncate font-medium text-black'>
+            {' '}
+            {formatDate(row.original.createdAt)}
+          </span>
           <span className='text-muted-foreground truncate text-xs'>
-            Last login: {row.original.lastLogin}
+            {/* Last login: {formatDate(row.original.createdAt) - formatDate(row.original.updatedAt)} */}
+            Last login:{' '}
+            {formatDate((row.original.updatedAt || 0) - (row.original.createdAt || 0))?.day} days
+            ago
           </span>
         </div>
       </Button>
@@ -786,7 +800,7 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
     header: 'Verified',
     cell: ({ row }) => (
       <Badge variant='outline' className='text-muted-foreground px-1.5 border  rounded-full'>
-        {row.original.verified === true ? (
+        {row.original.verificationStatus === true ? (
           <span className='flex items-center text-green-500 [&>svg]:size-4'>
             <Check className='mr-1' /> Verified
           </span>
@@ -798,73 +812,32 @@ export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
   },
   {
     accessorKey: 'action',
-    header: 'Action',
+    header: 'Actions',
     cell: ({ row }) => {
-      const { user } = useAuthStore();
-
-      if (user === null) return '';
+      const statuses = [
+        { value: 'pending', label: 'Pending', color: 'text-yellow-600' },
+        { value: 'in-progress', label: 'In Progress', color: 'text-blue-600' },
+        { value: 'resolved', label: 'Resolved', color: 'text-green-600' },
+        { value: 'rejected', label: 'Rejected', color: 'text-red-600' },
+      ];
 
       return (
-        // <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
-
-        //   Download
-        // </Button>
-
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-            >
-              {/* <Avatar className='h-8 w-8 rounded-lg grayscale'>
-                <AvatarImage src={user.profilePhoto} alt={user.firstName} />
-                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-              </Avatar>
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{user.firstName}</span>
-                <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
-              </div> */}
-              <IconDotsVertical className='ml-auto size-4' />
-            </SidebarMenuButton>
+          <DropdownMenuTrigger>
+            <span className='h-8 w-8 p-0'>
+              <MoreHorizontal className='h-4 w-4' />
+            </span>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
-            // side={isMobile ? 'bottom' : 'right'}
-            align='end'
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className='p-0 font-normal'>
-              <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
-                <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.profilePhoto} alt={user.firstName} />
-                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
-                </Avatar>
-                <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>{user.firstName}</span>
-                  <span className='text-muted-foreground truncate text-xs'>{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log('log out')}>
-              <IconLogout />
-              Log out
-            </DropdownMenuItem>
+          <DropdownMenuContent align='end'>
+            <span
+              onClick={() => viewItem(row.original)}
+              className='flex items-center p-2 text-sm cursor-pointer gap-2 hover:text-blue-400 hover:underline'
+            >
+              View
+            </span>
+            <hr />
+            <DropdownMenuItem>Deactivate Account</DropdownMenuItem>
+            <DropdownMenuItem>Resend Verification Email</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

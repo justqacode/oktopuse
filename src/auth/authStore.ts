@@ -6,6 +6,7 @@ import client from '@/lib/apollo-client';
 import { config } from '@/config/app.config';
 import { toast } from 'sonner';
 import type { Role } from '@/types';
+import { use } from 'react';
 
 export type User = {
   id: string;
@@ -197,7 +198,15 @@ export const useAuthStore = create<AuthState>()(
             set({ token, user, expiresAt });
 
             toast.success('Login successful');
-            navigate('/dashboard');
+
+            if (
+              user.role === 'admin' ||
+              (Array.isArray(user.role) && user.role.includes('admin'))
+            ) {
+              navigate('/dashboard/admin/users');
+            } else {
+              navigate('/dashboard');
+            }
           } else {
             toast('Login failed');
           }
