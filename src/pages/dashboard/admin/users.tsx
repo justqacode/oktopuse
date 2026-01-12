@@ -62,14 +62,14 @@ export default function UsersPage() {
           <div className='py-4 lg:py-6 px-8'>
             <div className='flex justify-between text-lg font-semibold mb-2'>
               <p>Registered Users</p>
-              <Button
+              {/* <Button
                 variant='default'
                 size='sm'
                 className='hidden sm:flex'
                 onClick={() => console.log('should be search')}
               >
                 Should be search
-              </Button>
+              </Button> */}
             </div>
             <DataTable
               columns={usersAdminColumn(handleStatusUpdate, viewItem)}

@@ -180,7 +180,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={filterByRole(data.navMain)} />
         {/* <NavDocuments items={filterByRole(data.documents)} /> */}
         <NavSecondary items={filterByRole(data.navSecondary)} className='mt-auto' />
-        <SidebarInfo />
+        {/* <SidebarInfo /> */}
       </SidebarContent>
 
       <SidebarFooter>
