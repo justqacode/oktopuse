@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon } from 'lucide-react';
-import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
+import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon, Currency } from 'lucide-react';
 import formatDate from '@/utils/format-date';
+import { formatCurrency } from '@/utils/format-currency';
+import { IconCurrency, IconCurrencyDollar } from '@tabler/icons-react';
 
 // Types
 interface MaintenanceRequestPreview {
@@ -30,72 +31,23 @@ interface MaintenanceRequestPreview {
   allowEntry?: boolean;
 }
 
-interface PreviewModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  requests: {
-    id: string;
-    date: string;
-    property: MaintenanceRequestPreview | null;
-  };
-}
-
-function capitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export function MaintenanceRequestPreviewModal({
-  open,
-  onOpenChange,
-  requests,
-}: PreviewModalProps) {
-  const request = requests?.property;
-  if (!request) return null;
-
-  const getStatusIcon = () => {
-    if (request.status === 'completed') {
-      return <IconCircleCheckFilled className='fill-green-500 dark:fill-green-400 h-5 w-5' />;
-    } else if (request.status === 'rejected') {
-      return <IconCircleXFilled className='fill-red-500 dark:fill-red-400 h-5 w-5' />;
-    } else {
-      return <IconLoader className='h-5 w-5' />;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (request.status) {
-      case 'completed':
-        return 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800';
-      case 'rejected':
-        return 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800';
-      case 'in-progress':
-        return 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800';
-      default:
-        return 'bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800';
-    }
-  };
+export function PropertyPreviewModal({ open, onOpenChange, requests }: any) {
+  const request = requests;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-w-3xl max-h-[90vh] overflow-y-auto'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-bold flex items-center justify-between'>
-            <span>Maintenance Request Details</span>
-            <Badge
-              variant='outline'
-              className={`${getStatusColor()} px-3 py-1 flex items-center gap-2`}
-            >
-              {getStatusIcon()}
-              {capitalizeFirstLetter(request.status)}
-            </Badge>
+            <span>Property Details</span>
           </DialogTitle>
         </DialogHeader>
 
         <div className='space-y-6 mt-4'>
           {/* Request ID */}
           <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-            <span className='font-medium'>Request ID:</span>
-            <code className='bg-muted px-2 py-1 rounded'>{requests.id}</code>
+            <span className='font-medium'>Property name:</span>
+            <code className='bg-muted px-2 py-1 rounded'>{request?.name}</code>
           </div>
 
           {/* Grid Info */}
@@ -105,7 +57,7 @@ export function MaintenanceRequestPreviewModal({
               <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Date Submitted</p>
-                <p className='text-base font-semibold'>{formatDate(request.createdAt)}</p>
+                <p className='text-base font-semibold'>{formatDate(request?.createdAt)}</p>
               </div>
             </div>
 
@@ -113,65 +65,65 @@ export function MaintenanceRequestPreviewModal({
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
               <Tag className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
-                <p className='text-sm font-medium text-muted-foreground'>Category</p>
-                <p className='text-base font-semibold'>{request.category}</p>
+                <p className='text-sm font-medium text-muted-foreground'>Property Type</p>
+                <p className='text-base font-semibold'>{request?.propertyType}</p>
               </div>
             </div>
 
             {/* Property */}
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
-              <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
+              <IconCurrencyDollar className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
-                <p className='text-sm font-medium text-muted-foreground'>Property</p>
-                <p className='text-base font-semibold'>{request.propertyDetails?.name || 'N/A'}</p>
+                <p className='text-sm font-medium text-muted-foreground'>Amount</p>
+                <p className='text-base font-semibold'>
+                  {formatCurrency(request?.amount) || 'N/A'}
+                </p>
               </div>
             </div>
 
             {/* Tenant */}
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
-              <User className='h-5 w-5 text-muted-foreground mt-0.5' />
+              <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Address</p>
-                <p className='text-base font-semibold'>{`${
-                  request?.propertyDetails?.address?.street || 'N/A'
-                }, ${request?.propertyDetails?.address?.city || 'N/A'}, ${
-                  request?.propertyDetails?.address?.state || 'N/A'
-                }`}</p>
+                <p className='text-base font-semibold'>{`${request?.address?.street || 'N/A'}, ${
+                  request?.address?.city || 'N/A'
+                }, ${request?.address?.state || 'N/A'}`}</p>
               </div>
             </div>
           </div>
 
           {/* Description */}
-          {request.description && (
+          {request?.description && (
             <div className='space-y-2'>
               <h3 className='text-sm font-semibold text-foreground'>Description</h3>
               <div className='p-4 border rounded-lg bg-muted/30'>
-                <p className='text-sm leading-relaxed'>{request.description}</p>
+                <p className='text-sm leading-relaxed'>{request?.description}</p>
               </div>
             </div>
           )}
 
           {/* Preferred Date & Time */}
-          {(request.preferredDate || request.preferredTime) && (
+          {(request?.preferredDate || request?.preferredTime) && (
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              {request.preferredDate && (
+              {request?.preferredDate && (
                 <div className='flex items-start gap-3 p-4 border rounded-lg'>
                   <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' />
                   <div>
                     <p className='text-sm font-medium text-muted-foreground'>Preferred Date</p>
-                    <p className='text-base font-semibold'>{request.preferredDate}</p>
+                    <p className='text-base font-semibold'>{request?.preferredDate}</p>
                   </div>
                 </div>
               )}
 
-              {request.preferredTime && (
+              {request?.preferredTime && (
                 <div className='flex items-start gap-3 p-4 border rounded-lg'>
                   <Clock className='h-5 w-5 text-muted-foreground mt-0.5' />
                   <div>
                     <p className='text-sm font-medium text-muted-foreground'>Preferred Time</p>
                     <p className='text-base font-semibold'>
-                      {request.preferredTime.charAt(0).toUpperCase() +
-                        request.preferredTime.slice(1)}
+                      {request?.preferredTime.charAt(0).toUpperCase() +
+                        request?.preferredTime.slice(1)}
                     </p>
                   </div>
                 </div>
@@ -180,7 +132,7 @@ export function MaintenanceRequestPreviewModal({
           )}
 
           {/* Allow Entry */}
-          {request.allowEntry !== undefined && (
+          {request?.allowEntry !== undefined && (
             <div className='flex items-center gap-3 p-4 border rounded-lg'>
               <div className='flex-1'>
                 <p className='text-sm font-medium'>Management Access Permission</p>
@@ -188,21 +140,23 @@ export function MaintenanceRequestPreviewModal({
                   Allow management to enter unit when tenant is out
                 </p>
               </div>
-              <Badge variant={request.allowEntry ? 'default' : 'secondary'} className='px-3 py-1'>
-                {request.allowEntry ? 'Yes' : 'No'}
+              <Badge variant={request?.allowEntry ? 'default' : 'secondary'} className='px-3 py-1'>
+                {request?.allowEntry ? 'Yes' : 'No'}
               </Badge>
             </div>
           )}
 
           {/* Images */}
-          {request.images && request.images.length > 0 && (
+          {/* {request?.images && request?.images.length > 0 && (
             <div className='space-y-3'>
               <div className='flex items-center gap-2'>
                 <ImageIcon className='h-5 w-5 text-muted-foreground' />
-                <h3 className='text-sm font-semibold'>Attached Images ({request.images.length})</h3>
+                <h3 className='text-sm font-semibold'>
+                  Attached Images ({request?.images.length})
+                </h3>
               </div>
               <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
-                {request.images.map((image, index) => (
+                {request?.images.map((image, index) => (
                   <div
                     key={index}
                     className='aspect-video bg-muted rounded-lg overflow-hidden border'
@@ -216,7 +170,7 @@ export function MaintenanceRequestPreviewModal({
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Actions */}
           {/* <div className='flex justify-end gap-2 pt-4 border-t'>
@@ -236,4 +190,4 @@ export function MaintenanceRequestPreviewModal({
   );
 }
 
-export default MaintenanceRequestPreviewModal;
+export default PropertyPreviewModal;

@@ -46,7 +46,7 @@ export default function PaymentHistoryLandlord() {
       enableColumnVisibility
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
       loading={loading}
     />
   );

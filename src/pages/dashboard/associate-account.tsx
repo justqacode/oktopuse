@@ -18,7 +18,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/auth/authStore';
 
 import { gql } from '@apollo/client';
-import { useMutation } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   Select,
   SelectContent,
@@ -27,6 +27,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
+
+const GET_PROPERTIES = gql`
+  query GetMyProperties {
+    getMyProperties {
+      id
+      name
+      amount
+      description
+      images
+      propertyType
+      createdAt
+      address {
+        street
+        city
+        state
+        zip
+      }
+    }
+  }
+`;
 
 const ASSOCIATE_MUTATION = gql`
   mutation associateUserWithProperty($userId: String!, $propertyId: String!, $role: String!) {
@@ -109,6 +129,12 @@ export default function AssociateAccount() {
     }
   };
 
+  const { data, loading } = useQuery<any>(GET_PROPERTIES, {
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const propertyData = data?.getMyProperties || [];
+
   return (
     <div className='flex flex-1 flex-col'>
       <div className='@container/main flex flex-1 flex-col gap-2'>
@@ -185,7 +211,7 @@ export default function AssociateAccount() {
                         )}
                       />
 
-                      <FormField
+                      {/* <FormField
                         control={form.control}
                         name='propertyId'
                         render={({ field }) => (
@@ -197,6 +223,33 @@ export default function AssociateAccount() {
                                 {...field}
                               />
                             </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      /> */}
+
+                      <FormField
+                        control={form.control}
+                        name='propertyId'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Property ID *</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder='Select property' />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {loading && <SelectItem value='na'>Loading...</SelectItem>}
+                                {!loading &&
+                                  propertyData.map((property: any) => (
+                                    <SelectItem key={property.id} value={property.id}>
+                                      {property.name}
+                                    </SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}

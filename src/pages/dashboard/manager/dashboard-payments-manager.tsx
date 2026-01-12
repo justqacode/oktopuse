@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 import { paymentHistoryManagerColumn } from '@/components/dashboard-main/columns';
 import formatDate from '@/utils/format-date';
 import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/utils/format-currency';
 
 const GET_ALL_MANAGER_PAYMENTS = gql`
   query GetRentHistoryForManager {
@@ -33,7 +34,7 @@ export default function PaymentHistoryManager() {
     id: '...' + item._id.slice(-6),
     paymentRef: item.paymentRef,
     date: formatDate(item.date),
-    amountReceived: item.amountReceived || 0,
+    amountReceived: formatCurrency(item.amountReceived) || 0,
     note: item.note?.split(0, 22) || 'N/A',
     docLink: item.docLink || 'N/A',
     status: item.status || 'pending',
@@ -62,7 +63,7 @@ export default function PaymentHistoryManager() {
               enableColumnVisibility
               enableSorting
               enableFiltering
-              pageSize={5}
+              pageSize={10}
               loading={loading}
             />
           </div>

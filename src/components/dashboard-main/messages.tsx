@@ -34,7 +34,7 @@ export default function Messages() {
       enablePagination
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
     />
   );
 }

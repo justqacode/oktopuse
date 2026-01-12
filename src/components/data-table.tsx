@@ -89,6 +89,8 @@ export interface DataTableProps<T> {
 
   // loading state
   loading?: boolean;
+
+  emptyState?: React.ReactNode;
 }
 
 function DragHandle<T extends Record<string, any>>({
@@ -301,6 +303,7 @@ export function DataTable<T extends Record<string, any>>({
   onRowClick,
   className = '',
   loading = false,
+  emptyState,
 }: DataTableProps<T>) {
   // Prepare columns with optional drag and select columns
   const columns = React.useMemo(() => {
@@ -436,6 +439,8 @@ export function DataTable<T extends Record<string, any>>({
                           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                           Loading...
                         </div>
+                      ) : emptyState ? (
+                        emptyState
                       ) : (
                         'No results.'
                       )}
@@ -480,6 +485,8 @@ export function DataTable<T extends Record<string, any>>({
                         <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                         Loading...
                       </div>
+                    ) : emptyState ? (
+                      emptyState
                     ) : (
                       'No results.'
                     )}

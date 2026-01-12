@@ -54,7 +54,7 @@ type PaymentFormValues = z.infer<typeof paymentSchema>;
 export function PaymentSettings() {
   const { user, updateUser } = useAuthStore();
 
-  console.log('User ACH Profile:', user?.ACHProfile);
+  // console.log('User ACH Profile:', user?.ACHProfile);
 
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -72,7 +72,7 @@ export function PaymentSettings() {
     },
   });
 
-  console.log('Payment Form Values:', paymentForm.getValues());
+  // console.log('Payment Form Values:', paymentForm.getValues());
 
   // Track payment form changes
   useEffect(() => {

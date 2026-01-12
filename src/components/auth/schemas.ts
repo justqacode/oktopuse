@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const nameRegex = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+
 export const forgotPasswordSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
 });
@@ -20,9 +23,27 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
-  lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }),
-  email: z.string().email({ message: 'Please enter a valid email address' }),
+  firstName: z
+    .string()
+    .trim()
+    .min(1, { message: 'First name is required' })
+    .max(50, { message: 'First name is too long' })
+    .regex(nameRegex, {
+      message: 'First name can only contain letters, spaces, hyphens, or apostrophes',
+    }),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, { message: 'Last name is required' })
+    .max(50, { message: 'Last name is too long' })
+    .regex(nameRegex, {
+      message: 'Last name can only contain letters, spaces, hyphens, or apostrophes',
+    }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: 'Please enter a valid email address' })
+    .max(254, { message: 'Email is too long' }),
   phone: z
     .string()
     .min(10, { message: 'Phone number must be at least 10 digits' })
@@ -44,9 +65,28 @@ export const registerSchema = z.object({
 });
 
 export const contactSchema = z.object({
-  firstName: z.string().min(2, { message: 'First name must be at least 2 characters' }),
-  lastName: z.string().min(2, { message: 'Last name must be at least 2 characters' }).optional(),
-  email: z.string().email({ message: 'Please enter a valid email address' }),
+  firstName: z
+    .string()
+    .trim()
+    .min(1, { message: 'First name is required' })
+    .max(50, { message: 'First name is too long' })
+    .regex(nameRegex, {
+      message: 'First name can only contain letters, spaces, hyphens, or apostrophes',
+    }),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, { message: 'Last name should have more than 1 letter' })
+    .max(50, { message: 'Last name is too long' })
+    .regex(nameRegex, {
+      message: 'Last name can only contain letters, spaces, hyphens, or apostrophes',
+    })
+    .optional(),
+  email: z
+    .string()
+    .trim()
+    .email({ message: 'Please enter a valid email address' })
+    .max(254, { message: 'Email is too long' }),
   phone: z
     .string()
     .min(10, { message: 'Phone number must be at least 10 digits' })

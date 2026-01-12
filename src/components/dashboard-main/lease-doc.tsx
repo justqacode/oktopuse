@@ -37,7 +37,7 @@ export default function LeaseDoc() {
       enableColumnVisibility
       enableSorting
       enableFiltering
-      pageSize={5}
+      pageSize={10}
     />
   );
 }

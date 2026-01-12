@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import clsx from 'clsx';
+import type { UserAdmin } from '../types';
 
 const mockContacts = [
   {
@@ -326,3 +327,105 @@ export default function DashboardChats() {
     </div>
   );
 }
+
+export const usersAdminMockData: UserAdmin[] = [
+  {
+    userName: 'Emma Johnson',
+    email: 'emma.johnson@example.com',
+    role: 'Admin',
+    accountStatus: 'Active',
+    registerdDate: 'May 01, 2023',
+    lastLogin: 'Today',
+    verified: true,
+  },
+  {
+    userName: 'Michael Smith',
+    email: 'michael.smith@example.com',
+    role: 'PM',
+    accountStatus: 'Active',
+    registerdDate: 'Apr 14, 2023',
+    lastLogin: '6 days ago',
+    verified: true,
+  },
+  {
+    userName: 'Sarah Evans',
+    email: 'sarah.evans@example.com',
+    role: 'Landlord',
+    accountStatus: 'Pending Verification',
+    registerdDate: 'Jun 20, 2023',
+    lastLogin: 'Never',
+    verified: false,
+  },
+  {
+    userName: 'David Lee',
+    email: 'david.lee@example.com',
+    role: 'Tenant',
+    accountStatus: 'Not Verified',
+    registerdDate: 'Feb 25, 2023',
+    lastLogin: '1 week ago',
+    verified: false,
+  },
+  {
+    userName: 'Jessica Brown',
+    email: 'jessica.brown@example.com',
+    role: 'PM',
+    accountStatus: 'Suspended',
+    registerdDate: 'Jan 10, 2023',
+    lastLogin: 'Sep 12, 2023',
+    verified: true,
+  },
+  {
+    userName: 'Daniel Wilson',
+    email: 'daniel.wilson@example.com',
+    role: 'Landlord',
+    accountStatus: 'Active',
+    registerdDate: 'May 14, 2023',
+    lastLogin: '6 days ago',
+    verified: true,
+  },
+  {
+    userName: 'Amanda Tumer',
+    email: 'amanda.tumer@example.com',
+    role: 'PM',
+    accountStatus: 'Suspended',
+    registerdDate: 'Feb 11, 2023',
+    lastLogin: 'Today',
+    verified: false,
+  },
+  {
+    userName: 'Robert Miller',
+    email: 'robert.miller@example.com',
+    role: 'Landlord',
+    accountStatus: 'Active',
+    registerdDate: 'Mar 13, 2022',
+    lastLogin: 'Never',
+    verified: true,
+  },
+  {
+    userName: 'Susan Adams',
+    email: 'susan.adams@example.com',
+    role: 'PM',
+    accountStatus: 'Not Verified',
+    registerdDate: 'Apr 12, 2023',
+    lastLogin: 'Sep 26, 2023',
+    verified: true,
+  },
+  {
+    userName: 'James Clark',
+    email: 'james.clark@example.com',
+    role: 'Tenant',
+    accountStatus: 'Active',
+    registerdDate: 'May 23, 2023',
+    lastLogin: '1 week ago',
+    verified: true,
+  },
+  {
+    userName: 'James Clark',
+    email: 'james.clark@example.com',
+    role: 'Tenant',
+    accountStatus: 'Suspended',
+    registerdDate: 'Apr 13, 2023',
+    lastLogin: 'Sep 8, 2023',
+    verified: true,
+  },
+];

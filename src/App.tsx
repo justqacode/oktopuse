@@ -20,6 +20,7 @@ import { config } from './config/app.config';
 import AssociateAccount from './pages/dashboard/associate-account';
 import { useSEO } from './hooks/useSEO';
 import NotFound from './pages/NotFound';
+import UsersPage from './pages/dashboard/admin/users';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -173,6 +174,14 @@ function MessagesPage() {
   return <DashboardChats />;
 }
 
+function UsersAdminPage() {
+  useSEO({
+    title: 'Admin - Users',
+    description: 'View your messages and conversations',
+  });
+  return <UsersPage />;
+}
+
 export default function App() {
   return (
     <ApolloProvider client={client}>
@@ -186,6 +195,7 @@ export default function App() {
             {/* Public Routes */}
             <Route element={<PublicLayout />}>
               <Route path='/' element={<HomePage />} />
+              <Route path='/pricing' element={<HomePage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/register' element={<RegisterPage />} />
               <Route path='/contact' element={<ContactPage />} />
@@ -207,6 +217,10 @@ export default function App() {
                 <Route path='associate-accounts' element={<AssociateAccountPage />} />
                 <Route path='settings' element={<SettingsPage />} />
                 <Route path='messages' element={<MessagesPage />} />
+
+                <Route path='admin'>
+                  <Route path='users' element={<UsersAdminPage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>

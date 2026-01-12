@@ -38,10 +38,21 @@ export type TenantRequest = {
 export type ManagerRequest = {
   id: number;
   date: string;
-  property: string;
+  property: any;
   tenant: string;
   category: string;
   status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+  maintenanceId: string;
+  propertyDetails: {
+    name: string;
+    propertyType: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
+  };
 };
 
 export type LandlordRequest = {
@@ -72,4 +83,14 @@ export type PaymentHistoryManager = {
   note: string;
   status: string;
   docLink: string;
+};
+
+export type UserAdmin = {
+  userName: string;
+  email: string;
+  role: 'Admin' | 'PM' | 'Landlord' | 'Tenant';
+  accountStatus: 'Active' | 'Suspended' | 'Pending Verification' | 'Not Verified';
+  registerdDate: string;
+  lastLogin: string;
+  verified: boolean;
 };

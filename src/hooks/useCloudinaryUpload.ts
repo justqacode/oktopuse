@@ -46,7 +46,7 @@ export function useCloudinaryUpload(): UseCloudinaryUploadReturn {
         }
       }
 
-      toast.success('All images uploaded successfully');
+      // toast.success('All images uploaded successfully');
       return urls;
     } catch (error) {
       console.error('Cloudinary upload error:', error);
