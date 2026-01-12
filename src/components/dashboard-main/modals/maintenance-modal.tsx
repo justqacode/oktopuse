@@ -199,7 +199,7 @@ export default function MaintenanceRequestModal({
 
       if (result) {
         triggerRefetch();
-        setShowSuccess(true);
+        // setShowSuccess(true);
         form.reset();
         setSelectedImages([]);
         onOpenChange(false);
@@ -228,237 +228,235 @@ export default function MaintenanceRequestModal({
           </DialogDescription>
         </DialogHeader>
 
-        {showSuccess ? (
+        {/* {showSuccess ? (
           <Alert className='bg-green-50 border-green-200'>
             <CheckCircle2 className='h-5 w-5 text-green-600' />
             <AlertDescription className='text-green-800 font-medium'>
               Maintenance request submitted successfully!
             </AlertDescription>
           </Alert>
-        ) : (
-          <Form {...form}>
-            <div className='space-y-6'>
-              {/* Category */}
+        ) : ( */}
+        <Form {...form}>
+          <div className='space-y-6'>
+            {/* Category */}
+            <FormField
+              control={form.control}
+              name='category'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category *</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select a category' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='Plumbing'>Plumbing</SelectItem>
+                      <SelectItem value='Electrical'>Electrical</SelectItem>
+                      <SelectItem value='HVAC'>HVAC</SelectItem>
+                      <SelectItem value='Appliances'>Appliances</SelectItem>
+                      <SelectItem value='Pest Control'>Pest Control</SelectItem>
+                      <SelectItem value='Landscaping / Exterior'>Landscaping / Exterior</SelectItem>
+                      <SelectItem value='General Requests / Other'>
+                        General Requests / Other
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Description */}
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description *</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Please describe the issue in detail...'
+                      className='min-h-[100px] resize-none'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Provide as much detail as possible to help us resolve the issue quickly.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Date + Time */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-start'>
               <FormField
                 control={form.control}
-                name='category'
+                name='preferredDate'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category *</FormLabel>
+                    <FormLabel>Preferred Date *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        min={new Date().toISOString().split('T')[0]}
+                        className='w-full block'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='preferredTime'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Preferred Time *</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder='Select a category' />
+                          <SelectValue placeholder='Select time' />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value='Plumbing'>Plumbing</SelectItem>
-                        <SelectItem value='Electrical'>Electrical</SelectItem>
-                        <SelectItem value='HVAC'>HVAC</SelectItem>
-                        <SelectItem value='Appliances'>Appliances</SelectItem>
-                        <SelectItem value='Pest Control'>Pest Control</SelectItem>
-                        <SelectItem value='Landscaping / Exterior'>
-                          Landscaping / Exterior
-                        </SelectItem>
-                        <SelectItem value='General Requests / Other'>
-                          General Requests / Other
-                        </SelectItem>
+                        <SelectItem value='morning'>Morning (8AM - 12PM)</SelectItem>
+                        <SelectItem value='afternoon'>Afternoon (12PM - 4PM)</SelectItem>
+                        <SelectItem value='evening'>Evening (4PM - 8PM)</SelectItem>
+                        <SelectItem value='anytime'>Anytime</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              {/* Description */}
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description *</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder='Please describe the issue in detail...'
-                        className='min-h-[100px] resize-none'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Provide as much detail as possible to help us resolve the issue quickly.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Date + Time */}
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-start'>
-                <FormField
-                  control={form.control}
-                  name='preferredDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Preferred Date *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          {...field}
-                          min={new Date().toISOString().split('T')[0]}
-                          className='w-full block'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='preferredTime'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Preferred Time *</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder='Select time' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value='morning'>Morning (8AM - 12PM)</SelectItem>
-                          <SelectItem value='afternoon'>Afternoon (12PM - 4PM)</SelectItem>
-                          <SelectItem value='evening'>Evening (4PM - 8PM)</SelectItem>
-                          <SelectItem value='anytime'>Anytime</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Allow Entry */}
-              <FormField
-                control={form.control}
-                name='allowEntry'
-                render={({ field }) => (
-                  <FormItem className='space-y-3'>
-                    <FormLabel>Allow management to enter my unit when I'm out? *</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        className='flex gap-4'
-                      >
-                        <div className='flex items-center space-x-2'>
-                          <RadioGroupItem value='yes' id='yes' />
-                          <label htmlFor='yes' className='text-sm font-medium cursor-pointer'>
-                            Yes
-                          </label>
-                        </div>
-                        <div className='flex items-center space-x-2'>
-                          <RadioGroupItem value='no' id='no' />
-                          <label htmlFor='no' className='text-sm font-medium cursor-pointer'>
-                            No
-                          </label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Upload + Preview */}
-              <FormField
-                control={form.control}
-                name='photo'
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Attach Photo (Optional)</FormLabel>
-                    <FormControl>
-                      <div className='space-y-4'>
-                        <div className='flex items-center gap-2'>
-                          <Input
-                            type='file'
-                            accept='image/jpeg,image/jpg,image/png'
-                            multiple
-                            className='hidden'
-                            id='photo-upload'
-                            onChange={handleFileChange}
-                          />
-                          <Button
-                            type='button'
-                            variant='outline'
-                            onClick={() => document.getElementById('photo-upload')?.click()}
-                            className='w-full'
-                          >
-                            <Image className='mr-2 h-4 w-4' />
-                            {selectedImages.length > 0
-                              ? `${selectedImages.length} image(s) selected`
-                              : 'Choose file(s)'}
-                          </Button>
-                        </div>
-
-                        {selectedImages.length > 0 && (
-                          <div className='space-y-2'>
-                            <p className='text-sm text-muted-foreground'>
-                              {selectedImages.length} of {MAX_IMAGES} images selected
-                            </p>
-                            <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
-                              {selectedImages.map((image, index) => (
-                                <div key={index} className='relative group'>
-                                  <div className='aspect-video bg-muted rounded-lg overflow-hidden border'>
-                                    <img
-                                      src={URL.createObjectURL(image)}
-                                      alt={`Preview ${index + 1}`}
-                                      className='w-full h-full object-cover'
-                                    />
-                                  </div>
-                                  <Button
-                                    type='button'
-                                    variant='destructive'
-                                    size='icon'
-                                    className='absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
-                                    onClick={() => removeImage(index)}
-                                  >
-                                    <X className='h-3 w-3' />
-                                  </Button>
-                                  <p className='text-xs text-muted-foreground mt-1 truncate'>
-                                    {image.name}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Accepted formats: JPG, PNG (Max 5MB each, up to {MAX_IMAGES} images)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Submit */}
-              <DialogFooter className='gap-2 sm:gap-0'>
-                <Button type='button' onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
-                  {isLoading ? (
-                    <span className='flex items-center'>
-                      <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
-                      Uploading ({Math.round(progress)}%)
-                    </span>
-                  ) : (
-                    <>Submit Request</>
-                  )}
-                </Button>
-              </DialogFooter>
             </div>
-          </Form>
-        )}
+
+            {/* Allow Entry */}
+            <FormField
+              control={form.control}
+              name='allowEntry'
+              render={({ field }) => (
+                <FormItem className='space-y-3'>
+                  <FormLabel>Allow management to enter my unit when I'm out? *</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      className='flex gap-4'
+                    >
+                      <div className='flex items-center space-x-2'>
+                        <RadioGroupItem value='yes' id='yes' />
+                        <label htmlFor='yes' className='text-sm font-medium cursor-pointer'>
+                          Yes
+                        </label>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <RadioGroupItem value='no' id='no' />
+                        <label htmlFor='no' className='text-sm font-medium cursor-pointer'>
+                          No
+                        </label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Upload + Preview */}
+            <FormField
+              control={form.control}
+              name='photo'
+              render={() => (
+                <FormItem>
+                  <FormLabel>Attach Photo (Optional)</FormLabel>
+                  <FormControl>
+                    <div className='space-y-4'>
+                      <div className='flex items-center gap-2'>
+                        <Input
+                          type='file'
+                          accept='image/jpeg,image/jpg,image/png'
+                          multiple
+                          className='hidden'
+                          id='photo-upload'
+                          onChange={handleFileChange}
+                        />
+                        <Button
+                          type='button'
+                          variant='outline'
+                          onClick={() => document.getElementById('photo-upload')?.click()}
+                          className='w-full'
+                        >
+                          <Image className='mr-2 h-4 w-4' />
+                          {selectedImages.length > 0
+                            ? `${selectedImages.length} image(s) selected`
+                            : 'Choose file(s)'}
+                        </Button>
+                      </div>
+
+                      {selectedImages.length > 0 && (
+                        <div className='space-y-2'>
+                          <p className='text-sm text-muted-foreground'>
+                            {selectedImages.length} of {MAX_IMAGES} images selected
+                          </p>
+                          <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                            {selectedImages.map((image, index) => (
+                              <div key={index} className='relative group'>
+                                <div className='aspect-video bg-muted rounded-lg overflow-hidden border'>
+                                  <img
+                                    src={URL.createObjectURL(image)}
+                                    alt={`Preview ${index + 1}`}
+                                    className='w-full h-full object-cover'
+                                  />
+                                </div>
+                                <Button
+                                  type='button'
+                                  variant='destructive'
+                                  size='icon'
+                                  className='absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <X className='h-3 w-3' />
+                                </Button>
+                                <p className='text-xs text-muted-foreground mt-1 truncate'>
+                                  {image.name}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Accepted formats: JPG, PNG (Max 5MB each, up to {MAX_IMAGES} images)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Submit */}
+            <DialogFooter className='gap-2 sm:gap-0'>
+              <Button type='button' onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+                {isLoading ? (
+                  <span className='flex items-center'>
+                    <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
+                    Uploading ({Math.round(progress)}%)
+                  </span>
+                ) : (
+                  <>Submit Request</>
+                )}
+              </Button>
+            </DialogFooter>
+          </div>
+        </Form>
+        {/* )} */}
       </DialogContent>
     </Dialog>
   );
