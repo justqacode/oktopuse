@@ -77,7 +77,7 @@ const data = {
       title: 'Users',
       url: '/dashboard/admin/users',
       icon: IconUsers,
-      roles: ['manager', 'admin'],
+      roles: ['admin'],
     },
     {
       title: 'Settings',
