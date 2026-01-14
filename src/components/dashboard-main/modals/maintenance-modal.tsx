@@ -120,7 +120,7 @@ export default function MaintenanceRequestModal({
   onOpenChange,
 }: MaintenanceRequestModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  // const [showSuccess, setShowSuccess] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const { user } = useAuthStore();
   const mon = user?.tenantInfo?.rentalAddress;
