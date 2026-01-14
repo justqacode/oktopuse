@@ -311,24 +311,84 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
           </DialogDescription>
         </DialogHeader>
 
-        {showSuccess ? (
+        {/* {showSuccess ? (
           <Alert className='bg-green-50 border-green-200'>
             <CheckCircle2 className='h-5 w-5 text-green-600' />
             <AlertDescription className='text-green-800 font-medium'>
               Property added successfully!
             </AlertDescription>
           </Alert>
-        ) : (
-          <Form {...form}>
-            <div className='space-y-6'>
+        ) : ( */}
+        <Form {...form}>
+          <div className='space-y-6'>
+            <FormField
+              control={form.control}
+              name='propertyName'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property Name *</FormLabel>
+                  <FormControl>
+                    <Input placeholder='e.g., Sunset View Apartments' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='propertyType'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property Type *</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select property type' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='apartment'>Apartment</SelectItem>
+                      <SelectItem value='duplex'>Duplex</SelectItem>
+                      <SelectItem value='studio'>Studio</SelectItem>
+                      <SelectItem value='office'>Office</SelectItem>
+                      <SelectItem value='house'>House</SelectItem>
+                      <SelectItem value='condo'>Condo</SelectItem>
+                      <SelectItem value='townhouse'>Townhouse</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='address'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Address *</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Enter full street address'
+                      className='min-h-20 resize-none'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
               <FormField
                 control={form.control}
-                name='propertyName'
+                name='city'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Property Name *</FormLabel>
+                    <FormLabel>City *</FormLabel>
                     <FormControl>
-                      <Input placeholder='e.g., Sunset View Apartments' {...field} />
+                      <Input placeholder='City' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -337,331 +397,271 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
 
               <FormField
                 control={form.control}
-                name='propertyType'
+                name='state'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Property Type *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Select property type' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value='apartment'>Apartment</SelectItem>
-                        <SelectItem value='duplex'>Duplex</SelectItem>
-                        <SelectItem value='studio'>Studio</SelectItem>
-                        <SelectItem value='office'>Office</SelectItem>
-                        <SelectItem value='house'>House</SelectItem>
-                        <SelectItem value='condo'>Condo</SelectItem>
-                        <SelectItem value='townhouse'>Townhouse</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='address'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address *</FormLabel>
+                    <FormLabel>State *</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder='Enter full street address'
-                        className='min-h-20 resize-none'
-                        {...field}
-                      />
+                      <Input placeholder='State' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
-                <FormField
-                  control={form.control}
-                  name='city'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City *</FormLabel>
-                      <FormControl>
-                        <Input placeholder='City' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='state'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>State *</FormLabel>
-                      <FormControl>
-                        <Input placeholder='State' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='zipCode'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Zip Code *</FormLabel>
-                      <FormControl>
-                        <Input placeholder='Zip Code' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
               <FormField
                 control={form.control}
-                name='rentAmount'
+                name='zipCode'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Rent Amount *</FormLabel>
+                    <FormLabel>Zip Code *</FormLabel>
                     <FormControl>
-                      <div className='relative'>
-                        <span className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground'>
-                          $
-                        </span>
-                        <Input
-                          type='number'
-                          step='0.01'
-                          min='0'
-                          placeholder='0.00'
-                          className='pl-7'
-                          {...field}
-                        />
-                      </div>
+                      <Input placeholder='Zip Code' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
-                <FormField
-                  control={form.control}
-                  name='leaseStartDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Lease Start Date *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          {...field}
-                          min={new Date().toISOString().split('T')[0]}
-                          className='w-full block bg-white'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='leaseEndDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Lease End Date *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          {...field}
-                          min={new Date().toISOString().split('T')[0]}
-                          className='w-full block bg-white'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='listingDate'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Listing Date *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='date'
-                          {...field}
-                          min={new Date().toISOString().split('T')[0]}
-                          className='w-full block bg-white'
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name='occupancyStatus'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Occupancy Status *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Select occupancy status' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value='Vacant'>Vacant</SelectItem>
-                        <SelectItem value='Occupied'>Occupied</SelectItem>
-                        <SelectItem value='Pending'>Pending</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description (Optional)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder='Describe the property, amenities, features, etc.'
-                        className='min-h-[100px] resize-none'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>Provide additional details about the property</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='managementId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Property Management ID (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder='Enter management ID' {...field} />
-                    </FormControl>
-                    <FormDescription>This will be autocomplete in future versions</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='images'
-                render={({ field: { onChange, value, ...field } }) => (
-                  <FormItem>
-                    <FormLabel>Property Images (Optional)</FormLabel>
-                    <FormControl>
-                      <div className='space-y-4'>
-                        <div className='flex items-center gap-2'>
-                          <Input
-                            type='file'
-                            accept='.jpg,.jpeg,.png'
-                            multiple
-                            className='hidden'
-                            id='image-upload'
-                            // onChange={(e) => {
-                            //   onChange(e.target.files);
-                            //   handleImageChange(e);
-                            // }}
-                            onChange={handleFileChange}
-                            {...field}
-                          />
-                          <Button
-                            type='button'
-                            variant='outline'
-                            onClick={() => document.getElementById('image-upload')?.click()}
-                            className='w-full'
-                          >
-                            <Image className='mr-2 h-4 w-4' />
-                            Choose Images
-                          </Button>
-                        </div>
-
-                        {selectedImages.length > 0 && (
-                          <div className='space-y-2'>
-                            <p className='text-sm text-muted-foreground'>
-                              {selectedImages.length} of {MAX_IMAGES} images selected
-                            </p>
-                            <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
-                              {selectedImages.map((image, index) => (
-                                <div key={index} className='relative group'>
-                                  <div className='aspect-video bg-muted rounded-lg overflow-hidden border'>
-                                    <img
-                                      src={URL.createObjectURL(image)}
-                                      alt={`Preview ${index + 1}`}
-                                      className='w-full h-full object-cover'
-                                    />
-                                  </div>
-                                  <Button
-                                    type='button'
-                                    variant='destructive'
-                                    size='icon'
-                                    className='absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
-                                    onClick={() => removeImage(index)}
-                                  >
-                                    <X className='h-3 w-3' />
-                                  </Button>
-                                  <p className='text-xs text-muted-foreground mt-1 truncate'>
-                                    {image.name}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </FormControl>
-                    <FormDescription>
-                      Upload up to {MAX_IMAGES} images (JPG, PNG, max 5MB each)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <DialogFooter className='gap-2 sm:gap-0'>
-                <Button type='button' variant='outline' onClick={handleClear} disabled={isLoading}>
-                  Clear
-                </Button>
-                <Button type='button' onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
-                  {isLoading ? (
-                    <span className='flex items-center'>
-                      <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
-                      Adding Property...
-                    </span>
-                  ) : (
-                    <>
-                      <Home className='mr-2 h-4 w-4' />
-                      Add Property
-                    </>
-                  )}
-                </Button>
-              </DialogFooter>
             </div>
-          </Form>
-        )}
+
+            <FormField
+              control={form.control}
+              name='rentAmount'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rent Amount *</FormLabel>
+                  <FormControl>
+                    <div className='relative'>
+                      <span className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground'>
+                        $
+                      </span>
+                      <Input
+                        type='number'
+                        step='0.01'
+                        min='0'
+                        placeholder='0.00'
+                        className='pl-7'
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-start'>
+              <FormField
+                control={form.control}
+                name='leaseStartDate'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lease Start Date *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        min={new Date().toISOString().split('T')[0]}
+                        className='w-full block bg-white'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='leaseEndDate'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Lease End Date *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        min={new Date().toISOString().split('T')[0]}
+                        className='w-full block bg-white'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='listingDate'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Listing Date *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        min={new Date().toISOString().split('T')[0]}
+                        className='w-full block bg-white'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name='occupancyStatus'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Occupancy Status *</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select occupancy status' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value='Vacant'>Vacant</SelectItem>
+                      <SelectItem value='Occupied'>Occupied</SelectItem>
+                      <SelectItem value='Pending'>Pending</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (Optional)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder='Describe the property, amenities, features, etc.'
+                      className='min-h-[100px] resize-none'
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>Provide additional details about the property</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='managementId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property Management ID (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter management ID' {...field} />
+                  </FormControl>
+                  <FormDescription>This will be autocomplete in future versions</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='images'
+              render={({ field: { onChange, value, ...field } }) => (
+                <FormItem>
+                  <FormLabel>Property Images (Optional)</FormLabel>
+                  <FormControl>
+                    <div className='space-y-4'>
+                      <div className='flex items-center gap-2'>
+                        <Input
+                          type='file'
+                          accept='.jpg,.jpeg,.png'
+                          multiple
+                          className='hidden'
+                          id='image-upload'
+                          // onChange={(e) => {
+                          //   onChange(e.target.files);
+                          //   handleImageChange(e);
+                          // }}
+                          onChange={handleFileChange}
+                          {...field}
+                        />
+                        <Button
+                          type='button'
+                          variant='outline'
+                          onClick={() => document.getElementById('image-upload')?.click()}
+                          className='w-full'
+                        >
+                          <Image className='mr-2 h-4 w-4' />
+                          Choose Images
+                        </Button>
+                      </div>
+
+                      {selectedImages.length > 0 && (
+                        <div className='space-y-2'>
+                          <p className='text-sm text-muted-foreground'>
+                            {selectedImages.length} of {MAX_IMAGES} images selected
+                          </p>
+                          <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                            {selectedImages.map((image, index) => (
+                              <div key={index} className='relative group'>
+                                <div className='aspect-video bg-muted rounded-lg overflow-hidden border'>
+                                  <img
+                                    src={URL.createObjectURL(image)}
+                                    alt={`Preview ${index + 1}`}
+                                    className='w-full h-full object-cover'
+                                  />
+                                </div>
+                                <Button
+                                  type='button'
+                                  variant='destructive'
+                                  size='icon'
+                                  className='absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity'
+                                  onClick={() => removeImage(index)}
+                                >
+                                  <X className='h-3 w-3' />
+                                </Button>
+                                <p className='text-xs text-muted-foreground mt-1 truncate'>
+                                  {image.name}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Upload up to {MAX_IMAGES} images (JPG, PNG, max 5MB each)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <DialogFooter className='gap-2 sm:gap-0'>
+              <Button type='button' variant='outline' onClick={handleClear} disabled={isLoading}>
+                Clear
+              </Button>
+              <Button type='button' onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+                {isLoading ? (
+                  <span className='flex items-center'>
+                    <span className='animate-spin mr-2 h-4 w-4 border-2 border-current border-t-transparent rounded-full'></span>
+                    Adding Property...
+                  </span>
+                ) : (
+                  <>
+                    <Home className='mr-2 h-4 w-4' />
+                    Add Property
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </div>
+        </Form>
+        {/* )} */}
       </DialogContent>
     </Dialog>
   );

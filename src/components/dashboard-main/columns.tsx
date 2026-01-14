@@ -586,7 +586,7 @@ export const propertiesColumn: ColumnDef<Properties>[] = [
     accessorKey: 'propertyType',
     header: 'Property Type',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground w-fit px-0 text-left'>
+      <Badge variant='outline' className='text-muted-foreground w-fit px-2 text-left'>
         {row.original.propertyType}
       </Badge>
     ),
