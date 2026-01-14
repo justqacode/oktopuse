@@ -17,13 +17,9 @@ export function SiteHeader() {
 
   // const daysLeft = dueDate.getDate() - today.getDate();
 
-  // const landlord = user?.role.includes('landlord');
-  // const tenant = user?.role.includes('tenant');
-  // const manager = user?.role.includes('manager');
-
-  const landlord = false;
-  const tenant = true;
-  const manager = false;
+  const landlord = user?.role.includes('landlord');
+  const tenant = user?.role.includes('tenant');
+  const manager = user?.role.includes('manager');
 
   // console.log('daysleft: ', daysLeft);
   return (
