@@ -6,6 +6,7 @@ import {
   RegisterForm,
   SocialLogin,
 } from '@/components/auth';
+import { Verification2FA } from '@/components/auth/Verification2FAForm';
 import { ContactForm } from '@/components/auth/ContactForm';
 import { ForgotPasswordForm } from '@/components/auth/ForgotPassword';
 import { ResetPasswordAfterForgetForm } from '@/components/auth/ResetPasswordAfterForget';
@@ -30,6 +31,7 @@ export const Auth = () => {
           {route === '/reset-password' && <ResetPasswordAfterForgetForm />}
         </div>
         <div className='px-8'>{route === '/contact' && <ContactForm />}</div>
+        <div className='px-8'>{route === '/2fa' && <Verification2FA />}</div>
         <div className='px-8'>
           <SocialLogin />
           {/* <AuthFooter isLogin={isLogin} navigate={navigate} /> */}
