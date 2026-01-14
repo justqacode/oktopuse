@@ -6,7 +6,7 @@ import client from '@/lib/apollo-client';
 import { config } from '@/config/app.config';
 import { toast } from 'sonner';
 import type { Role } from '@/types';
-import { use } from 'react';
+import { MFA_MUTATION, type MFALoginResponse } from '@/components/auth/Verification2FAForm';
 
 export type User = {
   id: string;
@@ -34,13 +34,9 @@ type AuthState = {
   isLoading: boolean;
   isLoadingGoogle: boolean;
   expiresAt: number | null;
-  login: (
-    email: string,
-    password: string,
-    ipa: string,
-    ua: string,
-    navigate: NavigateFunction
-  ) => Promise<void>;
+  setToken: (token: string | null) => void;
+  setUser: (user: User | null) => void;
+  mfaLogin: (verificationCode: string, navigate: NavigateFunction) => Promise<void>;
   loginWithGoogle: (
     credential: string,
     ipa: string,
@@ -50,71 +46,6 @@ type AuthState = {
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
 };
-
-const LOGIN_MUTATION = gql`
-  mutation Login(
-    $ipa: String
-    $ua: String
-    $email: String!
-    $password: String!
-    $tenantInfo: TenantInfoInput
-    $managerInfo: ManagerInfoInput
-  ) {
-    login(
-      ipa: $ipa
-      ua: $ua
-      email: $email
-      password: $password
-      tenantInfo: $tenantInfo
-      managerInfo: $managerInfo
-    ) {
-      token
-      user {
-        id
-        oktoID
-        firstName
-        lastName
-        email
-        phone
-        role
-        status
-        verificationStatus
-        notificationPreferences
-        emergencyContact {
-          name
-          phone
-          relationship
-        }
-        ACHProfile {
-          ACHRouting
-          ACHAccount
-        }
-        managerInfo {
-          managerID
-          companyName
-          companyAddress
-        }
-        landlordInfo {
-          ownerID
-          ownedProperties
-        }
-        tenantInfo {
-          propertyId
-          leaseStartDate
-          leaseEndDate
-          rentAmount
-          balanceDue
-          paymentFrequency
-          rentalAddress
-          rentAmount
-          rentalZip
-          rentalState
-          rentalCity
-        }
-      }
-    }
-  }
-`;
 
 const GOOGLE_LOGIN_MUTATION = gql`
   mutation Login($googleToken: String!, $ipa: String, $ua: String) {
@@ -176,28 +107,31 @@ export const useAuthStore = create<AuthState>()(
       isLoadingGoogle: false,
       expiresAt: null,
 
-      login: async (email, password, ipa, ua, navigate) => {
+      setToken: (token) => set({ token }),
+      setUser: (user) => set({ user }),
+
+      mfaLogin: async (verificationCode, navigate) => {
         set({ isLoading: true });
         try {
-          type LoginMutationResponse = {
-            login: {
-              token: string;
-              user: User;
-            };
-          };
-
-          const { data } = await client.mutate<LoginMutationResponse>({
-            mutation: LOGIN_MUTATION,
-            variables: { email, password, ipa, ua },
+          const { data } = await client.mutate<MFALoginResponse>({
+            mutation: MFA_MUTATION,
+            variables: { mfaCode: verificationCode },
           });
 
-          if (data?.login) {
-            const { token, user } = data.login;
+          if (data?.MFAlogin) {
+            const { token, user: rawUser } = data.MFAlogin;
             const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hr from now
+
+            const user: User = {
+              ...rawUser,
+              role: rawUser.role as Role | Role[],
+            };
 
             set({ token, user, expiresAt });
 
             toast.success('Login successful');
+
+            navigate('/2fa');
 
             if (
               user.role === 'admin' ||
@@ -237,8 +171,13 @@ export const useAuthStore = create<AuthState>()(
           });
 
           if (data?.login) {
-            const { token: authToken, user } = data.login;
+            const { token: authToken, user: rawUser } = data.login;
             const expiresAt = Date.now() + 60 * 60 * 1000;
+
+            const user: User = {
+              ...rawUser,
+              role: rawUser.role as Role | Role[],
+            };
 
             set({ token: authToken, user, expiresAt });
             toast.success('Logged in with Google');

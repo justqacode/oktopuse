@@ -11,8 +11,8 @@ export function SiteHeader() {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [openAddProperty, setOpenAddProperty] = useState(false);
-  const dueDate = new Date('2024-09-30');
-  const today = new Date();
+  // const dueDate = new Date('2024-09-30');
+  // const today = new Date();
   // const sixMonths = 365 / 2;
 
   // const daysLeft = dueDate.getDate() - today.getDate();
@@ -27,7 +27,7 @@ export function SiteHeader() {
       <div className='flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6'>
         <SidebarTrigger className='-ml-1' />
         <Separator orientation='vertical' className='mx-2 data-[orientation=vertical]:h-4' />
-        <h1 className='text-base font-medium'>Welcome {user?.firstName}</h1>
+        {/* <h1 className='text-base font-medium'>Welcome {user?.firstName}</h1> */}
         {tenant && (
           <div className='ml-auto flex items-center gap-2'>
             <Button

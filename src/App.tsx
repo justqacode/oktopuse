@@ -110,6 +110,14 @@ function VerifyPage() {
   return <Verify />;
 }
 
+function TwoFactorPage() {
+  useSEO({
+    title: 'Verify',
+    description: 'Verify your Oktopuse account',
+  });
+  return <Auth />;
+}
+
 function AboutPage() {
   useSEO({
     title: 'About',
@@ -203,6 +211,7 @@ export default function App() {
               <Route path='/reset-password' element={<ResetPasswordPage />} />
               <Route path='/verify' element={<VerifyPage />} />
               <Route path='/verify/:id' element={<VerifyPage />} />
+              <Route path='/2fa' element={<TwoFactorPage />} />
               <Route path='/about' element={<AboutPage />} />
               <Route path='/terms' element={<TermsPage />} />
               <Route path='/privacy-policy' element={<PrivacyPage />} />
