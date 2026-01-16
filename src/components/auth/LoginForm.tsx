@@ -60,8 +60,6 @@ export const LoginForm = () => {
         // Persist token in zustand (and localStorage via persist middleware)
         setToken(result.login.token);
         navigate('/2fa');
-
-        console.log('Login result:', result.login.token);
       }
     } catch (error: any) {
       // toast.error(`Login failed: ${error.message}`);
