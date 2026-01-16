@@ -130,7 +130,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   // Initialize Square Payments SDK
   useEffect(() => {
     const initSquarePayments = async () => {
-      console.log('[Square] Starting initialization...');
+      console.log('[Square] Starting initialization.....');
       // Trim whitespace and check for empty strings
       const appId = config.SQUARE_APPLICATION_ID?.trim() || '';
       const locationId = config.SQUARE_LOCATION_ID?.trim() || '';
