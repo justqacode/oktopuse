@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'react-router-dom';
 import { CreditCard, CheckCircle2, Building2, ChevronDown, ChevronUp } from 'lucide-react';
-import { payments } from '@square/web-sdk';
+import * as Square from '@square/web-sdk';
 import { config } from '@/config/app.config';
 import {
   Dialog,
@@ -188,7 +188,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         console.log('[Square] Creating payments instance...');
         console.log('[Square] Using Application ID:', maskValue(appId));
         console.log('[Square] Using Location ID:', maskValue(locationId));
-        const paymentsInstance = await payments(appId, locationId);
+        const paymentsInstance = await Square.payments(appId, locationId);
 
         if (!paymentsInstance) {
           console.error('[Square] Failed to initialize Square Payments instance - returned null');
@@ -200,17 +200,54 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
         // Generate a unique transaction ID
         const transactionId = `rent-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-        const redirectURI = `${window.location.origin}${window.location.pathname}`;
+        // redirectURI must NOT contain query parameters per Square docs
+        // https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.ach
+        const basePath = window.location.pathname;
+        const redirectURI = `${window.location.origin}${basePath}`;
         console.log('[Square] Transaction ID:', transactionId);
-        console.log('[Square] Redirect URI:', redirectURI);
+        console.log('[Square] Redirect URI (cleaned):', redirectURI);
+        console.log('[Square] Full URL (for reference):', window.location.href);
 
-        // Initialize ACH with required options (using type assertion for redirectURI)
-        // Note: redirectURI is required by Square SDK but may not be in TypeScript definitions
+        // Initialize ACH with required options
+        // According to Square docs: https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.ach
+        // redirectURI must not contain query parameters
         console.log('[Square] Initializing ACH instance...');
-        const achInstance = await paymentsInstance.ach({
-          redirectURI: redirectURI,
-          transactionId: transactionId,
-        } as any);
+        console.log('[Square] ACH Options:', {
+          redirectURI,
+          transactionId,
+          redirectURIClean: redirectURI.split('?')[0], // Remove any query params
+        });
+
+        // Ensure redirectURI has no query parameters as per Square requirements
+        const cleanRedirectURI = redirectURI.split('?')[0].split('#')[0];
+
+        let achInstance;
+        try {
+          // Type assertion needed because TypeScript definitions may not include redirectURI
+          // but it's required by Square SDK per documentation:
+          // https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.ach
+          const achOptions = {
+            redirectURI: cleanRedirectURI,
+            transactionId: transactionId,
+          };
+          achInstance = await paymentsInstance.ach(achOptions as any);
+        } catch (achError: any) {
+          console.error('[Square] ACH initialization error:', achError);
+          console.error('[Square] Error name:', achError?.name);
+          console.error('[Square] Error message:', achError?.message);
+
+          // If ACH is unsupported, log detailed info but don't crash
+          if (achError?.name === 'PaymentMethodUnsupportedError') {
+            console.error('[Square] ACH is not supported. Possible reasons:');
+            console.error('[Square] 1. ACH not enabled in Square Developer Dashboard');
+            console.error('[Square] 2. Account not US-based');
+            console.error('[Square] 3. Location not configured for ACH');
+            console.error('[Square] 4. Browser/environment restrictions');
+            // Don't set achInstanceRef so the fallback flow will be used
+            return;
+          }
+          throw achError;
+        }
 
         console.log('[Square] ACH instance initialized successfully');
         achInstanceRef.current = achInstance;
@@ -415,12 +452,36 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
     if (useSquare) {
       console.log('[Payment] Using Square ACH payment flow');
-      const accountHolderName = data.accountHolderName || user?.name || '';
-      console.log('[Payment] Account holder name:', accountHolderName);
 
-      if (!accountHolderName) {
+      // Get account holder name - required by Square for ACH tokenization
+      // According to Square docs: https://developer.squareup.com/reference/sdks/web/payments/bank-payments
+      // accountHolderName must be provided when calling ach.tokenize()
+      let accountHolderName = '';
+
+      // Priority: 1. Form field, 2. User's full name (firstName + lastName), 3. User's firstName only
+      if (data.accountHolderName && data.accountHolderName.trim()) {
+        accountHolderName = data.accountHolderName.trim();
+      } else if (user?.firstName || user?.lastName) {
+        // Combine first and last name
+        const firstName = user.firstName || '';
+        const lastName = user.lastName || '';
+        accountHolderName = `${firstName} ${lastName}`.trim();
+      } else if (user?.firstName) {
+        accountHolderName = user.firstName;
+      }
+
+      console.log('[Payment] Account holder name:', accountHolderName);
+      console.log('[Payment] User data:', {
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        formAccountHolderName: data.accountHolderName,
+      });
+
+      if (!accountHolderName || accountHolderName.length === 0) {
         console.error('[Payment] Account holder name is missing');
-        toast.error('Account holder name is required for ACH payment');
+        toast.error(
+          'Account holder name is required for ACH payment. Please enter your name or update your profile.'
+        );
         setIsLoading(false);
         return;
       }
