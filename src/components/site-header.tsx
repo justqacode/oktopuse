@@ -5,6 +5,7 @@ import PaymentModal from './dashboard-main/modals/rent-payment-modal';
 import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
 import AddPropertyModal from './dashboard-main/modals/add-property-modal';
+import useSquareACHPayment from '@/hooks/useSquareACHPayment';
 // import { userMockLandlord } from '@/mockData/user';
 
 export function SiteHeader() {
@@ -22,13 +23,33 @@ export function SiteHeader() {
   const manager = user?.role.includes('manager');
 
   // console.log('daysleft: ', daysLeft);
+
+  const rentAmount = user?.tenantInfo?.rentAmount || 0;
+  const { initiatePayment, isLoading, isInitialized } = useSquareACHPayment();
+
+  const handlePayFullRent = () => {
+    initiatePayment({
+      amount: rentAmount,
+      month: new Date().toISOString().slice(0, 7),
+      notes: 'Full monthly rent payment',
+    });
+  };
+
+  const handlePayHalfRent = () => {
+    initiatePayment({
+      amount: rentAmount / 2,
+      month: new Date().toISOString().slice(0, 7),
+      notes: 'Half monthly rent payment',
+    });
+  };
+
   return (
     <header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)'>
       <div className='flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6'>
         <SidebarTrigger className='-ml-1' />
         <Separator orientation='vertical' className='mx-2 data-[orientation=vertical]:h-4' />
         {/* <h1 className='text-base font-medium'>Welcome {user?.firstName}</h1> */}
-        {tenant && (
+        {/* {tenant && (
           <div className='ml-auto flex items-center gap-2'>
             <Button
               // variant={daysLeft <= 3 ? 'default' : 'destructive'}
@@ -37,8 +58,30 @@ export function SiteHeader() {
               className='hidden sm:flex'
               onClick={() => setOpen(true)}
             >
-              {/* {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`} */}
+              {daysLeft <= 3 ? 'Pay Rent' : `Rent due in ${daysLeft} days! Renew now`}
               Pay Rent
+            </Button>
+          </div>
+        )} */}
+
+        {tenant && (
+          <div className='ml-auto flex items-center gap-2'>
+            <Button
+              variant={'outline'}
+              size='sm'
+              onClick={handlePayHalfRent}
+              disabled={isLoading || !isInitialized}
+            >
+              Pay Half (${(rentAmount / 2).toFixed(2)})
+            </Button>
+
+            <Button
+              variant={'default'}
+              size='sm'
+              onClick={handlePayFullRent}
+              disabled={isLoading || !isInitialized}
+            >
+              {isLoading ? 'Processing...' : `Pay Full (${rentAmount.toFixed(2)})`}
             </Button>
           </div>
         )}

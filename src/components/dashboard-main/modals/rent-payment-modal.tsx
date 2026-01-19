@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'react-router-dom';
 import { CreditCard, CheckCircle2, Building2, ChevronDown, ChevronUp } from 'lucide-react';
-import * as Square from '@square/web-sdk';
+import { payments } from '@square/web-sdk';
 import { config } from '@/config/app.config';
 import {
   Dialog,
@@ -188,7 +188,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         console.log('[Square] Creating payments instance...');
         console.log('[Square] Using Application ID:', maskValue(appId));
         console.log('[Square] Using Location ID:', maskValue(locationId));
-        const paymentsInstance = await Square.payments(appId, locationId);
+        const paymentsInstance = await payments(appId, locationId);
 
         if (!paymentsInstance) {
           console.error('[Square] Failed to initialize Square Payments instance - returned null');

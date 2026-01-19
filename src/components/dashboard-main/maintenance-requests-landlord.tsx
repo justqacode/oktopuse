@@ -60,7 +60,7 @@ export default function MaintenanceRequestsLandlord() {
         columns={maintenanceRequestsLandlordColumn2}
         data={maintenanceHistoryFormatted}
         enablePagination
-        enableColumnVisibility
+        // enableColumnVisibility
         enableSorting
         enableFiltering
         pageSize={10}
