@@ -64,7 +64,7 @@ export function AchPayment({
       idempotencyKey: window.crypto.randomUUID(),
     });
 
-    const paymentResponse = await fetch('http://localhost:8301/payment', {
+    const paymentResponse = await fetch('https://connect.squareupsandbox.com/v2/payments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
