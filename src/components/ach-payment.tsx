@@ -178,12 +178,12 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
           email: formData.buyerEmailAddress,
           note: formData.note,
           referenceId: formData.referenceId,
-          amountMoney: user?.tenantInfo?.rentAmount,
+          amountMoney: String(user?.tenantInfo?.rentAmount),
         },
       });
 
       if (paymentResponse?.initiateSqrPayment.success) {
-        toast.success(paymentResponse?.initiateSqrPayment.message || 'Payment successful!');
+        toast.success(paymentResponse?.initiateSqrPayment.message || 'Payment is processing!');
       }
     } catch (error) {
       error instanceof Error ? error.message : 'Payment failed. Please try again later.';
@@ -210,8 +210,8 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
           try {
             const paymentResults = await createPayment(tokenResult.token, formData);
             setPaymentStatus('success');
-            toast.success('Payment successful!');
-            console.debug('Payment Success', paymentResults);
+            // toast.success('Payment successful!');
+            // console.debug('Payment Success', paymentResults);
             resolve();
           } catch (paymentError) {
             reject(paymentError);
@@ -244,8 +244,8 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
     return {
       accountHolderName,
       intent: 'CHARGE',
-      // amount: '5000.00',
-      amount: user?.tenantInfo?.rentAmount || '5000.00',
+      amount: '5000.00',
+      // amount: user?.tenantInfo?.rentAmount || '5000.00',
       currency: 'USD',
     };
   };
@@ -324,7 +324,7 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
         script.type = 'text/javascript';
         script.onload = initializeSquare;
         script.onerror = () => {
-          console.error('Failed to load Square SDK');
+          // console.error('Failed to load Square SDK');
           toast.error('Failed to load payment system');
           setPaymentStatus('failure');
         };
@@ -405,7 +405,8 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
                       clipRule='evenodd'
                     />
                   </svg>
-                  <span>Payment successful!</span>
+                  {/* <span>Payment successful!</span> */}
+                  <span>Payment is processing!</span>
                 </>
               ) : (
                 <>
@@ -436,11 +437,7 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
                 <FormItem>
                   <FormLabel>First Name *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='Enter first name'
-                      disabled={isLoading || !isInitialized}
-                      {...field}
-                    />
+                    <Input placeholder='Enter first name' disabled {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -454,11 +451,7 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
                 <FormItem>
                   <FormLabel>Last Name *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='Enter last name'
-                      disabled={isLoading || !isInitialized}
-                      {...field}
-                    />
+                    <Input placeholder='Enter last name' disabled {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -472,12 +465,7 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
                 <FormItem>
                   <FormLabel>Email Address *</FormLabel>
                   <FormControl>
-                    <Input
-                      type='email'
-                      placeholder='Enter email address'
-                      disabled={isLoading || !isInitialized}
-                      {...field}
-                    />
+                    <Input type='email' placeholder='Enter email address' disabled {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -491,11 +479,7 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
                 <FormItem>
                   <FormLabel>Reference ID *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder='Reference ID'
-                      disabled={isLoading || !isInitialized}
-                      {...field}
-                    />
+                    <Input placeholder='Reference ID' disabled {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
