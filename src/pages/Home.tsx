@@ -33,9 +33,9 @@ export function Home() {
             </p>
           </div>
 
-          <Button className='group bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-8 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3'>
+          <div className='sams-btn w-full sm:w-50'>
             <Link to='/register'> Get Oktopuse</Link>
-          </Button>
+          </div>
         </div>
 
         {/* Right Content - Mock Video Interface */}
@@ -333,7 +333,9 @@ export function Home() {
 
               <button
                 onClick={() => navigate('/register')}
-                className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
+                // className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
+                // className='w-full flex justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'
+                className='sams-btn'
               >
                 Get Started with a 60-Day Trial
                 <svg
@@ -552,9 +554,8 @@ export function Home() {
             </button> */}
 
             <Link to='/register'>
-              <div className='w-full flex justify-center  py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold transition-colors duration-300'>
-                Current Plan
-              </div>
+              {/* <div className='w-full flex justify-center  py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold transition-colors duration-300'> */}
+              <div className='sams-btn'>Current Plan</div>
             </Link>
           </div>
 
