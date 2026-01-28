@@ -244,8 +244,8 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
     return {
       accountHolderName,
       intent: 'CHARGE',
-      amount: '5000.00',
-      // amount: user?.tenantInfo?.rentAmount || '5000.00',
+      // amount: '5000.00',
+      amount: String(user?.tenantInfo?.rentAmount) || '5000.00',
       currency: 'USD',
     };
   };
