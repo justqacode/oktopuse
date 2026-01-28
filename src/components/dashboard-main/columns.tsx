@@ -68,15 +68,15 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: 'rentForMonth',
-    header: 'Rent For Month',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.rentForMonth}
-      </Button>
-    ),
-  },
+  // {
+  //   accessorKey: 'rentForMonth',
+  //   header: 'Rent For Month',
+  //   cell: ({ row }) => (
+  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+  //       {row.original.rentForMonth}
+  //     </Button>
+  //   ),
+  // },
   {
     accessorKey: 'status',
     header: 'Status',
@@ -152,7 +152,7 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
 
 export const maintenanceRequestsManagerColumn = (
   onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
-  viewItem: (maintenanceId: {}) => void
+  viewItem: (maintenanceId: {}) => void,
 ): ColumnDef<ManagerRequest>[] => [
   {
     accessorKey: 'date',
@@ -717,7 +717,7 @@ export const paymentHistoryManagerColumn: ColumnDef<PaymentHistoryManager>[] = [
 // export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
 export const usersAdminColumn = (
   onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
-  viewItem: (maintenanceId: {}) => void
+  viewItem: (maintenanceId: {}) => void,
 ): ColumnDef<any>[] => [
   {
     accessorKey: 'userName',

@@ -11,7 +11,7 @@ interface PaymentHistoryItem {
   _id: string;
   propertyID?: string;
   tenantID?: string;
-  amountPaid?: number;
+  amountReceived?: number;
   date?: string;
   rentForMonth?: string;
   note?: string;
@@ -30,7 +30,7 @@ const GET_PAYMENT_HISTORY = gql`
       _id
       propertyID
       tenantID
-      amountPaid
+      amountReceived
       date
       rentForMonth
       note
@@ -63,12 +63,12 @@ export default function RentHistory() {
   const rentHistoryData = data?.getPaymentHistoryByTenantID || [];
   const rentHistoryFormatted = rentHistoryData
     .slice()
-    .reverse()
+    // .reverse()
     .map((item) => ({
       id: '...' + item._id.slice(-6),
       date: formatDate(item.date),
-      amount: formatCurrency(Number(item.amountPaid)) || 0,
-      rentForMonth: item.rentForMonth,
+      amount: formatCurrency(Number(item.amountReceived)) || 0,
+      // rentForMonth: item.rentForMonth,
       status: item.status || 'pending',
       tenantId: item.tenantID,
       propertyId: item.propertyID,
