@@ -18,8 +18,8 @@ export function Home() {
   return (
     <div className='w-full min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 relative overflow-hidden'>
       {/* Decorative elements */}
-      <div className='absolute top-10 right-20 w-32 h-32 bg-pink-300 rounded-full opacity-40 blur-2xl'></div>
-      <div className='absolute bottom-20 left-10 w-40 h-40 bg-blue-300 rounded-full opacity-30 blur-2xl'></div>
+      <div className='absolute top-10 right-20 w-32 h-32 bg-pink-300 rounded-full opacity-40 blur-2xl z-10'></div>
+      <div className='absolute bottom-20 left-10 w-40 h-40 bg-blue-300 rounded-full opacity-30 blur-2xl z-10'></div>
 
       <div className='max-w-7xl mx-auto px-12 py-40 flex flex-col lg:flex-row items-center justify-between gap-12'>
         {/* Left Content */}
@@ -33,9 +33,9 @@ export function Home() {
             </p>
           </div>
 
-          <Button className='group bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-8 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3'>
+          <div className='sams-btn w-full sm:w-50'>
             <Link to='/register'> Get Oktopuse</Link>
-          </Button>
+          </div>
         </div>
 
         {/* Right Content - Mock Video Interface */}
@@ -219,13 +219,13 @@ export function Home() {
       </div>
 
       {/* Decorative bottom elements */}
-      <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 opacity-40'>
+      {/* <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 opacity-40'>
         <div className='relative'>
           <div className='absolute bottom-0 left-1/4 w-20 h-40 bg-coral-400 rounded-t-full'></div>
           <div className='absolute bottom-0 left-1/2 w-16 h-32 bg-pink-400 rounded-t-full transform -translate-x-1/2'></div>
           <div className='absolute bottom-0 right-1/4 w-24 h-36 bg-green-400 rounded-t-full'></div>
         </div>
-      </div>
+      </div> */}
 
       {/* Made by property managers section */}
       <div className='max-w-7xl mx-auto px-6 pt-20 pb-10'>
@@ -333,7 +333,9 @@ export function Home() {
 
               <button
                 onClick={() => navigate('/register')}
-                className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
+                // className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
+                // className='w-full flex justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'
+                className='sams-btn'
               >
                 Get Started with a 60-Day Trial
                 <svg
@@ -547,9 +549,14 @@ export function Home() {
               </div>
             </div>
 
-            <button className='w-full py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed'>
+            {/* <button className='w-full py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed'>
               Current Plan
-            </button>
+            </button> */}
+
+            <Link to='/register'>
+              {/* <div className='w-full flex justify-center  py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold transition-colors duration-300'> */}
+              <div className='sams-btn'>Current Plan</div>
+            </Link>
           </div>
 
           {/* Basic Plan */}
@@ -806,12 +813,15 @@ export function Home() {
         </div>
 
         {/* Contact Section */}
-        <div className='text-center mt-12'>
+        <div className='text-center mt-12 z-50!'>
           <p className='text-slate-600 text-lg'>
             Need a custom plan?{' '}
-            <a href='/contact' className='text-blue-600 hover:text-blue-700 font-medium underline'>
+            <Link
+              to='/contact'
+              className='text-blue-600 hover:text-blue-700 font-medium underline cursor-pointer'
+            >
               Contact
-            </a>{' '}
+            </Link>{' '}
             us for personalized solutions.
           </p>
         </div>

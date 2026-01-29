@@ -50,7 +50,7 @@ export const Navbar = () => {
         'fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300',
         isScrolled
           ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
-          : 'bg-background'
+          : 'bg-background',
       )}
     >
       <div className='container mx-auto px-4 lg:px-8 flex items-center justify-between h-16'>
@@ -185,9 +185,9 @@ export const Navbar = () => {
           {/* User Menu or Auth Buttons */}
           {user ? (
             <>
-              <Button asChild variant='outline' size='sm' className='hidden sm:inline-flex'>
+              <div className='hidden sm:inline-flex sams-btn h-10'>
                 <Link to='/contact'>Contact Oktopuse</Link>
-              </Button>
+              </div>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
@@ -211,7 +211,7 @@ export const Navbar = () => {
               </Button> */}
               <Button
                 size='sm'
-                className='hidden sm:inline-flex'
+                className='hidden sm:inline-flex '
                 onClick={() => navigate('/login')}
               >
                 Log in

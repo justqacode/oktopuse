@@ -68,15 +68,15 @@ export const rentHistoryColumn: ColumnDef<any>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: 'rentForMonth',
-    header: 'Rent For Month',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.rentForMonth}
-      </Button>
-    ),
-  },
+  // {
+  //   accessorKey: 'rentForMonth',
+  //   header: 'Rent For Month',
+  //   cell: ({ row }) => (
+  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+  //       {row.original.rentForMonth}
+  //     </Button>
+  //   ),
+  // },
   {
     accessorKey: 'status',
     header: 'Status',
@@ -152,7 +152,7 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
 
 export const maintenanceRequestsManagerColumn = (
   onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
-  viewItem: (maintenanceId: {}) => void
+  viewItem: (maintenanceId: {}) => void,
 ): ColumnDef<ManagerRequest>[] => [
   {
     accessorKey: 'date',
@@ -586,7 +586,7 @@ export const propertiesColumn: ColumnDef<Properties>[] = [
     accessorKey: 'propertyType',
     header: 'Property Type',
     cell: ({ row }) => (
-      <Badge variant='outline' className='text-muted-foreground w-fit px-0 text-left'>
+      <Badge variant='outline' className='text-muted-foreground w-fit px-2 text-left'>
         {row.original.propertyType}
       </Badge>
     ),
@@ -717,7 +717,7 @@ export const paymentHistoryManagerColumn: ColumnDef<PaymentHistoryManager>[] = [
 // export const usersAdminColumn: ColumnDef<UserAdmin>[] = [
 export const usersAdminColumn = (
   onStatusUpdate: (maintenanceId: string, newStatus: string) => void,
-  viewItem: (maintenanceId: {}) => void
+  viewItem: (maintenanceId: {}) => void,
 ): ColumnDef<any>[] => [
   {
     accessorKey: 'userName',

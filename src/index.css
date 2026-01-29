@@ -128,3 +128,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .sams-btn {
+    @apply w-full flex justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300 cursor-pointer;
+  }
+}

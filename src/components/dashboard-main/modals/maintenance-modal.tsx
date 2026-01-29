@@ -120,7 +120,7 @@ export default function MaintenanceRequestModal({
   onOpenChange,
 }: MaintenanceRequestModalProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  // const [showSuccess, setShowSuccess] = useState(false);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const { user } = useAuthStore();
   const mon = user?.tenantInfo?.rentalAddress;
@@ -175,11 +175,13 @@ export default function MaintenanceRequestModal({
     setIsLoading(true);
     const { triggerRefetch } = useMaintenanceStore.getState();
 
-    if (!selectedImages || selectedImages.length === 0) {
-      toast.error('Please select at least one image');
-      setIsLoading(false);
-      return;
-    }
+    // if (!selectedImages || selectedImages.length === 0) {
+    //   toast.error('Please select at least one image');
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    const imageAvailable = selectedImages && selectedImages.length > 0;
 
     try {
       const imageUrls = await uploadImages(selectedImages);
@@ -193,7 +195,7 @@ export default function MaintenanceRequestModal({
           preferedTimeOfResolution: data.preferredTime,
           canManagementAccess: data.allowEntry === 'yes',
           // images: selectedImages.map((img) => img.url),
-          images: imageUrls,
+          images: imageAvailable ? imageUrls : '',
         },
       });
 

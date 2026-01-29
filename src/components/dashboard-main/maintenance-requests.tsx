@@ -43,7 +43,7 @@ export default function MaintenanceRequests() {
     id: '...' + item._id.slice(-6),
     date: formatDate(item.createdAt) || '',
     description: item.description.split(0, 22) || '',
-    category: 'needs fix from sam',
+    category: item.category || 'N/A',
     status: item.status || 'pending',
   }));
 

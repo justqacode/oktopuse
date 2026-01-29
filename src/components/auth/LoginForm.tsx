@@ -4,20 +4,37 @@ import { loginSchema } from './schemas';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import type z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/auth/authStore';
+import { useAuthStore, type User } from '@/auth/authStore';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
+import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useIP } from '@/hooks/user-ip';
 
+const LOGIN_MUTATION = gql`
+  mutation Login($ipa: String, $ua: String, $email: String!, $password: String!) {
+    login(ipa: $ipa, ua: $ua, email: $email, password: $password) {
+      token
+    }
+  }
+`;
+
 type FormValues = z.infer<typeof loginSchema>;
+type LoginMutationResponse = {
+  login: {
+    token: string;
+    user: User;
+  };
+};
 
 export const LoginForm = () => {
   const navigate = useNavigate();
-  const { login, isLoading, user } = useAuthStore();
+  const { setToken } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
+  const [loginMutation, { loading: isLoading }] =
+    useMutation<LoginMutationResponse>(LOGIN_MUTATION);
 
   const userAgent = navigator.userAgent || 'N/A';
 
@@ -27,6 +44,31 @@ export const LoginForm = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
+
+  const onSubmit = async (data: FormValues) => {
+    // await login(data.email, data.password, ip, userAgent, navigate);
+
+    try {
+      const { data: result } = await loginMutation({
+        variables: { email: data.email, password: data.password, ipa: ip, ua: userAgent },
+      });
+
+      if (result) {
+        toast.success('Login successfully');
+        form.reset();
+
+        // Persist token in zustand (and localStorage via persist middleware)
+        setToken(result.login.token);
+        navigate('/2fa');
+      }
+    } catch (error: any) {
+      // toast.error(`Login failed: ${error.message}`);
+      toast('Login failed', {
+        className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
+        duration: 10000,
+      });
+    }
+  };
 
   const resendVerificationEmail = async (email: string) => {
     try {
@@ -39,28 +81,24 @@ export const LoginForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (user && user.verificationStatus === false) {
-      toast.warning('You need to verify your account!', {
-        classNames: {
-          toast: 'flex-col !items-start ',
-          actionButton: ' !justify-start mt-2',
-        },
-        description: 'Click on the button below to resend the verification email.',
-        action: {
-          label: <div>Resend Verification Email</div>,
-          onClick: () => {
-            resendVerificationEmail(user.email);
-          },
-        },
-        duration: 8000,
-      });
-    }
-  }, [user]);
-
-  const onSubmit = async (data: FormValues) => {
-    await login(data.email, data.password, ip, userAgent, navigate);
-  };
+  // useEffect(() => {
+  //   if (user && user.verificationStatus === false) {
+  //     toast.warning('You need to verify your account!', {
+  //       classNames: {
+  //         toast: 'flex-col !items-start ',
+  //         actionButton: ' !justify-start mt-2'
+  //       },
+  //       description: 'Click on the button below to resend the verification email.',
+  //       action: {
+  //         label: <div>Resend Verification Email</div>,
+  //         onClick: () => {
+  //           resendVerificationEmail(user.email);
+  //         },
+  //       },
+  //       duration: 8000,
+  //     });
+  //   }
+  // }, [user]);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
