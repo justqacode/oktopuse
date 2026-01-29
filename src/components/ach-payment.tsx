@@ -318,9 +318,13 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
     };
 
     if (open) {
+      const squareSrc = import.meta.env?.PROD
+        ? 'https://web.squarecdn.com/v1/square.js'
+        : 'https://sandbox.web.squarecdn.com/v1/square.js';
+
       if (!document.querySelector('script[src*="square.js"]')) {
         const script = document.createElement('script');
-        script.src = 'https://sandbox.web.squarecdn.com/v1/square.js';
+        script.src = squareSrc;
         script.type = 'text/javascript';
         script.onload = initializeSquare;
         script.onerror = () => {
