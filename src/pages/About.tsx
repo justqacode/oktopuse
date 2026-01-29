@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 export default function AboutUs() {
   return (
     <div className='mt-12 min-h-screen bg-gradient-to-br from-slate-50 to-slate-100'>
