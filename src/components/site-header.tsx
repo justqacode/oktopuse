@@ -6,6 +6,31 @@ import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
 import AddPropertyModal from './dashboard-main/modals/add-property-modal';
 import { AchPayment } from './ach-payment';
+import { useQuery } from '@apollo/client/react';
+import { gql } from '@apollo/client';
+
+const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
+  query GetMaintenanceHistoryStakeHolder {
+    getMaintenanceHistoryStakeHolder {
+      _id
+      description
+      status
+      createdAt
+      category
+      images
+      propertyDetails {
+        name
+        propertyType
+        address {
+          street
+          city
+          state
+          zip
+        }
+      }
+    }
+  }
+`;
 
 export function SiteHeader() {
   const { user } = useAuthStore();
@@ -20,72 +45,87 @@ export function SiteHeader() {
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+  const { data } = useQuery<any>(GET_MANAGER_MAINTENANCE_REQUESTS, {
+    fetchPolicy: 'cache-and-network',
+    variables: { managerID: user?.id },
+  });
+
+  const mono = data?.getMaintenanceHistoryStakeHolder || [];
+
   return (
-    <header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) z-500'>
-      <div className='flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6'>
-        <SidebarTrigger className='-ml-1' />
-        <Separator orientation='vertical' className='mx-2 data-[orientation=vertical]:h-4' />
-        <h1 className='text-base font-medium'>Welcome {user?.firstName}</h1>
+    <>
+      {user?.role === 'manager' && mono.length > 0 && (
+        <div className='bg-red-500 text-white w-full h-8 flex items-center justify-center'>
+          You have <span className='font-bold px-2'>{mono.length}</span> maintenance requests
+          pending. Please address them promptly.
+        </div>
+      )}
+      <header className='flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) z-500'>
+        <div className='flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6'>
+          <SidebarTrigger className='-ml-1' />
+          <Separator orientation='vertical' className='mx-2 data-[orientation=vertical]:h-4' />
+          <h1 className='text-base font-medium'>Welcome {user?.firstName}</h1>
 
-        {tenant && (
-          <div className='ml-auto flex items-center gap-2'>
-            <Button
-              variant={'default'}
-              size='sm'
-              onClick={() => setShowPaymentModal(true)}
-              className='hidden sm:flex'
-            >
-              Pay rent
-            </Button>
-          </div>
-        )}
+          {tenant && (
+            <div className='ml-auto flex items-center gap-2'>
+              <Button
+                variant={'default'}
+                size='sm'
+                onClick={() => setShowPaymentModal(true)}
+                className='hidden sm:flex'
+              >
+                Pay rent
+              </Button>
+            </div>
+          )}
 
-        {landlord && (
-          <div className='ml-auto flex items-center gap-2'>
-            <Button
-              variant='outline'
-              size='sm'
-              className='hidden sm:flex'
-              onClick={() => setOpen(true)}
-            >
-              Message PM
-            </Button>
-            <Button
-              variant='default'
-              size='sm'
-              className='hidden sm:flex'
-              onClick={() => setOpenAddProperty(true)}
-            >
-              + Add Property
-            </Button>
-          </div>
-        )}
-        {manager && (
-          <div className='ml-auto flex items-center gap-2'>
-            <Button
-              variant='outline'
-              size='sm'
-              className='hidden sm:flex'
-              onClick={() => setOpen(true)}
-            >
-              Send Notice
-            </Button>
-            <Button
-              variant='default'
-              size='sm'
-              className='hidden sm:flex'
-              onClick={() => setOpenAddProperty(true)}
-            >
-              + Add Property
-            </Button>
-          </div>
-        )}
-      </div>
+          {landlord && (
+            <div className='ml-auto flex items-center gap-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                className='hidden sm:flex'
+                onClick={() => setOpen(true)}
+              >
+                Message PM
+              </Button>
+              <Button
+                variant='default'
+                size='sm'
+                className='hidden sm:flex'
+                onClick={() => setOpenAddProperty(true)}
+              >
+                + Add Property
+              </Button>
+            </div>
+          )}
+          {manager && (
+            <div className='ml-auto flex items-center gap-2'>
+              <Button
+                variant='outline'
+                size='sm'
+                className='hidden sm:flex'
+                onClick={() => setOpen(true)}
+              >
+                Send Notice
+              </Button>
+              <Button
+                variant='default'
+                size='sm'
+                className='hidden sm:flex'
+                onClick={() => setOpenAddProperty(true)}
+              >
+                + Add Property
+              </Button>
+            </div>
+          )}
+        </div>
 
-      <PaymentModal open={open} onOpenChange={setOpen} />
-      <AddPropertyModal open={openAddProperty} onOpenChange={setOpenAddProperty} />
+        <PaymentModal open={open} onOpenChange={setOpen} />
+        <AddPropertyModal open={openAddProperty} onOpenChange={setOpenAddProperty} />
 
-      <AchPayment open={showPaymentModal} onOpenChange={setShowPaymentModal} />
-    </header>
+        <AchPayment open={showPaymentModal} onOpenChange={setShowPaymentModal} />
+      </header>
+    </>
   );
 }
