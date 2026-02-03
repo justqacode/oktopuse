@@ -498,16 +498,16 @@ export const leaseDocColumn: ColumnDef<any>[] = [
       </Button>
     ),
   },
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
-        {/* {row.original.type} */}
-        Download
-      </Button>
-    ),
-  },
+  // {
+  //   accessorKey: 'action',
+  //   header: 'Action',
+  //   cell: ({ row }) => (
+  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
+  //       {/* {row.original.type} */}
+  //       Download
+  //     </Button>
+  //   ),
+  // },
 ];
 
 export const expensesColumn: ColumnDef<Expenses>[] = [

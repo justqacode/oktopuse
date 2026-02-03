@@ -19,53 +19,55 @@ import { Separator } from '@/components/ui/separator';
 import clsx from 'clsx';
 import type { UserAdmin } from '../types';
 
-const mockContacts = [
-  {
-    id: 1,
-    name: 'Property Manager',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'Your maintenance request has been approved',
-    time: '10:30 AM',
-    unread: 2,
-    online: true,
-  },
-  {
-    id: 2,
-    name: 'Maintenance Team',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'We will arrive at 2 PM today',
-    time: '9:45 AM',
-    unread: 0,
-    online: true,
-  },
-  {
-    id: 3,
-    name: 'Building Security',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'Package delivered to your door',
-    time: 'Yesterday',
-    unread: 0,
-    online: false,
-  },
-  {
-    id: 4,
-    name: 'Tenant Support',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'How can we help you today?',
-    time: 'Monday',
-    unread: 0,
-    online: true,
-  },
-  {
-    id: 5,
-    name: 'Landlord',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'Rent receipt sent via email',
-    time: 'Friday',
-    unread: 0,
-    online: false,
-  },
-];
+// const mockContacts = [
+//   {
+//     id: 1,
+//     name: 'Property Manager',
+//     avatar: '/api/placeholder/40/40',
+//     lastMessage: 'Your maintenance request has been approved',
+//     time: '10:30 AM',
+//     unread: 2,
+//     online: true,
+//   },
+//   {
+//     id: 2,
+//     name: 'Maintenance Team',
+//     avatar: '/api/placeholder/40/40',
+//     lastMessage: 'We will arrive at 2 PM today',
+//     time: '9:45 AM',
+//     unread: 0,
+//     online: true,
+//   },
+//   {
+//     id: 3,
+//     name: 'Building Security',
+//     avatar: '/api/placeholder/40/40',
+//     lastMessage: 'Package delivered to your door',
+//     time: 'Yesterday',
+//     unread: 0,
+//     online: false,
+//   },
+//   {
+//     id: 4,
+//     name: 'Tenant Support',
+//     avatar: '/api/placeholder/40/40',
+//     lastMessage: 'How can we help you today?',
+//     time: 'Monday',
+//     unread: 0,
+//     online: true,
+//   },
+//   {
+//     id: 5,
+//     name: 'Landlord',
+//     avatar: '/api/placeholder/40/40',
+//     lastMessage: 'Rent receipt sent via email',
+//     time: 'Friday',
+//     unread: 0,
+//     online: false,
+//   },
+// ];
+
+const mockContacts: any = [];
 
 type Message = {
   id: number;
@@ -122,11 +124,11 @@ export default function DashboardChats() {
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const currentContact = mockContacts.find((c) => c.id === selectedContact);
+  const currentContact = mockContacts.find((c: any) => c.id === selectedContact);
   const currentMessages = mockMessages[selectedContact] || [];
 
-  const filteredContacts = mockContacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredContacts = mockContacts.filter((contact: any) =>
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleSendMessage = () => {
@@ -168,7 +170,7 @@ export default function DashboardChats() {
 
           {/* Contacts List */}
           <ScrollArea className='flex-1'>
-            {filteredContacts.map((contact) => (
+            {filteredContacts.map((contact: any) => (
               // <div
               //   key={contact.id}
               //   className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 ${
@@ -180,7 +182,7 @@ export default function DashboardChats() {
                 key={contact.id}
                 className={clsx(
                   'flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50',
-                  selectedContact === contact.id ? 'bg-gray-100' : ''
+                  selectedContact === contact.id ? 'bg-gray-100' : '',
                 )}
                 onClick={() => setSelectedContact(contact.id)}
               >
@@ -317,7 +319,7 @@ export default function DashboardChats() {
           ) : (
             <div className='flex-1 flex items-center justify-center bg-gray-50'>
               <div className='text-center'>
-                <h3 className='text-2xl font-medium text-gray-600 mb-2'>WhatsApp Web</h3>
+                <h3 className='text-2xl font-medium text-gray-600 mb-2'>No new Messages</h3>
                 <p className='text-gray-500'>Select a chat to start messaging</p>
               </div>
             </div>
