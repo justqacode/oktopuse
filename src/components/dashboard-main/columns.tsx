@@ -1,13 +1,4 @@
-import {
-  IconCircleCheckFilled,
-  IconCircleXFilled,
-  IconCreditCard,
-  IconDotsVertical,
-  IconLoader,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from '@tabler/icons-react';
+import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,62 +12,58 @@ import type {
   PaymentHistoryManager,
   Properties,
   TenantRequest,
-  UserAdmin,
 } from './types';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { SidebarMenuButton } from '../ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { useAuthStore } from '@/auth/authStore';
-import { Check, DotIcon, EllipsisVertical, Eye, MoreHorizontal, TicketCheck } from 'lucide-react';
+import { Check, Eye, MoreHorizontal } from 'lucide-react';
 import { getStatusIcon } from './maintenance-requests-manager';
 import formatDate from '@/utils/format-date';
 
-export const rentHistoryColumn: ColumnDef<any>[] = [
+export const rentHistoryColumn = (viewPayment: (payId: {}) => void): ColumnDef<any>[] => [
   {
     accessorKey: 'id',
     header: 'Payment ID',
     cell: ({ row }) => (
-      <Button variant='link' className='text-foreground w-fit px-0 text-left'>
+      <Button
+        variant='link'
+        className='text-foreground w-fit px-0 text-left'
+        onClick={() => viewPayment(row.original)}
+      >
         {row.original.id}
       </Button>
     ),
     enableHiding: false,
   },
   {
-    accessorKey: 'date',
-    header: 'Payment Date',
-    cell: ({ row }) => (
-      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.date}
-      </Button>
-    ),
-  },
-  {
     accessorKey: 'amount',
     header: 'Amount',
     cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+      <Button
+        variant='ghost'
+        className='text-muted-foreground w-fit px-0 text-left'
+        onClick={() => viewPayment(row.original)}
+      >
         {row.original.amount}
       </Button>
     ),
   },
-  // {
-  //   accessorKey: 'rentForMonth',
-  //   header: 'Rent For Month',
-  //   cell: ({ row }) => (
-  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-  //       {row.original.rentForMonth}
-  //     </Button>
-  //   ),
-  // },
+  {
+    accessorKey: 'date',
+    header: 'Date',
+    cell: ({ row }) => (
+      <Button
+        variant='link'
+        className='text-muted-foreground w-fit px-0 text-left'
+        onClick={() => viewPayment(row.original)}
+      >
+        {row.original.date}
+      </Button>
+    ),
+  },
   {
     accessorKey: 'status',
     header: 'Status',
