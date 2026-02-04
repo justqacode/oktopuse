@@ -51,7 +51,7 @@ export default function RentHistory() {
     fetchPolicy: 'cache-and-network',
   });
 
-  console.log({ data });
+  // console.log({ data });
 
   const { shouldRefetch, resetRefetch } = usePaymentStore();
 

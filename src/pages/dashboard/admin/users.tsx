@@ -32,7 +32,7 @@ export default function UsersPage() {
   });
   const users = data?.getAllRegisteredUsers || [];
 
-  console.log('Registered Users Data:', users);
+  // console.log('Registered Users Data:', users);
 
   const handleStatusUpdate = async (maintenanceId: string, newStatus: string) => {
     // try {
@@ -46,8 +46,7 @@ export default function UsersPage() {
     //   // console.error('Failed to update status:', error);
     //   toast.error('Failed to update status. Please try again.');
     // }
-
-    console.log(maintenanceId, newStatus);
+    // console.log(maintenanceId, newStatus);
   };
 
   const viewItem = (request: {}) => {
