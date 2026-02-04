@@ -82,7 +82,6 @@ export default function RentHistory() {
   // const rentda = rentHistoryFormatted.slice().reverse();
 
   const viewPayment = (payId: {}) => {
-    console.log('View payment:', payId);
     setSelectedRequest(payId);
     setPreviewOpen(true);
   };

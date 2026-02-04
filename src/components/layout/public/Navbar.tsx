@@ -190,11 +190,11 @@ export const Navbar = () => {
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-                    <Avatar className='h-8 w-8'>
-                      <AvatarFallback>{user?.firstName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
-                    </Avatar>
-                  </Button>
+                  {/* <Button variant='ghost' className='relative h-8 w-8 rounded-full'> */}
+                  <Avatar className='h-8 w-8'>
+                    <AvatarFallback>{user?.firstName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+                  </Avatar>
+                  {/* </Button> */}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='w-56' align='end'>
                   <DropdownMenuItem asChild>

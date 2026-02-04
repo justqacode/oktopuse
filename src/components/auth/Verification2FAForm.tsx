@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,11 +11,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 import { gql } from '@apollo/client';
-import { useMutation } from '@apollo/client/react';
 import { useAuthStore } from '@/auth/authStore';
 
 export const MFA_MUTATION = gql`
@@ -234,7 +232,7 @@ const VerificationCodeInput = ({
             onKeyDown={(e) => handleKeyDown(e, idx)}
             onPaste={handlePaste}
             onFocus={handleFocus}
-            className='w-12 h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+            className='w-8 h-8 sm:w-12 sm:h-12 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
             autoComplete='off'
           />
         ))}
@@ -256,34 +254,6 @@ export const Verification2FA = () => {
   });
 
   const onSubmit = async (data: VerifyFormValues) => {
-    // try {
-    //   const { data: result } = await mfaMutation({
-    //     variables: {
-    //       mfaCode: data.verificationCode,
-    //     },
-    //   });
-
-    //   if (result) {
-    //     toast.success('Login successfully');
-    //     veriForm.reset();
-    //     // navigate('/dashboard');
-
-    //     if (
-    //       result.MFAlogin.user.role === 'admin' ||
-    //       (Array.isArray(result.MFAlogin.user.role) && result.MFAlogin.user.role.includes('admin'))
-    //     ) {
-    //       navigate('/dashboard/admin/users');
-    //     } else {
-    //       navigate('/dashboard');
-    //     }
-    //   }
-    // } catch (error: any) {
-    //   // toast.error(`Login failed: ${error.message}`);
-    //   toast('Login failed', {
-    //     className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
-    //     duration: 10000,
-    //   });
-    // }
     await mfaLogin(data.verificationCode, navigate);
   };
 
@@ -313,6 +283,17 @@ export const Verification2FA = () => {
           </Button>
         </form>
       </Form>
+
+      <div className='mt-8'>
+        <div className='relative'>
+          <div className='absolute inset-0 flex items-center'>
+            <div className='w-full border-t border-gray-300' />
+          </div>
+          <div className='relative flex justify-center text-sm'>
+            <span className='px-2 bg-white text-gray-500'>Send another token in 00:00 mins</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
