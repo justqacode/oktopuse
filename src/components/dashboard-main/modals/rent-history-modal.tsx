@@ -32,6 +32,8 @@ interface PaymentPreview {
   images?: string[];
   allowEntry?: boolean;
   amount: string;
+  paymentMethod: string;
+  purpose: string;
 }
 
 interface PreviewModalProps {
@@ -99,7 +101,7 @@ export function RentHistoryPreviewModal({ open, onOpenChange, requests }: Previe
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {/* Date Submitted */}
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
-              <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' />
+              {/* <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' /> */}
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Date </p>
                 <p className='text-base font-semibold'>{formatDate(requests.date)}</p>
@@ -108,21 +110,30 @@ export function RentHistoryPreviewModal({ open, onOpenChange, requests }: Previe
 
             {/* Category */}
             <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
-              <IconReportMoney className='h-5 w-5 text-muted-foreground mt-0.5' />
+              {/* <IconReportMoney className='h-5 w-5 text-muted-foreground mt-0.5' /> */}
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Amount</p>
                 <p className='text-base font-semibold'>{requests.amount}</p>
               </div>
             </div>
 
-            {/* Property */}
-            {/* <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
-              <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
+            {/* Payment method */}
+            <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
+              {/* <Payment className='h-5 w-5 text-muted-foreground mt-0.5' /> */}
               <div>
-                <p className='text-sm font-medium text-muted-foreground'>Property</p>
-                <p className='text-base font-semibold'>{requests.propertyDetails?.name || 'N/A'}</p>
+                <p className='text-sm font-medium text-muted-foreground'>Payment Method</p>
+                <p className='text-base font-semibold'>{requests.paymentMethod}</p>
               </div>
-            </div> */}
+            </div>
+
+            {/* Purpose */}
+            <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>
+              {/* <Payment className='h-5 w-5 text-muted-foreground mt-0.5' /> */}
+              <div>
+                <p className='text-sm font-medium text-muted-foreground'>Purpose</p>
+                <p className='text-base font-semibold'>{requests.purpose}</p>
+              </div>
+            </div>
 
             {/* Tenant */}
             {/* <div className='flex items-start gap-3 p-4 border rounded-lg bg-muted/30'>

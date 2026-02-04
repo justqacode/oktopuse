@@ -51,6 +51,8 @@ export default function RentHistory() {
     fetchPolicy: 'cache-and-network',
   });
 
+  console.log({ data });
+
   const { shouldRefetch, resetRefetch } = usePaymentStore();
 
   useEffect(() => {
@@ -77,6 +79,9 @@ export default function RentHistory() {
       status: item.status || 'pending',
       tenantId: item.tenantID,
       propertyId: item.propertyID,
+      note: item.note,
+      paymentMethod: item.paymentMethod,
+      purpose: item.purpose,
     }));
 
   // const rentda = rentHistoryFormatted.slice().reverse();
