@@ -322,7 +322,13 @@ export function AchPayment({ open, onOpenChange }: SquarePaymentModalProps) {
       //   ? 'https://web.squarecdn.com/v1/square.js'
       //   : 'https://sandbox.web.squarecdn.com/v1/square.js';
 
-      const PROD_HOSTNAMES = ['https://www.oktopuse.com', 'oktopuse.com', 'oktopuse.vercel.app'];
+      const PROD_HOSTNAMES = [
+        'https://www.oktopuse.com',
+        'https://oktopuse.com',
+        'www.oktopuse.com',
+        'oktopuse.com',
+        'oktopuse.vercel.app',
+      ];
 
       const isProductionDomain =
         typeof window !== 'undefined' && PROD_HOSTNAMES.includes(window.location.hostname);
