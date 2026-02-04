@@ -11,7 +11,8 @@ import formatDate, { monthNames } from '@/utils/format-date';
 const tabs = [
   { value: 'rent-history', label: 'Rent History' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
-  { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
+  // { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
+  { value: 'lease-documents', label: 'Lease Documents' },
 ];
 
 export default function DashboardHomeTenant() {

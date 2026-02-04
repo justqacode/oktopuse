@@ -51,7 +51,7 @@ export default function PaymentHistoryManager() {
                 variant='default'
                 size='sm'
                 className='hidden sm:flex'
-                onClick={() => console.log('pay landlord')}
+                // onClick={() => console.log('pay landlord')}
               >
                 Pay landlord
               </Button>

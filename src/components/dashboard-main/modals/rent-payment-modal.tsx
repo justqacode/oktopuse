@@ -71,7 +71,7 @@ const formSchema = z
     {
       message: 'Please enter a valid custom amount',
       path: ['customAmount'],
-    }
+    },
   );
 
 type FormValues = z.infer<typeof formSchema>;
@@ -130,7 +130,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   // Initialize Square Payments SDK
   useEffect(() => {
     const initSquarePayments = async () => {
-      console.log('[Square] Starting initialization.....');
+      // console.log('[Square] Starting initialization.....');
       // Trim whitespace and check for empty strings
       const appId = config.SQUARE_APPLICATION_ID?.trim() || '';
       const locationId = config.SQUARE_LOCATION_ID?.trim() || '';
@@ -142,17 +142,17 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         return `${val.substring(0, 4)}...${val.substring(val.length - 4)}`;
       };
 
-      console.log('[Square] Application ID:', appId ? `Present (${maskValue(appId)})` : 'Missing');
-      console.log(
-        '[Square] Location ID:',
-        locationId ? `Present (${maskValue(locationId)})` : 'Missing'
-      );
-      console.log('[Square] Application ID length:', appId.length);
-      console.log('[Square] Location ID length:', locationId.length);
+      // console.log('[Square] Application ID:', appId ? `Present (${maskValue(appId)})` : 'Missing');
+      // console.log(
+      //   '[Square] Location ID:',
+      //   locationId ? `Present (${maskValue(locationId)})` : 'Missing'
+      // );
+      // console.log('[Square] Application ID length:', appId.length);
+      // console.log('[Square] Location ID length:', locationId.length);
 
       if (!appId || appId.length === 0 || !locationId || locationId.length === 0) {
         console.warn(
-          '[Square] Credentials not configured or empty - Square ACH will not be available'
+          '[Square] Credentials not configured or empty - Square ACH will not be available',
         );
         console.warn('[Square] App ID empty:', !appId || appId.length === 0);
         console.warn('[Square] Location ID empty:', !locationId || locationId.length === 0);
@@ -164,38 +164,38 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       const hasValidPrefix = validAppIdPrefixes.some((prefix) => appId.startsWith(prefix));
 
       if (!hasValidPrefix) {
-        console.error('[Square] Invalid Application ID format.');
-        console.error('[Square] Should start with one of:', validAppIdPrefixes.join(', '));
-        console.error(
-          '[Square] Current value starts with:',
-          appId.substring(0, Math.min(10, appId.length))
-        );
-        console.error('[Square] Full masked value:', maskValue(appId));
+        // console.error('[Square] Invalid Application ID format.');
+        // console.error('[Square] Should start with one of:', validAppIdPrefixes.join(', '));
+        // console.error(
+        //   '[Square] Current value starts with:',
+        //   appId.substring(0, Math.min(10, appId.length))
+        // );
+        // console.error('[Square] Full masked value:', maskValue(appId));
         return;
       }
 
       // Validate Location ID format - should be alphanumeric uppercase (Square format)
       if (!/^[A-Z0-9]+$/.test(locationId)) {
-        console.error('[Square] Invalid Location ID format.');
-        console.error('[Square] Should be alphanumeric uppercase (e.g., "ABC123XYZ")');
-        console.error('[Square] Current value:', maskValue(locationId));
+        // console.error('[Square] Invalid Location ID format.');
+        // console.error('[Square] Should be alphanumeric uppercase (e.g., "ABC123XYZ")');
+        // console.error('[Square] Current value:', maskValue(locationId));
         return;
       }
 
-      console.log('[Square] Credentials validated successfully');
+      // console.log('[Square] Credentials validated successfully');
 
       try {
-        console.log('[Square] Creating payments instance...');
-        console.log('[Square] Using Application ID:', maskValue(appId));
-        console.log('[Square] Using Location ID:', maskValue(locationId));
+        // console.log('[Square] Creating payments instance...');
+        // console.log('[Square] Using Application ID:', maskValue(appId));
+        // console.log('[Square] Using Location ID:', maskValue(locationId));
         const paymentsInstance = await payments(appId, locationId);
 
         if (!paymentsInstance) {
-          console.error('[Square] Failed to initialize Square Payments instance - returned null');
+          // console.error('[Square] Failed to initialize Square Payments instance - returned null');
           return;
         }
 
-        console.log('[Square] Payments instance created successfully');
+        // console.log('[Square] Payments instance created successfully');
         paymentsInstanceRef.current = paymentsInstance;
 
         // Generate a unique transaction ID
@@ -204,19 +204,19 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         // https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.ach
         const basePath = window.location.pathname;
         const redirectURI = `${window.location.origin}${basePath}`;
-        console.log('[Square] Transaction ID:', transactionId);
-        console.log('[Square] Redirect URI (cleaned):', redirectURI);
-        console.log('[Square] Full URL (for reference):', window.location.href);
+        // console.log('[Square] Transaction ID:', transactionId);
+        // console.log('[Square] Redirect URI (cleaned):', redirectURI);
+        // console.log('[Square] Full URL (for reference):', window.location.href);
 
         // Initialize ACH with required options
         // According to Square docs: https://developer.squareup.com/reference/sdks/web/payments/objects/Payments#Payments.ach
         // redirectURI must not contain query parameters
-        console.log('[Square] Initializing ACH instance...');
-        console.log('[Square] ACH Options:', {
-          redirectURI,
-          transactionId,
-          redirectURIClean: redirectURI.split('?')[0], // Remove any query params
-        });
+        // console.log('[Square] Initializing ACH instance...');
+        // console.log('[Square] ACH Options:', {
+        //   redirectURI,
+        //   transactionId,
+        //   redirectURIClean: redirectURI.split('?')[0], // Remove any query params
+        // });
 
         // Ensure redirectURI has no query parameters as per Square requirements
         const cleanRedirectURI = redirectURI.split('?')[0].split('#')[0];
@@ -232,26 +232,26 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
           };
           achInstance = await paymentsInstance.ach(achOptions as any);
         } catch (achError: any) {
-          console.error('[Square] ACH initialization error:', achError);
-          console.error('[Square] Error name:', achError?.name);
-          console.error('[Square] Error message:', achError?.message);
+          // console.error('[Square] ACH initialization error:', achError);
+          // console.error('[Square] Error name:', achError?.name);
+          // console.error('[Square] Error message:', achError?.message);
 
           // If ACH is unsupported, log detailed info but don't crash
           if (achError?.name === 'PaymentMethodUnsupportedError') {
-            console.error('[Square] ACH is not supported. Possible reasons:');
-            console.error('[Square] 1. ACH not enabled in Square Developer Dashboard');
-            console.error('[Square] 2. Account not US-based');
-            console.error('[Square] 3. Location not configured for ACH');
-            console.error('[Square] 4. Browser/environment restrictions');
+            // console.error('[Square] ACH is not supported. Possible reasons:');
+            // console.error('[Square] 1. ACH not enabled in Square Developer Dashboard');
+            // console.error('[Square] 2. Account not US-based');
+            // console.error('[Square] 3. Location not configured for ACH');
+            // console.error('[Square] 4. Browser/environment restrictions');
             // Don't set achInstanceRef so the fallback flow will be used
             return;
           }
           throw achError;
         }
 
-        console.log('[Square] ACH instance initialized successfully');
+        // console.log('[Square] ACH instance initialized successfully');
         achInstanceRef.current = achInstance;
-        console.log('[Square] Initialization complete - Square ACH is ready');
+        // console.log('[Square] Initialization complete - Square ACH is ready');
       } catch (error) {
         console.error('[Square] Failed to initialize Square Payments:', error);
         console.error('[Square] Error details:', error);
@@ -259,7 +259,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
     };
 
     if (open) {
-      console.log('[Square] Modal opened - initializing Square...');
+      // console.log('[Square] Modal opened - initializing Square...');
       initSquarePayments();
     } else {
       console.log('[Square] Modal closed - skipping initialization');
@@ -268,11 +268,11 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
     // Cleanup on unmount or when modal closes
     return () => {
       if (achInstanceRef.current) {
-        console.log('[Square] Cleaning up ACH instance');
+        // console.log('[Square] Cleaning up ACH instance');
         achInstanceRef.current = null;
       }
       if (paymentsInstanceRef.current) {
-        console.log('[Square] Cleaning up payments instance');
+        // console.log('[Square] Cleaning up payments instance');
         paymentsInstanceRef.current = null;
       }
     };
@@ -297,10 +297,10 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   // Handle Square redirect callback - check for token when component mounts or modal opens
   useEffect(() => {
     const handleSquareCallback = async () => {
-      console.log('[Square Callback] Checking for payment token...');
-      console.log('[Square Callback] Current URL:', window.location.href);
-      console.log('[Square Callback] Search params:', Object.fromEntries(searchParams.entries()));
-      console.log('[Square Callback] Hash:', window.location.hash);
+      // console.log('[Square Callback] Checking for payment token...');
+      // console.log('[Square Callback] Current URL:', window.location.href);
+      // console.log('[Square Callback] Search params:', Object.fromEntries(searchParams.entries()));
+      // console.log('[Square Callback] Hash:', window.location.hash);
 
       // Check for paymentToken in URL parameters or hash
       // Square may return it as 'token', 'paymentToken', 'bauth', or in hash fragment
@@ -312,19 +312,19 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         window.location.hash.match(/[?&]paymentToken=([^&]+)/)?.[1] ||
         window.location.hash.match(/[?&]bauth=([^&]+)/)?.[1];
 
-      console.log('[Square Callback] Payment token found:', paymentToken ? 'Yes' : 'No');
+      // console.log('[Square Callback] Payment token found:', paymentToken ? 'Yes' : 'No');
 
       if (paymentToken) {
-        console.log('[Square Callback] Processing payment token:', paymentToken);
+        // console.log('[Square Callback] Processing payment token:', paymentToken);
         // Retrieve stored form data from sessionStorage
         const storedFormData = sessionStorage.getItem('rentPaymentFormData');
 
         if (storedFormData) {
           try {
             const formData = JSON.parse(storedFormData);
-            console.log('[Square Callback] Parsed form data:', formData);
+            // console.log('[Square Callback] Parsed form data:', formData);
             setIsLoading(true);
-            console.log('[Square Callback] Sending payment to backend...');
+            // console.log('[Square Callback] Sending payment to backend...');
 
             const { triggerRefetch } = usePaymentStore.getState();
             const amountPaid = safeMoney(formData.amountPaid);
@@ -342,9 +342,9 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
               },
             });
 
-            console.log('[Square Callback] Backend response:', result);
+            // console.log('[Square Callback] Backend response:', result);
             if (result?.collectPayment.success) {
-              console.log('[Square Callback] Payment successful!');
+              // console.log('[Square Callback] Payment successful!');
               triggerRefetch();
               form.reset();
               setShowBankDetails(false);
@@ -363,7 +363,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
                 window.history.replaceState(
                   null,
                   '',
-                  window.location.pathname + window.location.search
+                  window.location.pathname + window.location.search,
                 );
               }
               onOpenChange(false);
@@ -371,7 +371,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
               console.error('[Square Callback] Payment failed:', result);
             }
           } catch (err: any) {
-            console.error('[Square Callback] Error processing payment:', err);
+            // console.error('[Square Callback] Error processing payment:', err);
             toast.error(err?.message || 'Payment failed. Please try again.');
             sessionStorage.removeItem('rentPaymentFormData');
             const newSearchParams = new URLSearchParams(searchParams);
@@ -380,7 +380,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
             newSearchParams.delete('bauth');
             setSearchParams(newSearchParams);
           } finally {
-            console.log('[Square Callback] Setting loading to false');
+            // console.log('[Square Callback] Setting loading to false');
             setIsLoading(false);
           }
         } else {
@@ -399,7 +399,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
 
     // Check for callback token whenever modal opens or search params change
     if (open) {
-      console.log('[Square Callback] Modal is open - checking for callback');
+      // console.log('[Square Callback] Modal is open - checking for callback');
       handleSquareCallback();
     }
   }, [open, searchParams, rentMutation, user, form, setSearchParams, onOpenChange]);
@@ -420,12 +420,12 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
   // SUBMIT
   // -------------------------
   const onSubmit = async (data: FormValues) => {
-    console.log('[Payment] Submit started');
+    // console.log('[Payment] Submit started');
     setIsLoading(true);
 
     const { triggerRefetch } = usePaymentStore.getState();
     const amountPaid = safeMoney(getPaymentAmount());
-    console.log('[Payment] Amount:', amountPaid);
+    // console.log('[Payment] Amount:', amountPaid);
 
     // Collect bank details if provided
     const bankDetails = showBankDetails
@@ -443,15 +443,15 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
     const hasLocationId = !!config.SQUARE_LOCATION_ID;
     const useSquare = hasAchInstance && hasAppId && hasLocationId;
 
-    console.log('[Payment] Square check:', {
-      hasAchInstance,
-      hasAppId,
-      hasLocationId,
-      useSquare,
-    });
+    // console.log('[Payment] Square check:', {
+    //   hasAchInstance,
+    //   hasAppId,
+    //   hasLocationId,
+    //   useSquare,
+    // });
 
     if (useSquare) {
-      console.log('[Payment] Using Square ACH payment flow');
+      // console.log('[Payment] Using Square ACH payment flow');
 
       // Get account holder name - required by Square for ACH tokenization
       // According to Square docs: https://developer.squareup.com/reference/sdks/web/payments/bank-payments
@@ -470,17 +470,17 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         accountHolderName = user.firstName;
       }
 
-      console.log('[Payment] Account holder name:', accountHolderName);
-      console.log('[Payment] User data:', {
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        formAccountHolderName: data.accountHolderName,
-      });
+      // console.log('[Payment] Account holder name:', accountHolderName);
+      // console.log('[Payment] User data:', {
+      //   firstName: user?.firstName,
+      //   lastName: user?.lastName,
+      //   formAccountHolderName: data.accountHolderName,
+      // });
 
       if (!accountHolderName || accountHolderName.length === 0) {
-        console.error('[Payment] Account holder name is missing');
+        // console.error('[Payment] Account holder name is missing');
         toast.error(
-          'Account holder name is required for ACH payment. Please enter your name or update your profile.'
+          'Account holder name is required for ACH payment. Please enter your name or update your profile.',
         );
         setIsLoading(false);
         return;
@@ -493,35 +493,35 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
         notes: data.notes || '',
         bankDetails,
       };
-      console.log('[Payment] Storing form data:', formDataToStore);
+      // console.log('[Payment] Storing form data:', formDataToStore);
       sessionStorage.setItem('rentPaymentFormData', JSON.stringify(formDataToStore));
 
       // Trigger Square ACH tokenization which will redirect to Square
       try {
-        console.log('[Payment] Calling Square tokenize with:', {
-          accountHolderName,
-          intent: 'CHARGE',
-          amount: amountPaid.toFixed(2),
-          currency: 'USD',
-        });
+        // console.log('[Payment] Calling Square tokenize with:', {
+        //   accountHolderName,
+        //   intent: 'CHARGE',
+        //   amount: amountPaid.toFixed(2),
+        //   currency: 'USD',
+        // });
         const tokenizeResult = await achInstanceRef.current.tokenize({
           accountHolderName: accountHolderName,
           intent: 'CHARGE',
           amount: amountPaid.toFixed(2),
           currency: 'USD',
         });
-        console.log('[Payment] Tokenize result:', tokenizeResult);
+        // console.log('[Payment] Tokenize result:', tokenizeResult);
         // User will be redirected to Square, so we return early
         // The callback handler will process the result when they return
         // Don't set isLoading to false here as the redirect will happen
-        console.log('[Payment] Redirecting to Square...');
+        // console.log('[Payment] Redirecting to Square...');
         return;
       } catch (tokenizeError: any) {
-        console.error('[Payment] Square ACH tokenization error:', tokenizeError);
-        console.error('[Payment] Error details:', {
-          message: tokenizeError?.message,
-          error: tokenizeError,
-        });
+        // console.error('[Payment] Square ACH tokenization error:', tokenizeError);
+        // console.error('[Payment] Error details:', {
+        //   message: tokenizeError?.message,
+        //   error: tokenizeError,
+        // });
         sessionStorage.removeItem('rentPaymentFormData');
         toast.error(tokenizeError?.message || 'Failed to initiate payment. Please try again.');
         setIsLoading(false);
@@ -529,7 +529,7 @@ export default function PaymentModal({ open, onOpenChange }: PaymentModalProps) 
       }
     }
 
-    console.log('[Payment] Square not available - using fallback flow');
+    // console.log('[Payment] Square not available - using fallback flow');
 
     // Fallback to original payment flow if Square is not initialized or not configured
     // try {

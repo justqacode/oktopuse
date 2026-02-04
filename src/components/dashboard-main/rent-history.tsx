@@ -3,9 +3,12 @@ import { rentHistoryColumn } from './columns';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { usePaymentStore } from '@/stores/usePaymentStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import formatDate from '@/utils/format-date';
 import { formatCurrency } from '@/utils/format-currency';
+import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
+import MaintenanceRequestModal from './modals/maintenance-modal';
+import RentHistoryPreviewModal from './modals/rent-history-modal';
 
 interface PaymentHistoryItem {
   _id: string;
@@ -42,9 +45,13 @@ const GET_PAYMENT_HISTORY = gql`
 `;
 
 export default function RentHistory() {
+  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const { data, refetch, loading } = useQuery<GetPaymentHistoryResult>(GET_PAYMENT_HISTORY, {
     fetchPolicy: 'cache-and-network',
   });
+
+  // console.log({ data });
 
   const { shouldRefetch, resetRefetch } = usePaymentStore();
 
@@ -72,19 +79,35 @@ export default function RentHistory() {
       status: item.status || 'pending',
       tenantId: item.tenantID,
       propertyId: item.propertyID,
+      note: item.note,
+      paymentMethod: item.paymentMethod,
+      purpose: item.purpose,
     }));
 
   // const rentda = rentHistoryFormatted.slice().reverse();
 
+  const viewPayment = (payId: {}) => {
+    setSelectedRequest(payId);
+    setPreviewOpen(true);
+  };
+
   return (
-    <DataTable
-      columns={rentHistoryColumn}
-      data={rentHistoryFormatted}
-      enablePagination
-      enableSorting
-      enableFiltering
-      pageSize={10}
-      loading={loading}
-    />
+    <>
+      <DataTable
+        columns={rentHistoryColumn(viewPayment)}
+        data={rentHistoryFormatted}
+        enablePagination
+        enableSorting
+        enableFiltering
+        pageSize={10}
+        loading={loading}
+      />
+
+      <RentHistoryPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        requests={selectedRequest}
+      />
+    </>
   );
 }

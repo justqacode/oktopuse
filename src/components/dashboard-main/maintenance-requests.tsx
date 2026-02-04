@@ -64,7 +64,7 @@ export default function MaintenanceRequests() {
 MaintenanceRequests.HeaderButton = function HeaderButton() {
   const [open, setOpen] = useState(false);
   const handleRequestMaintenance = () => {
-    console.log('Request maintenance triggered from header!');
+    // console.log('Request maintenance triggered from header!');
     setOpen(true);
   };
 

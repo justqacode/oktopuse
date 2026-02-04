@@ -56,8 +56,10 @@ function DashboardLayoutV() {
 function HomePage() {
   useSEO({
     title: 'Home',
-    description: 'Welcome to Oktopuse - Your platform description',
-    keywords: 'oktopuse, your, keywords, here',
+    description:
+      'Welcome to Oktopuse - Oktopuse - Built by Property Managers. Designed for Everyone',
+    keywords:
+      'oktopuse, property management, tenant management, maintenance tracking, rent collection, communication tools',
   });
   return <Home />;
 }

@@ -10,6 +10,7 @@ import {
   IconReport,
   IconFileWord,
   IconPigMoney,
+  IconMoneybagPlus,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -28,6 +29,7 @@ import { SidebarInfo } from './sidebar-info-card';
 import { NavLink } from 'react-router-dom';
 import type { Role } from '@/types';
 import { useAuthStore, type User } from '@/auth/authStore';
+import { AchPayment } from './ach-payment';
 
 type NavItem = {
   title: string;
@@ -85,6 +87,12 @@ const data = {
       icon: IconSettings,
       roles: ['tenant', 'manager', 'landlord', 'admin'],
     },
+    {
+      title: 'Pay Rent',
+      url: '#',
+      icon: IconMoneybagPlus,
+      roles: ['tenant'],
+    },
   ] as NavItem[],
   navSecondary: [
     // {
@@ -129,6 +137,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [isPayRentModalOpen, setIsPayRentModalOpen] = React.useState(false);
+
   const { user: userData } = useAuthStore();
   if (!userData) return null;
   const user = {
@@ -152,40 +162,54 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     });
   };
 
+  const handleNavItemClick = (item: { title: string; url: string }) => {
+    if (item.title === 'Pay Rent') {
+      setIsPayRentModalOpen(true);
+    }
+  };
+
   return (
-    <Sidebar collapsible='icon' {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:!p-1.5'>
-              <NavLink to='/'>
-                <div className='flex items-center space-x-2'>
-                  {/* <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
-                    <span className='text-primary-foreground font-bold text-sm'>OP</span>
-                  </div>
-                  <span className='font-semibold text-lg'>Oktopuse</span> */}
-
-                  <img
-                    src='/oktopuse-logo-cropped.png'
-                    alt='Oktopuse Logo'
-                    className='h-8 w-auto'
-                  />
+    <>
+      <Sidebar collapsible='icon' {...props}>
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild className='data-[slot=sidebar-menu-button]:p-1.5!'>
+                <div className='w-full'>
+                  <NavLink to='/'>
+                    <div className='flex items-center justify-between w-full space-x-2'>
+                      <div className='flex items-center'>
+                        <img
+                          src='/oktopuse-logo-cropped.png'
+                          alt='Oktopuse Logo'
+                          // className='h-8 w-auto group-data-[state=collapsed]:hidden  block'
+                          className='h-8 w-auto hidden md:block md:group-data-[state=collapsed]:hidden'
+                        />
+                        <img
+                          src='/vite.svg'
+                          alt='Oktopuse Logo'
+                          className='h-4 w-auto hidden group-data-[state=collapsed]:block'
+                        />
+                      </div>
+                    </div>
+                  </NavLink>
                 </div>
-              </NavLink>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={filterByRole(data.navMain)} />
-        {/* <NavDocuments items={filterByRole(data.documents)} /> */}
-        <NavSecondary items={filterByRole(data.navSecondary)} className='mt-auto' />
-        {/* <SidebarInfo /> */}
-      </SidebarContent>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <NavMain items={filterByRole(data.navMain)} onItemClick={handleNavItemClick} />
+          {/* <NavDocuments items={filterByRole(data.documents)} /> */}
+          <NavSecondary items={filterByRole(data.navSecondary)} className='mt-auto' />
+          {/* <SidebarInfo /> */}
+        </SidebarContent>
 
-      <SidebarFooter>
-        <NavUser user={user} />
-      </SidebarFooter>
-    </Sidebar>
+        <SidebarFooter>
+          <NavUser user={user} />
+        </SidebarFooter>
+      </Sidebar>
+      <AchPayment open={isPayRentModalOpen} onOpenChange={setIsPayRentModalOpen} />
+    </>
   );
 }

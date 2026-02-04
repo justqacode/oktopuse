@@ -73,12 +73,12 @@ export const Verify = () => {
         }
       } catch (e) {
         if (e instanceof Error) {
-          console.log('Verification error:', e.message);
+          // console.log('Verification error:', e.message);
           setApiMessage(e.message);
         } else {
-          console.log('Verification error:', e);
+          // console.log('Verification error:', e);
           setApiMessage(
-            'Something went wrong. Please register your account or attempt a password reset.'
+            'Something went wrong. Please register your account or attempt a password reset.',
           );
         }
         setState('error');
