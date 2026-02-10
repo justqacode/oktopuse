@@ -323,12 +323,12 @@ export function Home() {
             {/* Left Content */}
             <div className='p-12 lg:p-16 flex flex-col justify-center space-y-8'>
               <h2 className='text-4xl lg:text-5xl font-light text-slate-700 leading-tight'>
-                Don't Let a Cost Ruin Your Growth Plan
+                Don&apos;t let cost ruin your growth plan.
               </h2>
 
               <p className='text-slate-600 text-lg leading-relaxed'>
-                Simplify your rental operations and focus on growing your doors. Try Oktopuse free —
-                no credit card, no questions asked.
+                Simplify your rental operations and focus on growing your portfolio. Try Oktopuse
+                free — no credit card, no questions asked.
               </p>
 
               <button
