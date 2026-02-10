@@ -230,7 +230,7 @@ export function Home() {
       {/* Made by property managers section */}
       <div className='max-w-7xl mx-auto px-6 pt-20 pb-10'>
         <h2 className='text-4xl lg:text-5xl font-light text-slate-700 text-center mb-16'>
-          Made by property manager for other property managers
+          Designed by property managers. Powered for your success.
         </h2>
 
         <div className='grid md:grid-cols-2 gap-8'>
