@@ -6,29 +6,31 @@ import { Button } from '../ui/button';
 import { IconDownload, IconPlus } from '@tabler/icons-react';
 import { CreditCard, DownloadCloud, DownloadIcon } from 'lucide-react';
 
-const sampleData: Expenses[] = [
-  {
-    id: 1,
-    date: '20-09-2024',
-    category: 'Repairs',
-    amount: '$250',
-    status: 'paid',
-  },
-  {
-    id: 2,
-    date: '20-09-2024',
-    category: 'Maintentance',
-    amount: '$250',
-    status: 'pending',
-  },
-  {
-    id: 3,
-    date: '20-09-2024',
-    category: 'Fees',
-    amount: '$2500',
-    status: 'paid',
-  },
-];
+// const sampleData: Expenses[] = [
+//   {
+//     id: 1,
+//     date: '20-09-2024',
+//     category: 'Repairs',
+//     amount: '$250',
+//     status: 'paid',
+//   },
+//   {
+//     id: 2,
+//     date: '20-09-2024',
+//     category: 'Maintentance',
+//     amount: '$250',
+//     status: 'pending',
+//   },
+//   {
+//     id: 3,
+//     date: '20-09-2024',
+//     category: 'Fees',
+//     amount: '$2500',
+//     status: 'paid',
+//   },
+// ];
+
+const sampleData: Expenses[] = [];
 
 export default function ExpensesHistory() {
   return (
