@@ -356,11 +356,11 @@ export function Home() {
 
             {/* Right Content */}
             <div className='p-12 lg:p-16 bg-gray-50 flex flex-col justify-center space-y-6'>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-4'>Learn More About It</h3>
+              <h3 className='text-2xl font-semibold text-slate-800 mb-4'>We simplify</h3>
 
               <div className='space-y-4'>
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -380,7 +380,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -400,7 +400,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
