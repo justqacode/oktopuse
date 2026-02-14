@@ -241,13 +241,13 @@ export const Navbar = () => {
                     Home
                   </Link>
 
-                  <Link
+                  {/* <Link
                     to='#'
                     className='text-base font-medium hover:text-primary'
                     onClick={() => setOpen(false)}
                   >
                     Resources
-                  </Link>
+                  </Link> */}
 
                   <Link
                     to='/about'

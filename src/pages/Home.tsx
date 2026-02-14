@@ -230,7 +230,7 @@ export function Home() {
       {/* Made by property managers section */}
       <div className='max-w-7xl mx-auto px-6 pt-20 pb-10'>
         <h2 className='text-4xl lg:text-5xl font-light text-slate-700 text-center mb-16'>
-          Made by property manager for other property managers
+          Designed by property managers. Powered for your success.
         </h2>
 
         <div className='grid md:grid-cols-2 gap-8'>
@@ -323,12 +323,12 @@ export function Home() {
             {/* Left Content */}
             <div className='p-12 lg:p-16 flex flex-col justify-center space-y-8'>
               <h2 className='text-4xl lg:text-5xl font-light text-slate-700 leading-tight'>
-                Don't Let a Cost Ruin Your Growth Plan
+                Don&apos;t let cost ruin your growth plan.
               </h2>
 
               <p className='text-slate-600 text-lg leading-relaxed'>
-                Simplify your rental operations and focus on growing your doors. Try Oktopuse free —
-                no credit card, no questions asked.
+                Simplify your rental operations and focus on growing your portfolio. Try Oktopuse
+                free — no credit card, no questions asked.
               </p>
 
               <button
@@ -356,11 +356,11 @@ export function Home() {
 
             {/* Right Content */}
             <div className='p-12 lg:p-16 bg-gray-50 flex flex-col justify-center space-y-6'>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-4'>Learn More About It</h3>
+              <h3 className='text-2xl font-semibold text-slate-800 mb-4'>We simplify</h3>
 
               <div className='space-y-4'>
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -380,7 +380,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
@@ -400,7 +400,7 @@ export function Home() {
                 </a>
 
                 <a
-                  href='/about'
+                  href='#'
                   className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
                 >
                   <svg
