@@ -62,11 +62,11 @@ export const Footer = () => {
                   Register
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a href='#' className='hover:text-white transition'>
                   Resources
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a href='/about' className='hover:text-white transition'>
                   About Us
