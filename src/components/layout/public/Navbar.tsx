@@ -60,7 +60,8 @@ export const Navbar = () => {
             <span className='text-primary-foreground font-bold text-sm'>OP</span>
           </div>
           <span className='font-semibold text-lg'>Oktopuse</span> */}
-          <img src='/oktopuse-logo-cropped.png' alt='Oktopuse Logo' className='h-8 w-auto' />
+          {/* <img src='/oktopuse-logo-cropped.png' alt='Oktopuse Logo' className='h-8 w-auto' /> */}
+          <img src='/oktopuse-logo-no-bk.png' alt='Oktopuse Logo' className='h-8 w-auto' />
         </Link>
 
         {/* Desktop Navigation */}
@@ -122,13 +123,13 @@ export const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem> */}
 
-              <NavigationMenuItem>
+              {/* <NavigationMenuItem>
                 <div>
                   <NavigationMenuLink className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'>
                     Resources
                   </NavigationMenuLink>
                 </div>
-              </NavigationMenuItem>
+              </NavigationMenuItem> */}
               <NavigationMenuItem>
                 <div>
                   <NavigationMenuLink

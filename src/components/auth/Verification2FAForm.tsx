@@ -69,10 +69,8 @@ export const MFA_MUTATION = gql`
 const CODE_LENGTH = 6;
 
 export const verifySchema = z.object({
-  verificationCode: z
-    .string()
-    .length(CODE_LENGTH, `Code must be ${CODE_LENGTH} characters`)
-    .regex(/^[A-Z0-9]+$/, 'Code must contain only letters and numbers'),
+  verificationCode: z.string().length(CODE_LENGTH, `Code must be ${CODE_LENGTH} characters`),
+  // .regex(/^[A-Z0-9]+$/, 'Code must contain only capital letters and numbers'),
 });
 
 export type VerifyFormValues = z.infer<typeof verifySchema>;
@@ -254,7 +252,8 @@ export const Verification2FA = () => {
   });
 
   const onSubmit = async (data: VerifyFormValues) => {
-    await mfaLogin(data.verificationCode, navigate);
+    const capify = data.verificationCode.toUpperCase();
+    await mfaLogin(capify, navigate);
   };
 
   return (
@@ -290,7 +289,7 @@ export const Verification2FA = () => {
             <div className='w-full border-t border-gray-300' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-2 bg-white text-gray-500'>Send another token in 00:00 mins</span>
+            <span className='px-2 bg-white text-gray-500'>Send another token in 10:00 mins</span>
           </div>
         </div>
       </div>
