@@ -15,7 +15,7 @@ const REGISTER_MUTATION = gql`
     $email: String!
     $password: String!
     $phone: String!
-    $role: String!
+    $role: [String!]!
   ) {
     register(
       firstName: $firstName
@@ -49,7 +49,7 @@ export const RegisterForm = () => {
       email: '',
       password: '',
       phone: '',
-      role: '',
+      role: [],
       agreeToTerms: false,
     },
   });
@@ -81,7 +81,7 @@ export const RegisterForm = () => {
       // console.log('Registration successful:', result);
       if (result) {
         toast.success(
-          'Your registration was successful! Please navigate to your email account to confirm and complete the registration.'
+          'Your registration was successful! Please navigate to your email account to confirm and complete the registration.',
         );
         setSuccess(true);
         form.reset();
@@ -274,7 +274,7 @@ export const RegisterForm = () => {
       </div>
 
       {/* Role */}
-      <div>
+      {/* <div>
         <label className='block text-sm font-medium text-gray-700 mb-1'>Role</label>
         <select
           {...form.register('role')}
@@ -287,6 +287,34 @@ export const RegisterForm = () => {
         </select>
         {form.formState.errors.role && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>
+        )}
+      </div> */}
+      <div className='space-y-1.5'>
+        <label className='block text-sm font-medium text-gray-700'>Role</label>
+
+        <div className='relative'>
+          <select
+            multiple
+            {...form.register('role')}
+            className='w-full px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm text-gray-900
+        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+        transition-colors duration-150
+        [&>option]:py-1.5 [&>option]:px-2 [&>option:checked]:bg-blue-50 [&>option:checked]:text-blue-700 overflow-hidden'
+            size={3}
+          >
+            <option value='tenant'>Tenant</option>
+            <option value='landlord'>Landlord</option>
+            <option value='manager'>Property Manager</option>
+          </select>
+        </div>
+
+        <p className='text-xs text-gray-500'>Hold Ctrl / Cmd to select multiple roles</p>
+
+        {form.formState.errors.role && (
+          <p className='flex items-center gap-1 text-red-500 text-xs mt-1'>
+            <span aria-hidden='true'>⚠</span>
+            {form.formState.errors.role.message as string}
+          </p>
         )}
       </div>
 
