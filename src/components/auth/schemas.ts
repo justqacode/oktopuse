@@ -56,9 +56,12 @@ export const registerSchema = z.object({
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number')
     .regex(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character'),
-  role: z.string().refine((val) => ['tenant', 'landlord', 'manager'].includes(val), {
-    message: 'Please select a valid role',
-  }),
+  // role: z.string().refine((val) => ['tenant', 'landlord', 'manager'].includes(val), {
+  //   message: 'Please select a valid role',
+  // }),
+  role: z
+    .array(z.enum(['tenant', 'landlord', 'manager']))
+    .min(1, { message: 'Please select at least one role' }),
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the Terms & Conditions',
   }),
