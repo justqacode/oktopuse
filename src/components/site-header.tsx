@@ -5,6 +5,7 @@ import PaymentModal from './dashboard-main/modals/rent-payment-modal';
 import { useState } from 'react';
 import { useAuthStore } from '@/auth/authStore';
 import AddPropertyModal from './dashboard-main/modals/add-property-modal';
+import CreateNoteModal from './dashboard-main/modals/create-note-modal';
 import { AchPayment } from './ach-payment';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
@@ -36,6 +37,7 @@ export function SiteHeader() {
   const { user } = useAuthStore();
   const [open, setOpen] = useState(false);
   const [openAddProperty, setOpenAddProperty] = useState(false);
+  const [openCreateNote, setOpenCreateNote] = useState(false);
 
   const landlord = user?.role.includes('landlord');
   const tenant = user?.role.includes('tenant');
@@ -105,7 +107,7 @@ export function SiteHeader() {
                 variant='outline'
                 size='sm'
                 className='hidden sm:flex'
-                onClick={() => setOpen(true)}
+                onClick={() => setOpenCreateNote(true)}
               >
                 Send Notice
               </Button>
@@ -123,6 +125,7 @@ export function SiteHeader() {
 
         <PaymentModal open={open} onOpenChange={setOpen} />
         <AddPropertyModal open={openAddProperty} onOpenChange={setOpenAddProperty} />
+        <CreateNoteModal open={openCreateNote} onOpenChange={setOpenCreateNote} />
 
         <AchPayment open={showPaymentModal} onOpenChange={setShowPaymentModal} />
       </header>
