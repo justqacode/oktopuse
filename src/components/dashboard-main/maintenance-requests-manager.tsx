@@ -8,6 +8,9 @@ import { CheckCircle, Clock, PlayCircle, XCircle } from 'lucide-react';
 import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import { IconPlus } from '@tabler/icons-react';
+import MaintenanceRequestModal from './modals/maintenance-modal';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryStakeHolder {
@@ -131,3 +134,21 @@ export default function MaintenanceRequestsManager() {
     </>
   );
 }
+
+MaintenanceRequestsManager.HeaderButton = function HeaderButton() {
+  const [open, setOpen] = useState(false);
+  const handleRequestMaintenance = () => {
+    // console.log('Request maintenance triggered from header!');
+    setOpen(true);
+  };
+
+  return (
+    <div className='flex gap-2'>
+      <Button variant='default' size='sm' onClick={handleRequestMaintenance}>
+        <IconPlus /> Request Maintenance
+      </Button>
+
+      <MaintenanceRequestModal open={open} onOpenChange={setOpen} />
+    </div>
+  );
+};
