@@ -31,8 +31,6 @@ export default function DashboardHomeTenant() {
   const TD = user?.tenantInfo;
   const leaseDate = formatDate(TD?.leaseEndDate);
 
-  console.log(user?.managerInfo);
-
   return (
     <div className='flex flex-1 flex-col'>
       <div className='@container/main flex flex-1 flex-col gap-2'>
@@ -69,9 +67,9 @@ export default function DashboardHomeTenant() {
                   {'cardMainContent'}
                 </CardTitle> */}
 
-                <CardAction>
+                {/* <CardAction>
                   <Badge variant='default'>Message</Badge>
-                </CardAction>
+                </CardAction> */}
               </CardHeader>
 
               <CardFooter className='flex-col items-start gap-1.5 text-sm'>

@@ -53,7 +53,10 @@ export default function MaintenanceRequests() {
   }));
 
   const viewItem = (request: {}) => {
-    setSelectedRequest(request);
+    const requests = {
+      property: request,
+    };
+    setSelectedRequest(requests);
     setPreviewOpen(true);
   };
 

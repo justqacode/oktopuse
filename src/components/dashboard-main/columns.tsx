@@ -108,7 +108,9 @@ export const maintenanceRequestsColumn = (
     header: 'Description',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.description.slice(0, 30)}
+        {row.original.description.toString().length < 30
+          ? row.original.description.toString()
+          : row.original.description.toString().slice(0, 30) + '...'}
       </Button>
     ),
   },

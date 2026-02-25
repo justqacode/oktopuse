@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon } from 'lucide-react';
 import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
 import formatDate from '@/utils/format-date';
+import { useAuthStore } from '@/auth/authStore';
 
 // Types
 interface MaintenanceRequestPreview {
@@ -51,6 +52,9 @@ export function MaintenanceRequestPreviewModal({
 }: PreviewModalProps) {
   const request = requests?.property;
   if (!request) return null;
+  const { user } = useAuthStore();
+
+  const TD = user?.tenantInfo;
 
   const getStatusIcon = () => {
     if (request.status === 'completed') {
@@ -105,7 +109,9 @@ export function MaintenanceRequestPreviewModal({
               <Calendar className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Date Submitted</p>
-                <p className='text-base font-semibold'>{formatDate(request.createdAt)}</p>
+                <p className='text-base font-semibold'>
+                  {formatDate(request.createdAt || request.date)}
+                </p>
               </div>
             </div>
 
@@ -123,7 +129,9 @@ export function MaintenanceRequestPreviewModal({
               <MapPin className='h-5 w-5 text-muted-foreground mt-0.5' />
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Property</p>
-                <p className='text-base font-semibold'>{request.propertyDetails?.name || 'N/A'}</p>
+                <p className='text-base font-semibold'>
+                  {request.propertyDetails?.name || TD?.rentalAddress || 'N/A'}
+                </p>
               </div>
             </div>
 
@@ -133,9 +141,9 @@ export function MaintenanceRequestPreviewModal({
               <div>
                 <p className='text-sm font-medium text-muted-foreground'>Address</p>
                 <p className='text-base font-semibold'>{`${
-                  request?.propertyDetails?.address?.street || 'N/A'
-                }, ${request?.propertyDetails?.address?.city || 'N/A'}, ${
-                  request?.propertyDetails?.address?.state || 'N/A'
+                  request?.propertyDetails?.address?.street || TD?.rentalAddress || 'N/A'
+                }, ${request?.propertyDetails?.address?.city || TD?.rentalCity || 'N/A'}, ${
+                  request?.propertyDetails?.address?.state || TD?.rentalState || 'N/A'
                 }`}</p>
               </div>
             </div>
