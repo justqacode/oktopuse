@@ -7,6 +7,15 @@ import { DashCard } from '@/components/dashboard-card';
 import { useAuthStore } from '@/auth/authStore';
 import { formatCurrency } from '@/utils/format-currency';
 import formatDate, { monthNames } from '@/utils/format-date';
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const tabs = [
   { value: 'rent-history', label: 'Rent History' },
@@ -21,6 +30,8 @@ export default function DashboardHomeTenant() {
 
   const TD = user?.tenantInfo;
   const leaseDate = formatDate(TD?.leaseEndDate);
+
+  console.log(user?.managerInfo);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -45,6 +56,46 @@ export default function DashboardHomeTenant() {
               cardDescription='Montly rent'
               cardMainContent={formatCurrency(TD?.rentAmount || 0)}
             />
+
+            <Card className='@container/card'>
+              <CardHeader>
+                <CardDescription>Manager info</CardDescription>
+                {/* {footerTop || footerBottom ? (
+                  <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+                    {cardMainContent}
+                  </CardTitle>
+                ) : ( */}
+                {/* <CardTitle className='pt-8 text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+                  {'cardMainContent'}
+                </CardTitle> */}
+
+                <CardAction>
+                  <Badge variant='default'>Message</Badge>
+                </CardAction>
+              </CardHeader>
+
+              <CardFooter className='flex-col items-start gap-1.5 text-sm'>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
+                  Name:{' '}
+                  <span className='ml-2 text-muted-foreground'>
+                    {user?.managerInfo?.propertyManagerName || 'N/A'}
+                  </span>{' '}
+                </div>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
+                  Email:{' '}
+                  <span className='ml-2 text-muted-foreground '>
+                    {user?.managerInfo?.propertyManagerEmail || 'N/A'}
+                  </span>
+                </div>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
+                  Phone:{' '}
+                  <span className='ml-2 text-muted-foreground'>
+                    {' '}
+                    {user?.managerInfo?.propertyManagerPhone || 'N/A'}
+                  </span>
+                </div>
+              </CardFooter>
+            </Card>
           </div>
           <div className='py-4 lg:py-6 px-8'>
             <TabsLayout

@@ -80,7 +80,9 @@ export const rentHistoryColumn = (viewPayment: (payId: {}) => void): ColumnDef<a
   },
 ];
 
-export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
+export const maintenanceRequestsColumn = (
+  viewItem: (maintenanceId: {}) => void,
+): ColumnDef<TenantRequest>[] => [
   {
     accessorKey: 'id',
     header: 'Request ID',
@@ -106,7 +108,7 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
     header: 'Description',
     cell: ({ row }) => (
       <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.description}
+        {row.original.description.slice(0, 30)}
       </Button>
     ),
   },
@@ -134,6 +136,30 @@ export const maintenanceRequestsColumn: ColumnDef<TenantRequest>[] = [
         {capitalizeFirstLetter(row.original.status)}
       </Badge>
     ),
+  },
+  {
+    accessorKey: 'action',
+    header: 'Actions',
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <span className='h-8 w-8 p-0'>
+              <MoreHorizontal className='h-4 w-4' />
+            </span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <span
+              onClick={() => viewItem(row.original)}
+              className='flex items-center p-2 text-sm cursor-pointer gap-2 hover:text-blue-400 hover:underline'
+            >
+              <Eye className='w-4 h-4 text-gray-500' />
+              View
+            </span>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];
 

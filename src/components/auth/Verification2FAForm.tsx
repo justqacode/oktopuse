@@ -43,6 +43,9 @@ export const MFA_MUTATION = gql`
           managerID
           companyName
           companyAddress
+          propertyManagerEmail
+          propertyManagerName
+          propertyManagerPhone
         }
         landlordInfo {
           ownerID
