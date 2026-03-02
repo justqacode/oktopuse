@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 import { gql } from '@apollo/client';
 import { useAuthStore } from '@/auth/authStore';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
 export const MFA_MUTATION = gql`
   mutation MFA($mfaCode: String!) {
@@ -242,10 +244,60 @@ const VerificationCodeInput = ({
   );
 };
 
+const RESEND_CODE_MUTATION = gql`
+  mutation ResendMFA {
+    resendMFA {
+      success
+      message
+    }
+  }
+`;
+
+interface ResendCodeResponse {
+  resendMFA: {
+    success: boolean;
+    message: string;
+  };
+}
+
+// const COUNTDOWN_SECONDS = 10 * 60; // 10 minutes
+const COUNTDOWN_SECONDS = 6; // 10 minutes
+
+const formatTime = (seconds: number) => {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+};
+
 export const Verification2FA = () => {
   const navigate = useNavigate();
-  const { mfaLogin, isLoading: mfaLoading, user } = useAuthStore();
-  // const [mfaMutation, { loading: mfaLoading }] = useMutation<MFALoginResponse>(MFA_MUTATION);
+  const { mfaLogin, isLoading: mfaLoading } = useAuthStore();
+
+  const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
+  const canResend = countdown === 0;
+
+  const [resendCode, { loading: resendLoading }] =
+    useMutation<ResendCodeResponse>(RESEND_CODE_MUTATION);
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
+  const handleResend = async () => {
+    try {
+      const { data } = await resendCode();
+      if (data?.resendMFA?.success) {
+        setCountdown(COUNTDOWN_SECONDS);
+        toast.success(data?.resendMFA?.message || 'Verification code resent successfully');
+      } else {
+        toast.error(data?.resendMFA?.message || 'Failed to resend code');
+      }
+    } catch (error) {
+      toast.error('An error occurred while resending the code. Please try again.');
+    }
+  };
 
   const veriForm = useForm<VerifyFormValues>({
     resolver: zodResolver(verifySchema),
@@ -292,7 +344,23 @@ export const Verification2FA = () => {
             <div className='w-full border-t border-gray-300' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='px-2 bg-white text-gray-500'>Send another token in 10:00 mins</span>
+            {canResend ? (
+              <span className='px-2 bg-white'>
+                <Button
+                  variant='ghost'
+                  size='sm'
+                  onClick={handleResend}
+                  disabled={resendLoading}
+                  className='px-2 bg-blue-300 text-white hover:text-gray-700'
+                >
+                  {resendLoading ? 'Sending...' : 'Resend verification code'}
+                </Button>
+              </span>
+            ) : (
+              <span className='px-2 bg-white text-gray-500'>
+                Send another token in {formatTime(countdown)} mins
+              </span>
+            )}
           </div>
         </div>
       </div>
