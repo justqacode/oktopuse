@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client/react';
 import { useAuthStore } from '@/auth/authStore';
 import formatDate from '@/utils/format-date';
 import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
+import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
 
 const GET_MAINTENANCE_HISTORY = gql`
   query GetHistory($tenantID: ID!) {
@@ -17,6 +18,8 @@ const GET_MAINTENANCE_HISTORY = gql`
       description
       status
       createdAt
+      category
+      preferedDateOfResolution
     }
   }
 `;
@@ -27,6 +30,8 @@ export default function MaintenanceRequests() {
     fetchPolicy: 'cache-and-network',
     variables: { tenantID: user?.id },
   });
+  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const { shouldRefetch, resetRefetch } = useMaintenanceStore();
 
@@ -47,17 +52,32 @@ export default function MaintenanceRequests() {
     status: item.status || 'pending',
   }));
 
+  const viewItem = (request: {}) => {
+    const requests = {
+      property: request,
+    };
+    setSelectedRequest(requests);
+    setPreviewOpen(true);
+  };
+
   return (
-    <DataTable
-      columns={maintenanceRequestsColumn}
-      data={maintenanceHistoryFormatted}
-      enablePagination
-      enableColumnVisibility
-      enableSorting
-      enableFiltering
-      pageSize={10}
-      loading={loading}
-    />
+    <>
+      <DataTable
+        columns={maintenanceRequestsColumn(viewItem)}
+        data={maintenanceHistoryFormatted}
+        enablePagination
+        enableColumnVisibility
+        enableSorting
+        enableFiltering
+        pageSize={10}
+        loading={loading}
+      />
+      <MaintenanceRequestPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        requests={selectedRequest}
+      />
+    </>
   );
 }
 

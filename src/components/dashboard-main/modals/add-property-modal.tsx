@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+// import { Alert, AlertDescription } from '@/components/ui/alert';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
@@ -68,21 +68,21 @@ const formSchema = z
           if (!files || files.length === 0) return true;
           return files.length <= MAX_IMAGES;
         },
-        { message: `You can upload up to ${MAX_IMAGES} images` }
+        { message: `You can upload up to ${MAX_IMAGES} images` },
       )
       .refine(
         (files) => {
           if (!files || files.length === 0) return true;
           return Array.from(files).every((file: any) => file.size <= MAX_FILE_SIZE);
         },
-        { message: 'Each image must be less than 5MB' }
+        { message: 'Each image must be less than 5MB' },
       )
       .refine(
         (files) => {
           if (!files || files.length === 0) return true;
           return Array.from(files).every((file: any) => ACCEPTED_IMAGE_TYPES.includes(file.type));
         },
-        { message: 'Only .jpg and .png files are accepted' }
+        { message: 'Only .jpg and .png files are accepted' },
       ),
   })
   .superRefine((data, ctx) => {
@@ -286,7 +286,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
     } catch (error) {
       // console.error('Error adding property:', error);
       toast.error(
-        error instanceof Error ? error.message : 'Failed to add property. Please try again.'
+        error instanceof Error ? error.message : 'Failed to add property. Please try again.',
       );
     } finally {
       setIsLoading(false);

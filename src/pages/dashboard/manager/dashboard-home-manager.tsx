@@ -4,6 +4,7 @@ import Messages from '@/components/dashboard-main/messages';
 import { DashCard } from '@/components/dashboard-card';
 import Properties from '@/components/dashboard-main/properties';
 import MaintenanceRequestsManager from '@/components/dashboard-main/maintenance-requests-manager';
+import { useState } from 'react';
 
 const tabs = [
   { value: 'properties', label: 'Properties' },
@@ -12,7 +13,7 @@ const tabs = [
 ];
 
 export default function DashboardHomeManager() {
-  // const [activeTab, setActiveTab] = useState('expenses');
+  const [activeTab, setActiveTab] = useState('properties');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -28,8 +29,11 @@ export default function DashboardHomeManager() {
             <TabsLayout
               tabs={tabs}
               defaultValue='properties'
-              // onValueChange={setActiveTab}
+              onValueChange={setActiveTab}
               // header={activeTab === 'properties' ? <ExpensesHistory.HeaderButton /> : null}
+              header={
+                activeTab === 'maintenance-requests' ? <MaintenanceRequests.HeaderButton /> : null
+              }
             >
               <TabsContent value='properties'>
                 <Properties />

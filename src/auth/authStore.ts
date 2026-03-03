@@ -41,7 +41,7 @@ type AuthState = {
     credential: string,
     ipa: string,
     ua: string,
-    navigate: NavigateFunction
+    navigate: NavigateFunction,
   ) => Promise<void>;
   logout: (navigate: NavigateFunction) => void;
   updateUser: (updates: Partial<User>) => void;
@@ -75,6 +75,9 @@ const GOOGLE_LOGIN_MUTATION = gql`
           managerID
           companyName
           companyAddress
+          propertyManagerEmail
+          propertyManagerName
+          propertyManagerPhone
         }
         landlordInfo {
           ownerID
@@ -223,6 +226,6 @@ export const useAuthStore = create<AuthState>()(
           state.expiresAt = null;
         }
       },
-    }
-  )
+    },
+  ),
 );
