@@ -54,7 +54,7 @@ export const LoginForm = () => {
       });
 
       if (result) {
-        toast.success('Login successfully');
+        toast.success('Please check your email account for the authentication code');
         form.reset();
 
         // Persist token in zustand (and localStorage via persist middleware)
@@ -70,16 +70,16 @@ export const LoginForm = () => {
     }
   };
 
-  const resendVerificationEmail = async (email: string) => {
-    try {
-      const res = await resendVerifyMutation({ variables: { token: email } });
-      if (res?.data?.resendVerification?.success) {
-        toast.success('Verification link resent successfully.');
-      }
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : 'Failed to resend verification link.');
-    }
-  };
+  // const resendVerificationEmail = async (email: string) => {
+  //   try {
+  //     const res = await resendVerifyMutation({ variables: { token: email } });
+  //     if (res?.data?.resendVerification?.success) {
+  //       toast.success('Verification link resent successfully.');
+  //     }
+  //   } catch (e) {
+  //     toast.error(e instanceof Error ? e.message : 'Failed to resend verification link.');
+  //   }
+  // };
 
   // useEffect(() => {
   //   if (user && user.verificationStatus === false) {
