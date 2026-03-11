@@ -318,12 +318,12 @@ export default function DashboardChats() {
 
               {/* Message Input */}
               <div className='bg-gray-100 px-4 py-3 flex items-center gap-2'>
-                {/* <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
+                <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
                   <Smile className='h-5 w-5' />
                 </Button>
                 <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
                   <Paperclip className='h-5 w-5' />
-                </Button> */}
+                </Button>
                 <Input
                   placeholder='Type a message'
                   className='flex-1 bg-white'
@@ -336,7 +336,11 @@ export default function DashboardChats() {
                   className='h-10 w-10 bg-green-500 hover:bg-green-600'
                   onClick={handleSendMessage}
                 >
-                  <Send className='h-5 w-5 text-white' />
+                  {messageInput.trim() ? (
+                    <Send className='h-5 w-5 text-white' />
+                  ) : (
+                    <Mic className='h-5 w-5 text-white' />
+                  )}
                 </Button>
               </div>
             </>

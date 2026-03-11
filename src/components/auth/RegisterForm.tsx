@@ -6,7 +6,7 @@ import { Eye, EyeOff, UserPlus, Check, X } from 'lucide-react';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const REGISTER_MUTATION = gql`
   mutation Register(
@@ -16,6 +16,7 @@ const REGISTER_MUTATION = gql`
     $password: String!
     $phone: String!
     $role: [String!]!
+    $referredBy: String
   ) {
     register(
       firstName: $firstName
@@ -24,6 +25,7 @@ const REGISTER_MUTATION = gql`
       password: $password
       phone: $phone
       role: $role
+      referredBy: $referredBy
     ) {
       id
       firstName
@@ -41,6 +43,8 @@ export const RegisterForm = () => {
   const [passwordValue, setPasswordValue] = useState('');
   const [registerMutation] = useMutation(REGISTER_MUTATION);
 
+  const { '*': param } = useParams();
+
   const form = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -50,6 +54,7 @@ export const RegisterForm = () => {
       password: '',
       phone: '',
       role: [],
+      referredBy: param || '',
       agreeToTerms: false,
     },
   });
@@ -74,6 +79,7 @@ export const RegisterForm = () => {
           email: data.email,
           password: data.password,
           phone: data.phone,
+          referredBy: data.referredBy,
           role: data.role,
         },
       });
@@ -289,7 +295,8 @@ export const RegisterForm = () => {
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.role.message}</p>
         )}
       </div> */}
-      <div className='space-y-1.5'>
+      {/* v22 */}
+      {/* <div className='space-y-1.5'>
         <label className='block text-sm font-medium text-gray-700'>Role</label>
 
         <div className='relative'>
@@ -315,6 +322,54 @@ export const RegisterForm = () => {
             <span aria-hidden='true'>⚠</span>
             {form.formState.errors.role.message as string}
           </p>
+        )}
+      </div> */}
+      <div className='space-y-1.5'>
+        <label className='block text-sm font-medium text-gray-700'>Role</label>
+
+        <div className='space-y-2'>
+          {[
+            { value: 'tenant', label: 'Tenant' },
+            { value: 'landlord', label: 'Landlord' },
+            { value: 'manager', label: 'Property Manager' },
+          ].map(({ value, label }) => (
+            <label
+              key={value}
+              className='flex items-center gap-3 px-3 py-2 rounded-lg border border-gray-200 bg-white
+          hover:border-blue-300 hover:bg-blue-50/50 cursor-pointer transition-colors duration-150
+          has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50'
+            >
+              <input
+                type='checkbox'
+                value={value}
+                {...form.register('role')}
+                className='w-4 h-4 rounded border-gray-300 text-blue-600
+            focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer'
+              />
+              <span className='text-sm text-gray-700 select-none'>{label}</span>
+            </label>
+          ))}
+        </div>
+
+        {form.formState.errors.role && (
+          <p className='flex items-center gap-1 text-red-500 text-xs mt-1'>
+            <span aria-hidden='true'>⚠</span>
+            {form.formState.errors.role.message as string}
+          </p>
+        )}
+      </div>
+
+      {/* Referral */}
+      <div>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>Referral</label>
+        <input
+          {...form.register('referredBy')}
+          type='text'
+          placeholder='Enter your referral code (optional)'
+          className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+        />
+        {form.formState.errors.referredBy && (
+          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.referredBy.message}</p>
         )}
       </div>
 

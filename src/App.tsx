@@ -208,6 +208,7 @@ export default function App() {
               <Route path='/pricing' element={<HomePage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/register' element={<RegisterPage />} />
+              <Route path='/register/*' element={<RegisterPage />} />
               <Route path='/contact' element={<ContactPage />} />
               <Route path='/forgotpassword' element={<ForgotPasswordPage />} />
               <Route path='/reset-password' element={<ResetPasswordPage />} />

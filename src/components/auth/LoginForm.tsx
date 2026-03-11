@@ -32,7 +32,7 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const { setToken } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
-  const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
+  // const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
   const [loginMutation, { loading: isLoading }] =
     useMutation<LoginMutationResponse>(LOGIN_MUTATION);
 
