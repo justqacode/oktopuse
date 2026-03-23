@@ -1,85 +1,58 @@
 import { useState } from 'react';
-import {
-  Search,
-  MoreVertical,
-  Paperclip,
-  Smile,
-  Mic,
-  Send,
-  Phone,
-  Video,
-  Check,
-  CheckCheck,
-} from 'lucide-react';
+import { Search, MoreVertical, Send, Phone, Video, Check, CheckCheck, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import clsx from 'clsx';
 import type { UserAdmin } from '../types';
 import { useAuthStore } from '@/auth/authStore';
+import { gql } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
+import formatDate from '@/utils/format-date';
 
-// const mockContacts = [
-//   {
-//     id: 1,
-//     name: 'Property Manager',
-//     avatar: '/api/placeholder/40/40',
-//     lastMessage: 'Your maintenance request has been approved',
-//     time: '10:30 AM',
-//     unread: 2,
-//     online: true,
-//   },
-//   {
-//     id: 2,
-//     name: 'Maintenance Team',
-//     avatar: '/api/placeholder/40/40',
-//     lastMessage: 'We will arrive at 2 PM today',
-//     time: '9:45 AM',
-//     unread: 0,
-//     online: true,
-//   },
-//   {
-//     id: 3,
-//     name: 'Building Security',
-//     avatar: '/api/placeholder/40/40',
-//     lastMessage: 'Package delivered to your door',
-//     time: 'Yesterday',
-//     unread: 0,
-//     online: false,
-//   },
-//   {
-//     id: 4,
-//     name: 'Tenant Support',
-//     avatar: '/api/placeholder/40/40',
-//     lastMessage: 'How can we help you today?',
-//     time: 'Monday',
-//     unread: 0,
-//     online: true,
-//   },
-//   {
-//     id: 5,
-//     name: 'Landlord',
-//     avatar: '/api/placeholder/40/40',
-//     lastMessage: 'Rent receipt sent via email',
-//     time: 'Friday',
-//     unread: 0,
-//     online: false,
-//   },
-// ];
+import { toast } from 'sonner';
 
-// const mockContacts: any = [];
-const mockContacts: any = [
-  {
-    id: 1,
-    name: 'Property Manager',
-    avatar: '/api/placeholder/40/40',
-    lastMessage: 'Your maintenance request has been approved',
-    time: '10:30 AM',
-    unread: 2,
-    online: true,
-  },
-];
+const TRHEAD_QUERY = gql`
+  query GetThreads {
+    getThreads {
+      updatedAt
+      id
+      participants {
+        firstName
+        lastName
+        role
+      }
+    }
+  }
+`;
+
+const MESSAGE_QUERY = gql`
+  query GetMessages($threadId: ID!) {
+    getMessages(threadId: $threadId) {
+      id
+      sender
+      receiver
+      content
+      read
+      createdAt
+    }
+  }
+`;
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SendMessage($receiverId: ID!, $content: String!) {
+    sendMessage(receiverId: $receiverId, content: $content) {
+      id
+      threadId
+      sender
+      receiver
+      content
+      read
+      createdAt
+    }
+  }
+`;
 
 type Message = {
   id: number;
@@ -89,81 +62,161 @@ type Message = {
   status?: 'read' | string;
 };
 
-const mockMessages: Record<number, Message[]> = {
-  1: [
-    {
-      id: 1,
-      text: 'Hello! I submitted a maintenance request for the AC unit',
-      sender: 'user',
-      time: '10:15 AM',
-      status: 'read',
-    },
-    {
-      id: 2,
-      text: 'Hi there! I have received your request. Let me check the details.',
-      sender: 'contact',
-      time: '10:20 AM',
-    },
-    {
-      id: 3,
-      text: 'Your maintenance request has been approved',
-      sender: 'contact',
-      time: '10:30 AM',
-    },
-    {
-      id: 4,
-      text: 'Our team will visit tomorrow between 2-4 PM',
-      sender: 'contact',
-      time: '10:30 AM',
-    },
-    { id: 5, text: 'Perfect! Thank you so much', sender: 'user', time: '10:32 AM', status: 'read' },
-  ],
-  2: [
-    {
-      id: 1,
-      text: 'Hi, when can you come to fix the AC?',
-      sender: 'user',
-      time: '9:30 AM',
-      status: 'read',
-    },
-    { id: 2, text: 'We will arrive at 2 PM today', sender: 'contact', time: '9:45 AM' },
-  ],
-  3: [{ id: 1, text: 'Package delivered to your door', sender: 'contact', time: '2:15 PM' }],
-};
+const ContactSkeleton = () => (
+  <div className='flex items-center gap-3 px-4 py-3'>
+    <div className='h-12 w-12 rounded-full bg-gray-200 animate-pulse shrink-0' />
+    <div className='flex-1 min-w-0'>
+      <div className='flex justify-between items-baseline gap-4'>
+        <div className='h-3.5 w-32 bg-gray-200 animate-pulse rounded' />
+        <div className='h-3 w-10 bg-gray-200 animate-pulse rounded' />
+      </div>
+    </div>
+  </div>
+);
+
+const MessageSkeleton = ({ align }: { align: 'left' | 'right' }) => (
+  <div className={`flex ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
+    <div
+      className={`px-4 py-2 rounded-lg space-y-2 ${align === 'right' ? 'bg-green-50' : 'bg-white'}`}
+    >
+      <div className='h-3 bg-gray-200 animate-pulse rounded w-48' />
+      <div className='h-3 bg-gray-200 animate-pulse rounded w-32' />
+      <div className='flex justify-end'>
+        <div className='h-2.5 bg-gray-200 animate-pulse rounded w-10' />
+      </div>
+    </div>
+  </div>
+);
+
+const messageskeletons = [
+  { id: 1, align: 'left' },
+  { id: 2, align: 'right' },
+  { id: 3, align: 'left' },
+] as const;
 
 export default function DashboardChats() {
-  const [selectedContact, setSelectedContact] = useState(1);
+  const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-
   const { user } = useAuthStore();
 
-  console.log(user?.managerInfo);
+  const [sendMessageMutation, { loading: sendingMessage }] = useMutation(SEND_MESSAGE_MUTATION);
 
-  const mockContacts: any = [
-    {
-      id: 1,
-      name: user?.managerInfo?.propertyManagerName,
-      avatar: '/api/placeholder/40/40',
-      lastMessage: 'Your maintenance request has been approved',
-      time: '10:30 AM',
-      unread: 2,
-      online: true,
+  const { data: thread, loading: threadsLoading } = useQuery<any>(TRHEAD_QUERY, {
+    fetchPolicy: 'cache-and-network',
+    // onCompleted: (data) => {
+    //   if (data?.getThreads?.length > 0 && !selectedContact) {
+    //     setSelectedContact(data.getThreads[0].id); // auto-select first thread
+    //   }
+    // },
+  });
+
+  const threadsFormatted =
+    thread?.getThreads?.map((thr: any) => ({
+      updatedAt: formatTime(thr.updatedAt),
+      id: thr.id,
+      participant: `${thr?.participants[0]?.firstName} ${thr.participants[0]?.lastName}`,
+    })) || [];
+
+  console.log('Threads data left formatted:', threadsFormatted);
+
+  const {
+    data: threadEff,
+    loading: messagesLoading,
+    refetch: refetchMessages,
+  } = useQuery<any>(MESSAGE_QUERY, {
+    fetchPolicy: 'cache-and-network',
+    skip: !selectedContact,
+    variables: {
+      threadId: selectedContact,
     },
-  ];
+  });
+
+  console.log('threadEff', threadEff);
+
+  const mockContacts: any = threadsFormatted.map((thr: any) => ({
+    id: thr.id,
+    name: thr.participant,
+    avatar: '/api/placeholder/40/40',
+    time: thr.updatedAt,
+  }));
 
   const currentContact = mockContacts.find((c: any) => c.id === selectedContact);
-  const currentMessages = mockMessages[selectedContact] || [];
+  // const currentMessages = mockMessages[selectedContact] || [];
 
   const filteredContacts = mockContacts.filter((contact: any) =>
     contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleSendMessage = () => {
-    if (messageInput.trim()) {
-      setMessageInput('');
+  // const handleSendMessage = () => {
+  //   if (messageInput.trim()) {
+  //     setMessageInput('');
+  //   }
+  // };
+
+  const handleSendMessage = async () => {
+    if (!messageInput.trim()) return;
+
+    try {
+      const { data: result } = await sendMessageMutation({
+        variables: {
+          receiverId: user?.managerInfo?.managerID,
+          content: messageInput.trim(),
+        },
+      });
+
+      if (result) {
+        setMessageInput('');
+        refetchMessages();
+      }
+    } catch (error: any) {
+      toast.error(`Failed to send message: ${error.message}`);
     }
   };
+
+  function formatTime(timestamp: number | string, type: 'date' | 'time' | 'both' = 'both'): string {
+    const date = new Date(Number(timestamp));
+
+    if (isNaN(date.getTime())) {
+      return 'Invalid time value';
+    }
+
+    const optionsDate: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    };
+
+    const optionsTime: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    };
+
+    if (type === 'date') {
+      return date.toLocaleDateString('en-GB', optionsDate);
+    }
+
+    if (type === 'time') {
+      return date.toLocaleTimeString('en-GB', optionsTime);
+    }
+
+    return (
+      date.toLocaleDateString('en-GB', optionsDate) +
+      ' ' +
+      date.toLocaleTimeString('en-GB', optionsTime)
+    );
+  }
+  const messagesData = threadEff?.getMessages || [];
+  const messagesFormatted = messagesData.map((msg: any) => ({
+    id: msg.createdAt,
+    messageId: msg.id,
+    text: msg.content,
+    sent: msg.sender,
+    received: msg.receiver,
+    sender: msg.sender === user?.id ? 'user' : 'contact',
+    time: formatTime(msg.createdAt),
+  }));
 
   return (
     <div className='flex flex-1 flex-col h-[calc(100vh-48px)]'>
@@ -198,50 +251,34 @@ export default function DashboardChats() {
 
           {/* Contacts List */}
           <ScrollArea className='flex-1'>
-            {filteredContacts.map((contact: any) => (
-              // <div
-              //   key={contact.id}
-              //   className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 ${
-              //     selectedContact === contact.id ? 'bg-gray-100' : ''
-              //   }`}
-              //   onClick={() => setSelectedContact(contact.id)}
-              // >
-              <div
-                key={contact.id}
-                className={clsx(
-                  'flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50',
-                  selectedContact === contact.id ? 'bg-gray-100' : '',
-                )}
-                onClick={() => setSelectedContact(contact.id)}
-              >
-                <div className='relative'>
-                  <Avatar className='h-12 w-12'>
-                    <AvatarImage src={contact.avatar} />
-                    <AvatarFallback>{contact.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  {contact.online && (
-                    <div className='absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-white' />
-                  )}
-                </div>
-                <div className='flex-1 min-w-0'>
-                  <div className='flex justify-between items-baseline'>
-                    <h3 className='font-medium text-sm truncate'>{contact.name}</h3>
-                    <span className='text-xs text-gray-500'>{contact.time}</span>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-sm text-gray-600 truncate'>
-                      {contact.lastMessage.slice(0, 30)}
-                      {contact.lastMessage.length > 30 ? '...' : ''}
-                    </p>
-                    {contact.unread > 0 && (
-                      <span className='bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center ml-2'>
-                        {contact.unread}
-                      </span>
+            {threadsLoading
+              ? Array.from({ length: 3 }).map((_, i) => <ContactSkeleton key={i} />)
+              : filteredContacts.map((contact: any) => (
+                  <div
+                    key={contact.id}
+                    className={clsx(
+                      'flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50',
+                      selectedContact === contact.id ? 'bg-gray-100' : '',
                     )}
+                    onClick={() => setSelectedContact(contact.id)}
+                  >
+                    <div className='relative'>
+                      <Avatar className='h-12 w-12'>
+                        <AvatarImage src={contact.avatar} />
+                        <AvatarFallback>{contact.name.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      {contact.online && (
+                        <div className='absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-white' />
+                      )}
+                    </div>
+                    <div className='flex-1 min-w-0'>
+                      <div className='flex justify-between items-baseline'>
+                        <h3 className='font-medium text-sm truncate'>{contact.name}</h3>
+                        <span className='text-xs text-gray-500'>{contact.time}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))}
           </ScrollArea>
         </div>
 
@@ -258,85 +295,65 @@ export default function DashboardChats() {
                   </Avatar>
                   <div>
                     <h3 className='font-medium text-sm'>{currentContact.name}</h3>
-                    <p className='text-xs text-gray-500'>
-                      {currentContact.online ? 'Online' : 'Offline'}
-                    </p>
                   </div>
-                </div>
-                <div className='flex gap-4'>
-                  <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
-                    <Video className='h-5 w-5' />
-                  </Button>
-                  <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
-                    <Phone className='h-5 w-5' />
-                  </Button>
-                  <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
-                    <MoreVertical className='h-5 w-5' />
-                  </Button>
                 </div>
               </div>
 
               {/* Messages Area */}
-              <ScrollArea
-                className='flex-1 p-4 bg-gray-50'
-                style={{
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23f0f2f5'/%3E%3Cpath d='M20 20h10v10H20zM40 40h10v10H40zM60 20h10v10H60zM80 40h10v10H80z' fill='%23e9edef' fill-opacity='.4'/%3E%3C/svg%3E\")",
-                }}
-              >
+              <ScrollArea className='flex-1 p-4 bg-gray-50'>
                 <div className='max-w-4xl mx-auto space-y-3'>
-                  {currentMessages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${
-                        message.sender === 'user' ? 'justify-end' : 'justify-start'
-                      }`}
-                    >
-                      <div
-                        className={`max-w-md px-4 py-2 rounded-lg ${
-                          message.sender === 'user' ? 'bg-green-100' : 'bg-white'
-                        }`}
-                      >
-                        <p className='text-sm'>{message.text}</p>
-                        <div className='flex items-center justify-end gap-1 mt-1'>
-                          <span className='text-xs text-gray-500'>{message.time}</span>
-                          {message.sender === 'user' && (
-                            <span className='text-gray-500'>
-                              {message.status === 'read' ? (
-                                <CheckCheck className='h-4 w-4 text-blue-500' />
-                              ) : (
-                                <Check className='h-4 w-4' />
+                  {messagesLoading
+                    ? messageskeletons.map((s) => <MessageSkeleton key={s.id} align={s.align} />)
+                    : messagesFormatted?.map((message: any) => (
+                        <div
+                          key={message.id}
+                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-md px-4 py-2 rounded-lg ${
+                              message.sender === 'user' ? 'bg-green-100' : 'bg-white'
+                            }`}
+                          >
+                            <p className='text-sm'>{message.text}</p>
+                            <div className='flex items-center justify-end gap-1 mt-1'>
+                              <span className='text-xs text-gray-500'>{message.time}</span>
+                              {message.sender === 'user' && (
+                                <span className='text-gray-500'>
+                                  {message.status === 'read' ? (
+                                    <CheckCheck className='h-4 w-4 text-blue-500' />
+                                  ) : (
+                                    <Check className='h-4 w-4' />
+                                  )}
+                                </span>
                               )}
-                            </span>
-                          )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      ))}
                 </div>
               </ScrollArea>
 
               {/* Message Input */}
               <div className='bg-gray-100 px-4 py-3 flex items-center gap-2'>
-                {/* <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
-                  <Smile className='h-5 w-5' />
-                </Button>
-                <Button variant='ghost' size='icon' className='h-10 w-10 text-gray-600'>
-                  <Paperclip className='h-5 w-5' />
-                </Button> */}
                 <Input
                   placeholder='Type a message'
                   className='flex-1 bg-white'
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyPress={(e) => e.key === 'Enter' && !sendingMessage && handleSendMessage()}
+                  disabled={sendingMessage}
                 />
                 <Button
                   size='icon'
-                  className='h-10 w-10 bg-green-500 hover:bg-green-600'
+                  className='h-8 w-8 bg-green-500 hover:bg-green-600'
                   onClick={handleSendMessage}
+                  disabled={sendingMessage || !messageInput.trim()}
                 >
-                  <Send className='h-5 w-5 text-white' />
+                  {sendingMessage ? (
+                    <Loader2 className='h-5 w-5 text-white animate-spin' />
+                  ) : (
+                    <Send className='h-5 w-5 text-white' />
+                  )}
                 </Button>
               </div>
             </>
@@ -353,105 +370,3 @@ export default function DashboardChats() {
     </div>
   );
 }
-
-export const usersAdminMockData: UserAdmin[] = [
-  {
-    userName: 'Emma Johnson',
-    email: 'emma.johnson@example.com',
-    role: 'Admin',
-    accountStatus: 'Active',
-    registerdDate: 'May 01, 2023',
-    lastLogin: 'Today',
-    verified: true,
-  },
-  {
-    userName: 'Michael Smith',
-    email: 'michael.smith@example.com',
-    role: 'PM',
-    accountStatus: 'Active',
-    registerdDate: 'Apr 14, 2023',
-    lastLogin: '6 days ago',
-    verified: true,
-  },
-  {
-    userName: 'Sarah Evans',
-    email: 'sarah.evans@example.com',
-    role: 'Landlord',
-    accountStatus: 'Pending Verification',
-    registerdDate: 'Jun 20, 2023',
-    lastLogin: 'Never',
-    verified: false,
-  },
-  {
-    userName: 'David Lee',
-    email: 'david.lee@example.com',
-    role: 'Tenant',
-    accountStatus: 'Not Verified',
-    registerdDate: 'Feb 25, 2023',
-    lastLogin: '1 week ago',
-    verified: false,
-  },
-  {
-    userName: 'Jessica Brown',
-    email: 'jessica.brown@example.com',
-    role: 'PM',
-    accountStatus: 'Suspended',
-    registerdDate: 'Jan 10, 2023',
-    lastLogin: 'Sep 12, 2023',
-    verified: true,
-  },
-  {
-    userName: 'Daniel Wilson',
-    email: 'daniel.wilson@example.com',
-    role: 'Landlord',
-    accountStatus: 'Active',
-    registerdDate: 'May 14, 2023',
-    lastLogin: '6 days ago',
-    verified: true,
-  },
-  {
-    userName: 'Amanda Tumer',
-    email: 'amanda.tumer@example.com',
-    role: 'PM',
-    accountStatus: 'Suspended',
-    registerdDate: 'Feb 11, 2023',
-    lastLogin: 'Today',
-    verified: false,
-  },
-  {
-    userName: 'Robert Miller',
-    email: 'robert.miller@example.com',
-    role: 'Landlord',
-    accountStatus: 'Active',
-    registerdDate: 'Mar 13, 2022',
-    lastLogin: 'Never',
-    verified: true,
-  },
-  {
-    userName: 'Susan Adams',
-    email: 'susan.adams@example.com',
-    role: 'PM',
-    accountStatus: 'Not Verified',
-    registerdDate: 'Apr 12, 2023',
-    lastLogin: 'Sep 26, 2023',
-    verified: true,
-  },
-  {
-    userName: 'James Clark',
-    email: 'james.clark@example.com',
-    role: 'Tenant',
-    accountStatus: 'Active',
-    registerdDate: 'May 23, 2023',
-    lastLogin: '1 week ago',
-    verified: true,
-  },
-  {
-    userName: 'James Clark',
-    email: 'james.clark@example.com',
-    role: 'Tenant',
-    accountStatus: 'Suspended',
-    registerdDate: 'Apr 13, 2023',
-    lastLogin: 'Sep 8, 2023',
-    verified: true,
-  },
-];

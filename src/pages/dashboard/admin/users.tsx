@@ -1,10 +1,11 @@
 import { DataTable } from '@/components/data-table';
-import { useAuthStore } from '@/auth/authStore';
+// import { useAuthStore } from '@/auth/authStore';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
-import { paymentHistoryManagerColumn, usersAdminColumn } from '@/components/dashboard-main/columns';
-import { Button } from '@/components/ui/button';
-import { usersAdminMockData } from '@/components/dashboard-main/chats';
+import { usersAdminColumn } from '@/components/dashboard-main/columns';
+// import { Button } from '@/components/ui/button';h
+
+// import { usersAdminMockData } from '@/components/dashboard-main/chats';
 import { useState } from 'react';
 
 const GET_ALL_USERS_ADMIN = gql`
