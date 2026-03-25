@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import { Search, MoreVertical, Send, Phone, Video, Check, CheckCheck, Loader2 } from 'lucide-react';
+import { Search, MoreVertical, Send, Check, CheckCheck, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import clsx from 'clsx';
-import type { UserAdmin } from '../types';
 import { useAuthStore } from '@/auth/authStore';
 import { gql } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
-import formatDate from '@/utils/format-date';
 
 import { toast } from 'sonner';
+import formatTime from '@/utils/format-time';
 
 const TRHEAD_QUERY = gql`
   query GetThreads {
@@ -118,7 +117,7 @@ export default function DashboardChats() {
       participant: `${thr?.participants[0]?.firstName} ${thr.participants[0]?.lastName}`,
     })) || [];
 
-  console.log('Threads data left formatted:', threadsFormatted);
+  // console.log('Threads data left formatted:', threadsFormatted);
 
   const {
     data: threadEff,
@@ -132,7 +131,7 @@ export default function DashboardChats() {
     },
   });
 
-  console.log('threadEff', threadEff);
+  // console.log('threadEff', threadEff);
 
   const mockContacts: any = threadsFormatted.map((thr: any) => ({
     id: thr.id,
@@ -174,39 +173,39 @@ export default function DashboardChats() {
     }
   };
 
-  function formatTime(timestamp: number | string, type: 'date' | 'time' | 'both' = 'both'): string {
-    const date = new Date(Number(timestamp));
+  // function formatTime(timestamp: number | string, type: 'date' | 'time' | 'both' = 'both'): string {
+  //   const date = new Date(Number(timestamp));
 
-    if (isNaN(date.getTime())) {
-      return 'Invalid time value';
-    }
+  //   if (isNaN(date.getTime())) {
+  //     return 'Invalid time value';
+  //   }
 
-    const optionsDate: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    };
+  //   const optionsDate: Intl.DateTimeFormatOptions = {
+  //     year: 'numeric',
+  //     month: '2-digit',
+  //     day: '2-digit',
+  //   };
 
-    const optionsTime: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    };
+  //   const optionsTime: Intl.DateTimeFormatOptions = {
+  //     hour: '2-digit',
+  //     minute: '2-digit',
+  //     second: '2-digit',
+  //   };
 
-    if (type === 'date') {
-      return date.toLocaleDateString('en-GB', optionsDate);
-    }
+  //   if (type === 'date') {
+  //     return date.toLocaleDateString('en-GB', optionsDate);
+  //   }
 
-    if (type === 'time') {
-      return date.toLocaleTimeString('en-GB', optionsTime);
-    }
+  //   if (type === 'time') {
+  //     return date.toLocaleTimeString('en-GB', optionsTime);
+  //   }
 
-    return (
-      date.toLocaleDateString('en-GB', optionsDate) +
-      ' ' +
-      date.toLocaleTimeString('en-GB', optionsTime)
-    );
-  }
+  //   return (
+  //     date.toLocaleDateString('en-GB', optionsDate) +
+  //     ' ' +
+  //     date.toLocaleTimeString('en-GB', optionsTime)
+  //   );
+  // }
   const messagesData = threadEff?.getMessages || [];
   const messagesFormatted = messagesData.map((msg: any) => ({
     id: msg.createdAt,
