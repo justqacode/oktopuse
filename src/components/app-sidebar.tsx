@@ -76,6 +76,18 @@ const data = {
       roles: ['tenant', 'manager', 'landlord'],
     },
     {
+      title: 'Tenants',
+      url: '/dashboard/manager/tenants',
+      icon: IconUsers,
+      roles: ['manager'],
+    },
+    {
+      title: 'Landlords',
+      url: '/dashboard/manager/landlords',
+      icon: IconUsers,
+      roles: ['manager'],
+    },
+    {
       title: 'Users',
       url: '/dashboard/admin/users',
       icon: IconUsers,
