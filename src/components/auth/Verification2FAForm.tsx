@@ -17,6 +17,7 @@ import { gql } from '@apollo/client';
 import { useAuthStore } from '@/auth/authStore';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
+import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
 
 export const MFA_MUTATION = gql`
   mutation MFA($mfaCode: String!) {
@@ -271,7 +272,8 @@ const formatTime = (seconds: number) => {
 
 export const Verification2FA = () => {
   const navigate = useNavigate();
-  const { mfaLogin, isLoading: mfaLoading } = useAuthStore();
+  const { user, mfaLogin, isLoading: mfaLoading } = useAuthStore();
+  const [resendVerifyMutation] = useMutation<ResendVerifyAccountProps>(RESEND_VERIFY_MUTATION);
 
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
   const canResend = countdown === 0;
@@ -310,6 +312,36 @@ export const Verification2FA = () => {
     const capify = data.verificationCode.toUpperCase();
     await mfaLogin(capify, navigate);
   };
+
+  const resendVerificationEmail = async (email: string) => {
+    try {
+      const res = await resendVerifyMutation({ variables: { token: email } });
+      if (res?.data?.resendVerification?.success) {
+        toast.success('Verification link resent successfully.');
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Failed to resend verification link.');
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.verificationStatus === false) {
+      toast.warning('You need to verify your account!', {
+        classNames: {
+          toast: 'flex-col !items-start ',
+          actionButton: ' !justify-start mt-2',
+        },
+        description: 'Click on the button below to resend the verification email.',
+        action: {
+          label: <div>Resend Verification Email</div>,
+          onClick: () => {
+            resendVerificationEmail(user.email);
+          },
+        },
+        duration: 8000,
+      });
+    }
+  }, [user]);
 
   return (
     <div className='max-w-md mx-auto p-6'>
