@@ -261,7 +261,7 @@ export default function DashboardChats() {
               </div>
 
               {/* Messages Area */}
-              <ScrollArea className='flex-1 p-4 bg-gray-50'>
+              <ScrollArea className='flex-1 min-h-0 p-4 bg-gray-50'>
                 <div className='max-w-4xl mx-auto space-y-3'>
                   {messagesLoading
                     ? messageskeletons.map((s) => <MessageSkeleton key={s.id} align={s.align} />)

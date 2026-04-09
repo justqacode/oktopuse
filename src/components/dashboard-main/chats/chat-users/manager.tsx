@@ -8,16 +8,16 @@ import clsx from 'clsx';
 import { useAuthStore } from '@/auth/authStore';
 import { gql } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
-
 import { toast } from 'sonner';
 import formatTime from '@/utils/format-time';
 
-const TRHEAD_QUERY = gql`
+const THREAD_QUERY = gql`
   query GetThreads {
     getThreads {
       updatedAt
       id
       participants {
+        id
         firstName
         lastName
         role
@@ -49,6 +49,25 @@ const SEND_MESSAGE_MUTATION = gql`
       content
       read
       createdAt
+    }
+  }
+`;
+
+const GET_ALL_TENANTS_MANAGER = gql`
+  query GetMyTenants {
+    getMyTenants {
+      firstName
+      lastName
+      email
+      phone
+      status
+      verificationStatus
+      role
+      notificationPreferences
+      oktoID
+      createdAt
+      updatedAt
+      id
     }
   }
 `;
@@ -101,18 +120,23 @@ export default function DashboardChatsManager() {
 
   const [sendMessageMutation, { loading: sendingMessage }] = useMutation(SEND_MESSAGE_MUTATION);
 
-  const { data: thread, loading: threadsLoading } = useQuery<any>(TRHEAD_QUERY, {
+  const { data: threads } = useQuery<any>(THREAD_QUERY, {
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const { data: thread, loading: threadsLoading } = useQuery<any>(GET_ALL_TENANTS_MANAGER, {
     fetchPolicy: 'cache-and-network',
   });
 
   const threadsFormatted =
-    thread?.getThreads?.map((thr: any) => ({
+    thread?.getMyTenants?.map((thr: any) => ({
       updatedAt: formatTime(thr.updatedAt),
       id: thr.id,
-      participant: `${thr?.participants[0]?.firstName} ${thr.participants[0]?.lastName}`,
+      participant: `${thr?.firstName} ${thr?.lastName}`,
+      role: thr.role.includes('tenant') ? 'tenant' : 'landlord',
+      email: thr.email,
+      phone: thr.phone,
     })) || [];
-
-  // console.log('Threads data left formatted:', threadsFormatted);
 
   const {
     data: threadEff,
@@ -126,14 +150,34 @@ export default function DashboardChatsManager() {
     },
   });
 
-  // console.log('threadEff', threadEff);
-
-  const mockContacts: any = threadsFormatted.map((thr: any) => ({
+  const mockContactsvv: any = threadsFormatted.map((thr: any) => ({
     id: thr.id,
     name: thr.participant,
     avatar: '/api/placeholder/40/40',
     time: thr.updatedAt,
+    role: thr.role,
+    email: thr.email,
+    phone: thr.phone,
   }));
+
+  const mockContacts = mockContactsvv.map((user: any) => {
+    const matchedThread = threads?.getThreads?.find((thread: any) =>
+      thread.participants.some((p: any) => p.id === user.id),
+    );
+
+    return {
+      //   id: user.id,
+      //   threadId: matchedThread?.id ?? null,
+      id: matchedThread?.id ?? null,
+      userId: user.id,
+      name: user.name,
+      role: user.role,
+      avatar: '/api/placeholder/40/40',
+      time: user.time,
+      email: user.email,
+      phone: user.phone,
+    };
+  });
 
   const currentContact = mockContacts.find((c: any) => c.id === selectedContact);
   // const currentMessages = mockMessages[selectedContact] || [];
@@ -142,19 +186,17 @@ export default function DashboardChatsManager() {
     contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  // const handleSendMessage = () => {
-  //   if (messageInput.trim()) {
-  //     setMessageInput('');
-  //   }
-  // };
-
   const handleSendMessage = async () => {
     if (!messageInput.trim()) return;
+    if (!currentContact.userId) {
+      toast.error('Error sending to user. Please try again.');
+      return;
+    }
 
     try {
       const { data: result } = await sendMessageMutation({
         variables: {
-          receiverId: user?.managerInfo?.managerID,
+          receiverId: currentContact?.userId,
           content: messageInput.trim(),
         },
       });
@@ -216,7 +258,7 @@ export default function DashboardChatsManager() {
               ? Array.from({ length: 3 }).map((_, i) => <ContactSkeleton key={i} />)
               : filteredContacts.map((contact: any) => (
                   <div
-                    key={contact.id}
+                    key={contact.userId}
                     className={clsx(
                       'flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50',
                       selectedContact === contact.id ? 'bg-gray-100' : '',
@@ -224,17 +266,21 @@ export default function DashboardChatsManager() {
                     onClick={() => setSelectedContact(contact.id)}
                   >
                     <div className='relative'>
-                      <Avatar className='h-12 w-12'>
+                      {/* <Avatar className='h-12 w-12'>
                         <AvatarImage src={contact.avatar} />
                         <AvatarFallback>{contact.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar>
+                      </Avatar> */}
                       {contact.online && (
                         <div className='absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-white' />
                       )}
                     </div>
                     <div className='flex-1 min-w-0'>
                       <div className='flex justify-between items-baseline'>
-                        <h3 className='font-medium text-sm truncate'>{contact.name}</h3>
+                        <div className='flex flex-col justify-start'>
+                          <h3 className='font-medium text-sm truncate'>{contact.name}</h3>
+                          <h3 className='font-medium text-xs truncate text-gray-400'>{`${contact.role} `}</h3>
+                          <h3 className='font-medium text-xs truncate text-gray-400'>{`${contact.email} `}</h3>
+                        </div>
                         <span className='text-xs text-gray-500'>{contact.time}</span>
                       </div>
                     </div>
@@ -261,7 +307,7 @@ export default function DashboardChatsManager() {
               </div>
 
               {/* Messages Area */}
-              <ScrollArea className='flex-1 p-4 bg-gray-50'>
+              <ScrollArea className='flex-1 min-h-0 p-4 bg-gray-50'>
                 <div className='max-w-4xl mx-auto space-y-3'>
                   {messagesLoading
                     ? messageskeletons.map((s) => <MessageSkeleton key={s.id} align={s.align} />)
