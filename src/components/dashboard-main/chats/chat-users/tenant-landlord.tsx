@@ -112,8 +112,6 @@ export default function DashboardChats() {
       participant: `${thr?.participants[0]?.firstName} ${thr.participants[0]?.lastName}`,
     })) || [];
 
-  // console.log('Threads data left formatted:', threadsFormatted);
-
   const {
     data: threadEff,
     loading: messagesLoading,
