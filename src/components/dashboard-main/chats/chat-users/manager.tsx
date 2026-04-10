@@ -180,7 +180,7 @@ export default function DashboardChatsManager() {
   });
 
   const currentContact = mockContacts.find((c: any) => c.id === selectedContact);
-  // const currentMessages = mockMessages[selectedContact] || [];
+  // const currentMessages = mockMessages[selectedContact] || []; remove
 
   const filteredContacts = mockContacts.filter((contact: any) =>
     contact.name.toLowerCase().includes(searchQuery.toLowerCase()),
