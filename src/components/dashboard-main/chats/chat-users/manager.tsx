@@ -20,7 +20,6 @@ const THREAD_QUERY = gql`
         id
         firstName
         lastName
-        role
       }
     }
   }
@@ -124,12 +123,15 @@ export default function DashboardChatsManager() {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: thread, loading: threadsLoading } = useQuery<any>(GET_ALL_TENANTS_MANAGER, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data: tenantLandlordData, loading: threadsLoading } = useQuery<any>(
+    GET_ALL_TENANTS_MANAGER,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   const threadsFormatted =
-    thread?.getMyTenants?.map((thr: any) => ({
+    tenantLandlordData?.getMyTenants?.map((thr: any) => ({
       updatedAt: formatTime(thr.updatedAt),
       id: thr.id,
       participant: `${thr?.firstName} ${thr?.lastName}`,
@@ -166,10 +168,10 @@ export default function DashboardChatsManager() {
     );
 
     return {
-      //   id: user.id,
-      //   threadId: matchedThread?.id ?? null,
-      id: matchedThread?.id ?? null,
-      userId: user.id,
+      id: user.id,
+      threadId: matchedThread?.id ?? null,
+      //   id: matchedThread?.id ?? null,
+      //   userId: user.id,
       name: user.name,
       role: user.role,
       avatar: '/api/placeholder/40/40',
@@ -179,7 +181,7 @@ export default function DashboardChatsManager() {
     };
   });
 
-  const currentContact = mockContacts.find((c: any) => c.id === selectedContact);
+  const currentContact = mockContacts.find((c: any) => c.threadId === selectedContact);
   // const currentMessages = mockMessages[selectedContact] || []; remove
 
   const filteredContacts = mockContacts.filter((contact: any) =>
@@ -188,7 +190,7 @@ export default function DashboardChatsManager() {
 
   const handleSendMessage = async () => {
     if (!messageInput.trim()) return;
-    if (!currentContact.userId) {
+    if (!currentContact.id) {
       toast.error('Error sending to user. Please try again.');
       return;
     }
@@ -196,7 +198,7 @@ export default function DashboardChatsManager() {
     try {
       const { data: result } = await sendMessageMutation({
         variables: {
-          receiverId: currentContact?.userId,
+          receiverId: currentContact?.id,
           content: messageInput.trim(),
         },
       });
@@ -258,18 +260,18 @@ export default function DashboardChatsManager() {
               ? Array.from({ length: 3 }).map((_, i) => <ContactSkeleton key={i} />)
               : filteredContacts.map((contact: any) => (
                   <div
-                    key={contact.userId}
+                    key={contact.id}
                     className={clsx(
                       'flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50',
-                      selectedContact === contact.id ? 'bg-gray-100' : '',
+                      selectedContact === contact.threadId ? 'bg-gray-100' : '',
                     )}
-                    onClick={() => setSelectedContact(contact.id)}
+                    onClick={() => setSelectedContact(contact.threadId)}
                   >
                     <div className='relative'>
-                      {/* <Avatar className='h-12 w-12'>
+                      <Avatar className='h-12 w-12'>
                         <AvatarImage src={contact.avatar} />
                         <AvatarFallback>{contact.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar> */}
+                      </Avatar>
                       {contact.online && (
                         <div className='absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-white' />
                       )}
