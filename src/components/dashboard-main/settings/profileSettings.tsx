@@ -144,6 +144,7 @@ export function ProfileSettings() {
   }, [profileForm, user]);
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
+    setIsProfileLoading(true);
     setProfileError('');
     setProfileSuccess(false);
 
