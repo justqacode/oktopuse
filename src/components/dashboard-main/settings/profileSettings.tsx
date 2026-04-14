@@ -88,7 +88,7 @@ const profileSchema = z.object({
   address: z
     .string()
     .trim()
-    .min(5, { message: 'Address is too short' })
+    // .min(5, { message: 'Address is too short' })
     .max(255, { message: 'Address is too long' })
     .optional(),
 });
@@ -144,7 +144,6 @@ export function ProfileSettings() {
   }, [profileForm, user]);
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
-    setIsProfileLoading(true);
     setProfileError('');
     setProfileSuccess(false);
 
@@ -194,7 +193,7 @@ export function ProfileSettings() {
       }
     } catch (error) {
       setProfileError(
-        error instanceof Error ? error.message : 'Update failed. Please try again later.'
+        error instanceof Error ? error.message : 'Update failed. Please try again later.',
       );
     } finally {
       setIsProfileLoading(false);
@@ -292,7 +291,7 @@ export function ProfileSettings() {
                 <FormLabel>Role</FormLabel>
                 <Input
                   value={getRoleDisplay(
-                    Array.isArray(user?.role) ? user?.role[0] ?? '' : user?.role ?? ''
+                    Array.isArray(user?.role) ? (user?.role[0] ?? '') : (user?.role ?? ''),
                   )}
                   disabled
                   className='bg-muted cursor-not-allowed'
@@ -300,7 +299,7 @@ export function ProfileSettings() {
                 <p className='text-sm text-muted-foreground mt-2'>Your role cannot be changed</p>
               </div>
 
-              {manager && (
+              {/* {manager && (
                 <FormField
                   control={profileForm.control}
                   name='address'
@@ -314,7 +313,7 @@ export function ProfileSettings() {
                     </FormItem>
                   )}
                 />
-              )}
+              )} */}
 
               <div className='flex justify-end'>
                 <Button
