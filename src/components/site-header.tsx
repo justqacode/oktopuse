@@ -9,6 +9,7 @@ import CreateNoteModal from './dashboard-main/modals/create-note-modal';
 import { AchPayment } from './ach-payment';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
+import { Link } from 'react-router-dom';
 
 const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryStakeHolder {
@@ -83,14 +84,23 @@ export function SiteHeader() {
 
           {landlord && (
             <div className='ml-auto flex items-center gap-2'>
-              <Button
+              <Link
+                // variant='outline'
+                // size='sm'
+                className='hidden sm:flex justify-center items-center text-sm border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5'
+                // onClick={() => setOpen(true)}
+                to='/dashboard/messages'
+              >
+                Message PM
+              </Link>
+              {/* <Button
                 variant='outline'
                 size='sm'
                 className='hidden sm:flex'
                 onClick={() => setOpen(true)}
               >
                 Message PM
-              </Button>
+              </Button> */}
               <Button
                 variant='default'
                 size='sm'

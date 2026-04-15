@@ -203,7 +203,7 @@ export default function AssociateAccount() {
                           name='userId'
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>User Email or Id *</FormLabel>
+                              <FormLabel>User Email *</FormLabel>
                               <FormControl className='w-full'>
                                 <Input placeholder='Enter existing account email' {...field} />
                               </FormControl>
