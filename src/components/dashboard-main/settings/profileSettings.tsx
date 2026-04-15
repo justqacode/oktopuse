@@ -300,7 +300,7 @@ export function ProfileSettings() {
                 <p className='text-sm text-muted-foreground mt-2'>Your role cannot be changed</p>
               </div>
 
-              {/* {manager && (
+              {manager && (
                 <FormField
                   control={profileForm.control}
                   name='address'
@@ -314,7 +314,7 @@ export function ProfileSettings() {
                     </FormItem>
                   )}
                 />
-              )} */}
+              )}
 
               <div className='flex justify-end'>
                 <Button
