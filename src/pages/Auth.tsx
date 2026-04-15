@@ -16,7 +16,10 @@ export const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLogin = location.pathname === '/login' ? true : false;
-  const regLogin = location.pathname === '/login' || location.pathname === '/register';
+  const regLogin =
+    location.pathname === '/login' ||
+    location.pathname === '/register' ||
+    location.pathname.startsWith('/register/');
   const route = location.pathname;
 
   return (
@@ -26,6 +29,7 @@ export const Auth = () => {
         {regLogin && <AuthTabs isLogin={isLogin} navigate={navigate} />}
         <div className='px-8'>{route === '/login' && <LoginForm />}</div>
         <div className='px-8'>{route === '/register' && <RegisterForm />}</div>
+        <div className='px-8'>{route.startsWith('/register/') && <RegisterForm />}</div>
         <div className='px-8'>{route === '/forgotpassword' && <ForgotPasswordForm />}</div>
         <div className='px-8'>
           {route === '/reset-password' && <ResetPasswordAfterForgetForm />}

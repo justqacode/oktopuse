@@ -59,6 +59,7 @@ export const registerSchema = z.object({
   // role: z.string().refine((val) => ['tenant', 'landlord', 'manager'].includes(val), {
   //   message: 'Please select a valid role',
   // }),
+  referredBy: z.string().trim(),
   role: z
     .array(z.enum(['tenant', 'landlord', 'manager']))
     .min(1, { message: 'Please select at least one role' }),

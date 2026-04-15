@@ -1,16 +1,12 @@
 import { DataTable } from '@/components/data-table';
-// import { useAuthStore } from '@/auth/authStore';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { usersAdminColumn } from '@/components/dashboard-main/columns';
-// import { Button } from '@/components/ui/button';h
-
-// import { usersAdminMockData } from '@/components/dashboard-main/chats';
 import { useState } from 'react';
 
-const GET_ALL_USERS_ADMIN = gql`
-  query GetAllRegisteredUsers {
-    getAllRegisteredUsers {
+const GET_ALL_TENANTS_MANAGER = gql`
+  query GetMyTenants {
+    getMyTenants {
       firstName
       lastName
       email
@@ -19,21 +15,30 @@ const GET_ALL_USERS_ADMIN = gql`
       verificationStatus
       role
       notificationPreferences
+      oktoID
       createdAt
       updatedAt
+      id
     }
   }
 `;
 
-export default function UsersPage() {
+export default function LandlordPage() {
   const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string>('landlord');
   const [previewOpen, setPreviewOpen] = useState(false);
-  const { data, loading } = useQuery<any>(GET_ALL_USERS_ADMIN, {
+  const { data, loading } = useQuery<any>(GET_ALL_TENANTS_MANAGER, {
     fetchPolicy: 'cache-and-network',
   });
-  const users = data?.getAllRegisteredUsers || [];
+  const usersx = data?.getMyTenants || [];
 
-  // console.log('Registered Users Data:', users);
+  const users =
+    usersx
+      ?.filter((usr: any) => (selectedRole === '' ? true : usr.role.includes(selectedRole)))
+      ?.map((usr: any) => ({
+        ...usr,
+        role: usr.role?.[0] || '', // flatten for table display
+      })) || [];
 
   const handleStatusUpdate = async (maintenanceId: string, newStatus: string) => {
     // try {
@@ -61,7 +66,7 @@ export default function UsersPage() {
         <div className='flex flex-col gap-4 py-4 md:gap-6 md:py-6'>
           <div className='py-4 lg:py-6 px-8'>
             <div className='flex justify-between text-lg font-semibold mb-2'>
-              <p>Registered Users</p>
+              <p>Registered Landlords</p>
               {/* <Button
                 variant='default'
                 size='sm'

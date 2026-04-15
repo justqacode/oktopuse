@@ -175,85 +175,70 @@ export default function AssociateAccount() {
 
                   <Form {...form}>
                     <div className='space-y-4'>
-                      <FormField
-                        control={form.control}
-                        name='role'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Role *</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder='Select a Role' />
-                                </SelectTrigger>
+                      <div className='space-y-4 w-full sm:w-60'>
+                        <FormField
+                          control={form.control}
+                          name='role'
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Role *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl className='w-full'>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder='Select a Role' />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value='landlord'>Landlord</SelectItem>
+                                  <SelectItem value='tenant'>Tenant</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name='userId'
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>User Email or Id *</FormLabel>
+                              <FormControl className='w-full'>
+                                <Input placeholder='Enter existing account email' {...field} />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value='landlord'>Landlord</SelectItem>
-                                <SelectItem value='tenant'>Tenant</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={form.control}
-                        name='userId'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>User Email or Id *</FormLabel>
-                            <FormControl>
-                              <Input placeholder='Enter existing account email' {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      {/* <FormField
-                        control={form.control}
-                        name='propertyId'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Property ID *</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder='Enter property ID - 6941f890876c34abc390c0d0'
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      /> */}
-
-                      <FormField
-                        control={form.control}
-                        name='propertyId'
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Property ID *</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder='Select property' />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {loading && <SelectItem value='na'>Loading...</SelectItem>}
-                                {!loading &&
-                                  propertyData.map((property: any) => (
-                                    <SelectItem key={property.id} value={property.id}>
-                                      {property.name}
-                                    </SelectItem>
-                                  ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <FormField
+                          control={form.control}
+                          name='propertyId'
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Property ID *</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl className='w-full'>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder='Select property' />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {loading && <SelectItem value='na'>Loading...</SelectItem>}
+                                  {!loading &&
+                                    propertyData.map((property: any) => (
+                                      <SelectItem key={property.id} value={property.id}>
+                                        {property.name}
+                                      </SelectItem>
+                                    ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
                       <div className='flex justify-end'>
                         <Button

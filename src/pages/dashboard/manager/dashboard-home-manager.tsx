@@ -1,6 +1,6 @@
 import { TabsContent, TabsLayout } from '@/components/tab-layout';
 import MaintenanceRequests from '@/components/dashboard-main/maintenance-requests';
-import Messages from '@/components/dashboard-main/messages';
+// import Messages from '@/components/dashboard-main/messages';
 import { DashCard } from '@/components/dashboard-card';
 import Properties from '@/components/dashboard-main/properties';
 import MaintenanceRequestsManager from '@/components/dashboard-main/maintenance-requests-manager';
@@ -9,7 +9,7 @@ import { useState } from 'react';
 const tabs = [
   { value: 'properties', label: 'Properties' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
-  { value: 'messages', label: 'Messages', badge: 2 },
+  // { value: 'messages', label: 'Messages', badge: 2 },
 ];
 
 export default function DashboardHomeManager() {
@@ -43,9 +43,9 @@ export default function DashboardHomeManager() {
                 <MaintenanceRequestsManager />
               </TabsContent>
 
-              <TabsContent value='messages'>
+              {/* <TabsContent value='messages'>
                 <Messages />
-              </TabsContent>
+              </TabsContent> */}
             </TabsLayout>
           </div>
         </div>

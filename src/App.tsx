@@ -21,6 +21,8 @@ import AssociateAccount from './pages/dashboard/associate-account';
 import { useSEO } from './hooks/useSEO';
 import NotFound from './pages/NotFound';
 import UsersPage from './pages/dashboard/admin/users';
+import TenantPage from './pages/dashboard/manager/tenants';
+import LandlordPage from './pages/dashboard/manager/landlords';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -192,6 +194,22 @@ function UsersAdminPage() {
   return <UsersPage />;
 }
 
+function TenantManagerPage() {
+  useSEO({
+    title: 'Manager - Tenants',
+    description: 'View tenants assigned to you as a manager',
+  });
+  return <TenantPage />;
+}
+
+function LandlordManagerPage() {
+  useSEO({
+    title: 'Manager - Landlords',
+    description: 'View landlords assigned to you as a manager',
+  });
+  return <LandlordPage />;
+}
+
 export default function App() {
   return (
     <ApolloProvider client={client}>
@@ -208,6 +226,7 @@ export default function App() {
               <Route path='/pricing' element={<HomePage />} />
               <Route path='/login' element={<LoginPage />} />
               <Route path='/register' element={<RegisterPage />} />
+              <Route path='/register/*' element={<RegisterPage />} />
               <Route path='/contact' element={<ContactPage />} />
               <Route path='/forgotpassword' element={<ForgotPasswordPage />} />
               <Route path='/reset-password' element={<ResetPasswordPage />} />
@@ -231,6 +250,10 @@ export default function App() {
 
                 <Route path='admin'>
                   <Route path='users' element={<UsersAdminPage />} />
+                </Route>
+                <Route path='manager'>
+                  <Route path='tenants' element={<TenantManagerPage />} />
+                  <Route path='landlords' element={<LandlordManagerPage />} />
                 </Route>
               </Route>
             </Route>
