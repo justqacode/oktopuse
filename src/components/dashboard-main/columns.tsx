@@ -485,7 +485,7 @@ export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
   },
 ];
 
-export const leaseDocColumn: ColumnDef<any>[] = [
+export const leaseDocColumn = (onDownload: (docId: string) => void): ColumnDef<any>[] => [
   {
     accessorKey: 'docName',
     header: 'Document Name',
@@ -513,16 +513,19 @@ export const leaseDocColumn: ColumnDef<any>[] = [
       </Button>
     ),
   },
-  // {
-  //   accessorKey: 'action',
-  //   header: 'Action',
-  //   cell: ({ row }) => (
-  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left underline'>
-  //       {/* {row.original.type} */}
-  //       Download
-  //     </Button>
-  //   ),
-  // },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => (
+      <Button
+        variant='ghost'
+        className='text-muted-foreground w-fit px-0 text-left underline'
+        onClick={() => onDownload(row.original.id)}
+      >
+        Download
+      </Button>
+    ),
+  },
 ];
 
 export const expensesColumn: ColumnDef<Expenses>[] = [
