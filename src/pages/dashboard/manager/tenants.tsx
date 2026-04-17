@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/data-table';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
-import { usersAdminColumn } from '@/components/dashboard-main/columns';
+import { usersTableColumnTenant } from '@/components/dashboard-main/columns';
 
 import { useState } from 'react';
 
@@ -25,27 +25,11 @@ const GET_ALL_TENANTS_MANAGER = gql`
 `;
 
 export default function TenantPage() {
-  const [selectedRequest, setSelectedRequest] = useState<any | null>(null);
   const [selectedRole, setSelectedRole] = useState<string>('tenant');
-  const [previewOpen, setPreviewOpen] = useState(false);
   const { data, loading } = useQuery<any>(GET_ALL_TENANTS_MANAGER, {
     fetchPolicy: 'cache-and-network',
   });
   const usersx = data?.getMyTenants || [];
-
-  //   const filteredUsers = users.filter((usr) =>
-  //   selectedRoles.length === 0
-  //     ? true
-  //     : usr.role?.some((r: string) => selectedRoles.includes(r))  // use original usr.role array
-  // );
-
-  // const users =
-  //   usersx?.map((usr: any) => ({
-  //     ...usr,
-  //     role: usr.role.includes('tenant'),
-  //   })) || [];
-
-  // console.log('Registered Users Data:', users);
 
   const users =
     usersx
@@ -54,26 +38,6 @@ export default function TenantPage() {
         ...usr,
         role: usr.role?.[0] || '',
       })) || [];
-
-  const handleStatusUpdate = async (maintenanceId: string, newStatus: string) => {
-    // try {
-    //   await updateMaintenanceStatus({
-    //     variables: {
-    //       requestID: maintenanceId,
-    //       status: newStatus,
-    //     },
-    //   });
-    // } catch (error) {
-    //   // console.error('Failed to update status:', error);
-    //   toast.error('Failed to update status. Please try again.');
-    // }
-    // console.log(maintenanceId, newStatus);
-  };
-
-  const viewItem = (request: {}) => {
-    setSelectedRequest(request);
-    setPreviewOpen(true);
-  };
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -92,7 +56,7 @@ export default function TenantPage() {
               </Button> */}
             </div>
             <DataTable
-              columns={usersAdminColumn(handleStatusUpdate, viewItem)}
+              columns={usersTableColumnTenant}
               // data={usersAdminMockData}
               data={users}
               enablePagination
