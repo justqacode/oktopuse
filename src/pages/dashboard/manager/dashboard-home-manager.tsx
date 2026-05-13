@@ -5,10 +5,12 @@ import { DashCard } from '@/components/dashboard-card';
 import Properties from '@/components/dashboard-main/properties';
 import MaintenanceRequestsManager from '@/components/dashboard-main/maintenance-requests-manager';
 import { useState } from 'react';
+import LeaseDocManager from '@/components/dashboard-main/lease-doc-manager';
 
 const tabs = [
   { value: 'properties', label: 'Properties' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
+  { value: 'lease-documents', label: 'Lease Documents' },
   // { value: 'messages', label: 'Messages', badge: 2 },
 ];
 
@@ -32,7 +34,11 @@ export default function DashboardHomeManager() {
               onValueChange={setActiveTab}
               // header={activeTab === 'properties' ? <ExpensesHistory.HeaderButton /> : null}
               header={
-                activeTab === 'maintenance-requests' ? <MaintenanceRequests.HeaderButton /> : null
+                activeTab === 'maintenance-requests' ? (
+                  <MaintenanceRequests.HeaderButton />
+                ) : activeTab === 'lease-documents' ? (
+                  <LeaseDocManager.HeaderButton />
+                ) : null
               }
             >
               <TabsContent value='properties'>
@@ -41,6 +47,10 @@ export default function DashboardHomeManager() {
 
               <TabsContent value='maintenance-requests'>
                 <MaintenanceRequestsManager />
+              </TabsContent>
+
+              <TabsContent value='lease-documents'>
+                <LeaseDocManager />
               </TabsContent>
 
               {/* <TabsContent value='messages'>

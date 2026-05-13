@@ -35,6 +35,7 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
+import { usStates } from '@/mockData/us-states';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per image
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -395,7 +396,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='state'
                 render={({ field }) => (
@@ -404,6 +405,31 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                     <FormControl>
                       <Input placeholder='State' {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name='state'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>State *</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select State' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {usStates.map((state) => (
+                          <SelectItem key={state.id} value={state.short}>
+                            {state.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -499,7 +525,7 @@ export default function AddPropertyModal({ open, onOpenChange }: AddPropertyModa
                       <Input
                         type='date'
                         {...field}
-                        min={new Date().toISOString().split('T')[0]}
+                        // min={new Date().toISOString().split('T')[0]}
                         className='w-full block bg-white'
                       />
                     </FormControl>
