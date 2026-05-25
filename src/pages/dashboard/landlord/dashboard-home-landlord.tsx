@@ -13,7 +13,7 @@ const tabs = [
   { value: 'expenses', label: 'Expenses' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
   // { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
-  { value: 'lease-documents', label: 'Lease Documents' },
+  { value: 'lease-documents', label: 'Documents' },
 ];
 
 export default function DashboardHomeLandlord() {

@@ -261,7 +261,7 @@ interface ResendCodeResponse {
   };
 }
 
-const COUNTDOWN_SECONDS = 10 * 60; // 10 minutes
+const COUNTDOWN_SECONDS = 60 * 60; // 10 minutes
 // const COUNTDOWN_SECONDS = 6; // 10 minutes
 
 const formatTime = (seconds: number) => {

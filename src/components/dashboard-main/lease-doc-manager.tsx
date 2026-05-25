@@ -63,7 +63,7 @@ const sampleData: any = [];
 export default function LeaseDocManager() {
   const { data, loading } = useQuery<any>(GET_LEASE_DOCS, {
     fetchPolicy: 'cache-and-network',
-    variables: { filter: 'lease' },
+    variables: { filter: '' },
   });
 
   const documents = data?.getDocuments || [];
