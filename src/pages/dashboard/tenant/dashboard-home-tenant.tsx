@@ -21,7 +21,7 @@ const tabs = [
   { value: 'rent-history', label: 'Rent History' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
   // { value: 'lease-documents', label: 'Lease Documents', badge: 2 },
-  { value: 'lease-documents', label: 'Documents' },
+  { value: 'lease-documents', label: 'Lease Documents' },
 ];
 
 export default function DashboardHomeTenant() {
@@ -72,22 +72,23 @@ export default function DashboardHomeTenant() {
                 </CardAction> */}
               </CardHeader>
 
-              <CardFooter className='flex-col items-start gap-1.5 text-sm w-full min-w-0'>
-                <div className='flex flex-wrap gap-x-2 gap-y-0.5 font-medium [word-break:break-word] break-all'>
+              <CardFooter className='flex-col items-start gap-1.5 text-sm'>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
                   Name:{' '}
-                  <span className='text-muted-foreground'>
+                  <span className='ml-2 text-muted-foreground'>
                     {user?.managerInfo?.propertyManagerName || 'N/A'}
                   </span>{' '}
                 </div>
-                <div className='flex flex-wrap gap-x-2 gap-y-0.5 font-medium [word-break:break-word] break-all'>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
                   Email:{' '}
-                  <span className='text-muted-foreground '>
+                  <span className='ml-2 text-muted-foreground '>
                     {user?.managerInfo?.propertyManagerEmail || 'N/A'}
                   </span>
                 </div>
-                <div className='flex flex-wrap gap-x-2 gap-y-0.5 font-medium [word-break:break-word] break-all'>
+                <div className='line-clamp-1 flex gap-2 font-medium'>
                   Phone:{' '}
-                  <span className='text-muted-foreground'>
+                  <span className='ml-2 text-muted-foreground'>
+                    {' '}
                     {user?.managerInfo?.propertyManagerPhone || 'N/A'}
                   </span>
                 </div>

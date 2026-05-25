@@ -10,7 +10,7 @@ import LeaseDocManager from '@/components/dashboard-main/lease-doc-manager';
 const tabs = [
   { value: 'properties', label: 'Properties' },
   { value: 'maintenance-requests', label: 'Maintenance Request' },
-  { value: 'lease-documents', label: 'Documents' },
+  { value: 'lease-documents', label: 'Lease Documents' },
   // { value: 'messages', label: 'Messages', badge: 2 },
 ];
 

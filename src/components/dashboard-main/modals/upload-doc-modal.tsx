@@ -24,17 +24,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { gql } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
 import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
 import { useAuthStore } from '@/auth/authStore';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 // ================== CONSTANTS ==================
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -44,9 +37,6 @@ const ACCEPTED_FILE_EXTENSIONS = '.jpg,.jpeg,.png,.pdf';
 // ================== ZOD SCHEMA ==================
 const formSchema = z.object({
   docName: z.string().min(1, { message: 'Please enter a document name' }),
-  docType: z.string().min(1, { message: 'Please select a document type' }),
-  propertyID: z.string().min(1, { message: 'Please select the property this document belongs to' }),
-  docOwnerClass: z.string().min(1, { message: 'Please select who should see this document' }),
   docDescription: z.string().optional(),
   // docFolder: z.string().min(1, { message: 'Please enter a folder ID' }),
   file: z
@@ -67,8 +57,6 @@ const UPLOAD_DOCUMENT_MUTATION = gql`
   mutation UploadDocument(
     $docDescription: String
     $docName: String!
-    $docType: String!
-    $propertyID: ID!
     $docFolder: String!
     $docURL: String
     $docOwnerClass: Int
@@ -76,23 +64,12 @@ const UPLOAD_DOCUMENT_MUTATION = gql`
     uploadDocument(
       docDescription: $docDescription
       docName: $docName
-      docType: $docType
-      propertyID: $propertyID
       docFolder: $docFolder
       docURL: $docURL
       docOwnerClass: $docOwnerClass
     ) {
       success
       message
-    }
-  }
-`;
-
-const GET_MY_PROPERTIES = gql`
-  query GetMyProperties {
-    getMyProperties {
-      id
-      name
     }
   }
 `;
@@ -114,30 +91,11 @@ export default function UploadDocModal({ open, onOpenChange }: UploadDocModalPro
   const [uploadDocument] = useMutation(UPLOAD_DOCUMENT_MUTATION);
   const { uploadImages, isUploading, progress } = useCloudinaryUpload();
 
-  const { data: propertiesData } = useQuery<any>(GET_MY_PROPERTIES, {
-    skip: !open,
-  });
-
-  const properties = propertiesData?.getMyProperties || [];
-
-  // For tenants who may not have owned properties, fallback to their rented property
-  const tenantPropertyId = user?.tenantInfo?.propertyId;
-  const tenantAddress = user?.tenantInfo?.rentalAddress;
-
-  const displayProperties = properties.length > 0
-    ? properties
-    : (tenantPropertyId && tenantAddress
-      ? [{ id: tenantPropertyId, name: tenantAddress }]
-      : []);
-
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       docName: '',
-      docType: '',
       docDescription: '',
-      docOwnerClass: '',
-      propertyID: '',
       // docFolder: folderId,
       file: undefined,
     },
@@ -195,12 +153,10 @@ export default function UploadDocModal({ open, onOpenChange }: UploadDocModalPro
       const { data: result } = (await uploadDocument({
         variables: {
           docName: data.docName,
-          docType: data.docType,
-          propertyID: data.propertyID,
           docDescription: data.docDescription || '',
           docFolder: user?.id || '',
           docURL,
-          docOwnerClass: parseInt(data.docOwnerClass, 10),
+          docOwnerClass: 3,
         },
       })) as { data: { uploadDocument: { success: boolean; message: string } } };
 
@@ -322,82 +278,6 @@ export default function UploadDocModal({ open, onOpenChange }: UploadDocModalPro
                   <FormControl>
                     <Input placeholder='e.g. Lease Agreement 2024' {...field} />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Document Type */}
-            <FormField
-              control={form.control}
-              name='docType'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Document Type *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select document type' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='lease-agreement'>Lease Agreement</SelectItem>
-                      <SelectItem value='payment-receipt'>Payment Receipt</SelectItem>
-                      <SelectItem value='move-in-checklist'>Move-in Checklist</SelectItem>
-                      <SelectItem value='notice-of-entry'>Notice of Entry</SelectItem>
-                      <SelectItem value='other'>Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Document Class */}
-            <FormField
-              control={form.control}
-              name='docOwnerClass'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Who should see this document? *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select who should see this document' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='1'>Landlord Only</SelectItem>
-                      <SelectItem value='2'>Tenant Only</SelectItem>
-                      <SelectItem value='3'>Both</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Properties */}
-            <FormField
-              control={form.control}
-              name='propertyID'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Property *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select a property' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {displayProperties.map((property: any) => (
-                        <SelectItem key={property.id} value={property.id}>
-                          {property.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
