@@ -145,10 +145,10 @@ export const useAuthStore = create<AuthState>()(
               navigate('/dashboard');
             }
           } else {
-            toast('Login failed');
+            toast('Login failed. Please contact support for assistance.');
           }
         } catch (err: any) {
-          toast('Login failed', {
+          toast('Login failed. Please contact support for assistance.', {
             className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
             duration: 10000,
           });

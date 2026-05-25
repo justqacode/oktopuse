@@ -63,7 +63,7 @@ export const LoginForm = () => {
       }
     } catch (error: any) {
       // toast.error(`Login failed: ${error.message}`);
-      toast('Login failed', {
+      toast('Login failed. Please try again with the correct credentials or contact support for assistance.', {
         className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
         duration: 10000,
       });
