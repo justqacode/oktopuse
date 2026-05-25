@@ -30,7 +30,7 @@ export const Footer = () => {
               {/* <a href="#" className="w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition">
                 <Github className="w-5 h-5" />
               </a> */}
-              <a
+              {/* <a
                 href='#'
                 className='w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition'
               >
@@ -47,7 +47,7 @@ export const Footer = () => {
                 className='w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition'
               >
                 <IconBrandTwitterFilled className='w-5 h-5' />
-              </a>
+              </a> */}
             </div>
           </div>
 
