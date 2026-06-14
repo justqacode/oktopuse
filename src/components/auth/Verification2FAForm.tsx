@@ -389,7 +389,7 @@ export const Verification2FA = () => {
               </span>
             ) : (
               <span className='px-2 bg-white text-gray-500'>
-                Send another token in {formatTime(countdown)} mins
+                Sending another token in {formatTime(countdown)} mins
               </span>
             )}
           </div>
