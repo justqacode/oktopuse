@@ -16,7 +16,7 @@ export const AuthHeader = ({ route }: { route: string }) => (
       {route === '/forgotpassword' && 'Please enter your email'}
       {route === '/reset-password' && 'Add a new password'}
       {route === '/2fa' &&
-        "We've sent a 6-digit verification code to your email address. Please enter it below to continue."}
+        "We've sent a 6-digit verification code to your email address. Please copy and paste it below to continue."}
     </p>
   </div>
 );

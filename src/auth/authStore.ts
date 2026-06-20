@@ -119,6 +119,7 @@ export const useAuthStore = create<AuthState>()(
           const { data } = await client.mutate<MFALoginResponse>({
             mutation: MFA_MUTATION,
             variables: { mfaCode: verificationCode },
+            fetchPolicy: 'no-cache', // Always make a fresh network call — never return a cached result
           });
 
           if (data?.MFAlogin) {
@@ -132,27 +133,28 @@ export const useAuthStore = create<AuthState>()(
 
             set({ token, user, expiresAt });
 
-            toast.success('Login successful');
-
-            navigate('/2fa');
-
             if (
               user.role === 'admin' ||
               (Array.isArray(user.role) && user.role.includes('admin'))
             ) {
+              toast.success('Login successful');
               navigate('/dashboard/admin/users');
-            } else {
+            } else if (user.role != null) {
+              toast.success('Login successful');
               navigate('/dashboard');
+            } else {
+              toast.error('Incorrect verification code. Please try again.');
             }
           } else {
-            toast('Login failed. Please contact support for assistance.');
+            toast.error('Incorrect verification code. Please try again.');
           }
         } catch (err: any) {
-          toast('Login failed. Please contact support for assistance.', {
-            className: '!bg-red-600 !text-white !font-bold  !text-[14px]',
-            duration: 10000,
-          });
-          console.error('Login error:', err.message);
+          const serverMessage =
+            err?.graphQLErrors?.[0]?.message ||
+            err?.networkError?.result?.errors?.[0]?.message ||
+            err?.message;
+          console.error('Login error:', err);
+          toast.error(serverMessage || 'Incorrect or expired code. Please try again.');
         } finally {
           set({ isLoading: false });
         }
