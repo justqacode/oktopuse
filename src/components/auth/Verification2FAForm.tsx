@@ -269,6 +269,12 @@ interface ResendCodeResponse {
   };
 }
 
+interface UpdatePreferenceResponse {
+  updateRenterProfile: {
+    notificationPreferences: string;
+  };
+}
+
 const COUNTDOWN_SECONDS = 60 * 60; // 10 minutes
 
 const formatTime = (seconds: number) => {
@@ -288,7 +294,8 @@ export const Verification2FA = () => {
   const [resendCode, { loading: resendLoading }] =
     useMutation<ResendCodeResponse>(RESEND_CODE_MUTATION);
 
-  const [updatePreference, { loading: preferenceLoading }] = useMutation(UPDATE_PREFERENCE_MUTATION);
+  const [updatePreference, { loading: preferenceLoading }] =
+    useMutation<UpdatePreferenceResponse>(UPDATE_PREFERENCE_MUTATION);
   const [deliveryChannel, setDeliveryChannel] = useState<'Email' | 'SMS'>('Email');
 
   useEffect(() => {
