@@ -2,7 +2,8 @@ import { useState, type ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from './schemas';
-import { Eye, EyeOff, UserPlus, Check, X } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, Check, X, Info } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { toast } from 'sonner';
@@ -162,7 +163,17 @@ export const RegisterForm = () => {
 
       {/* Phone */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Phone</label>
+        <div className='flex items-center gap-1.5 mb-1'>
+          <label className='block text-sm font-medium text-gray-700'>Phone</label>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className='w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer' />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className='text-xs'>You will receive verification codes for your account via SMS.</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <input
           {...form.register('phone')}
           type='tel'
@@ -207,9 +218,8 @@ export const RegisterForm = () => {
                   <X className='w-4 h-4 text-gray-400' />
                 )}
                 <span
-                  className={`text-xs ${
-                    passwordChecks.minLength ? 'text-green-600' : 'text-gray-600'
-                  }`}
+                  className={`text-xs ${passwordChecks.minLength ? 'text-green-600' : 'text-gray-600'
+                    }`}
                 >
                   Minimum 9 characters
                 </span>
@@ -221,9 +231,8 @@ export const RegisterForm = () => {
                   <X className='w-4 h-4 text-gray-400' />
                 )}
                 <span
-                  className={`text-xs ${
-                    passwordChecks.hasUppercase ? 'text-green-600' : 'text-gray-600'
-                  }`}
+                  className={`text-xs ${passwordChecks.hasUppercase ? 'text-green-600' : 'text-gray-600'
+                    }`}
                 >
                   One uppercase letter (A–Z)
                 </span>
@@ -235,9 +244,8 @@ export const RegisterForm = () => {
                   <X className='w-4 h-4 text-gray-400' />
                 )}
                 <span
-                  className={`text-xs ${
-                    passwordChecks.hasLowercase ? 'text-green-600' : 'text-gray-600'
-                  }`}
+                  className={`text-xs ${passwordChecks.hasLowercase ? 'text-green-600' : 'text-gray-600'
+                    }`}
                 >
                   One lowercase letter (a–z)
                 </span>
@@ -249,9 +257,8 @@ export const RegisterForm = () => {
                   <X className='w-4 h-4 text-gray-400' />
                 )}
                 <span
-                  className={`text-xs ${
-                    passwordChecks.hasNumber ? 'text-green-600' : 'text-gray-600'
-                  }`}
+                  className={`text-xs ${passwordChecks.hasNumber ? 'text-green-600' : 'text-gray-600'
+                    }`}
                 >
                   One number (0–9)
                 </span>
@@ -263,9 +270,8 @@ export const RegisterForm = () => {
                   <X className='w-4 h-4 text-gray-400' />
                 )}
                 <span
-                  className={`text-xs ${
-                    passwordChecks.hasSpecial ? 'text-green-600' : 'text-gray-600'
-                  }`}
+                  className={`text-xs ${passwordChecks.hasSpecial ? 'text-green-600' : 'text-gray-600'
+                    }`}
                 >
                   One special character (!@#$%^&* etc.)
                 </span>

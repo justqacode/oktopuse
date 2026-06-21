@@ -246,10 +246,18 @@ const VerificationCodeInput = ({
 };
 
 const RESEND_CODE_MUTATION = gql`
-  mutation ResendMFA {
-    resendMFA {
+  mutation ResendMFA($deliveryChannel: String) {
+    resendMFA(deliveryChannel: $deliveryChannel) {
       success
       message
+    }
+  }
+`;
+
+const UPDATE_PREFERENCE_MUTATION = gql`
+  mutation UpdateRenterProfile($notificationPreferences: String!) {
+    updateRenterProfile(notificationPreferences: $notificationPreferences) {
+      notificationPreferences
     }
   }
 `;
@@ -280,6 +288,9 @@ export const Verification2FA = () => {
   const [resendCode, { loading: resendLoading }] =
     useMutation<ResendCodeResponse>(RESEND_CODE_MUTATION);
 
+  const [updatePreference, { loading: preferenceLoading }] = useMutation(UPDATE_PREFERENCE_MUTATION);
+  const [deliveryChannel, setDeliveryChannel] = useState<'Email' | 'SMS'>('Email');
+
   useEffect(() => {
     if (countdown <= 0) return;
     const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
@@ -288,7 +299,7 @@ export const Verification2FA = () => {
 
   const handleResend = async () => {
     try {
-      const { data } = await resendCode();
+      const { data } = await resendCode({ variables: { deliveryChannel } });
       if (data?.resendMFA?.success) {
         setCountdown(COUNTDOWN_SECONDS);
         toast.success(data?.resendMFA?.message || 'Verification code resent successfully');
@@ -297,6 +308,36 @@ export const Verification2FA = () => {
       }
     } catch (error) {
       toast.error('An error occurred while resending the code. Please try again.');
+    }
+  };
+
+  const handleSwitchToSMS = async () => {
+    const nextChannel = deliveryChannel === 'Email' ? 'SMS' : 'Email';
+    try {
+      const { data } = await updatePreference({
+        variables: { notificationPreferences: nextChannel },
+      });
+      if (data?.updateRenterProfile) {
+        setDeliveryChannel(nextChannel);
+        const { data: resendData } = await resendCode({ variables: { deliveryChannel: nextChannel } });
+        if (resendData?.resendMFA?.success) {
+          setCountdown(COUNTDOWN_SECONDS);
+          toast.success(
+            `MFA preference updated. Verification code sent via ${
+              nextChannel === 'SMS' ? 'text message (SMS)' : 'email'
+            }.`
+          );
+        } else {
+          toast.error(resendData?.resendMFA?.message || 'Failed to resend code');
+        }
+      } else {
+        toast.error('Failed to update delivery preference.');
+      }
+    } catch (error: any) {
+      console.error('Error switching MFA channel:', error);
+      toast.error(
+        error.message || 'An error occurred while switching the delivery channel. Please try again.'
+      );
     }
   };
 
@@ -394,6 +435,22 @@ export const Verification2FA = () => {
             )}
           </div>
         </div>
+      </div>
+      <div className='mt-4 text-center'>
+        <button
+          type='button'
+          onClick={handleSwitchToSMS}
+          disabled={resendLoading || preferenceLoading}
+          className='text-xs text-blue-600 hover:text-blue-800 hover:underline focus:outline-none transition-colors'
+        >
+          {preferenceLoading
+            ? 'Updating channel...'
+            : resendLoading
+            ? 'Sending code...'
+            : deliveryChannel === 'Email'
+            ? "Didn't receive the email? Receive code via text message (SMS)"
+            : 'Receive code via email instead'}
+        </button>
       </div>
     </div>
   );
