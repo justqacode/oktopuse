@@ -18,6 +18,7 @@ const REGISTER_MUTATION = gql`
     $phone: String!
     $role: [String!]!
     $referredBy: String
+    $smsOptIn: Boolean
   ) {
     register(
       firstName: $firstName
@@ -27,6 +28,7 @@ const REGISTER_MUTATION = gql`
       phone: $phone
       role: $role
       referredBy: $referredBy
+      smsOptIn: $smsOptIn
     ) {
       id
       firstName
@@ -42,6 +44,7 @@ export const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [passwordValue, setPasswordValue] = useState('');
+  const [smsOptIn, setSmsOptIn] = useState(false);
   const [registerMutation] = useMutation(REGISTER_MUTATION);
 
   const { '*': param } = useParams();
@@ -82,6 +85,7 @@ export const RegisterForm = () => {
           phone: data.phone,
           referredBy: data.referredBy,
           role: data.role,
+          smsOptIn,
         },
       });
 
@@ -170,7 +174,7 @@ export const RegisterForm = () => {
               <Info className='w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer' />
             </TooltipTrigger>
             <TooltipContent>
-              <p className='text-xs'>You will receive verification codes for your account via SMS.</p>
+              <p className='text-xs'>You will receive verification codes for your account <br></br>via SMS if you opt-in to SMS notifications.</p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -183,6 +187,20 @@ export const RegisterForm = () => {
         {form.formState.errors.phone && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.phone.message}</p>
         )}
+
+        {/* SMS Opt-in */}
+        <div className='flex items-center gap-2 mt-2'>
+          <input
+            type='checkbox'
+            id='smsOptIn'
+            checked={smsOptIn}
+            onChange={(e) => setSmsOptIn(e.target.checked)}
+            className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer'
+          />
+          <label htmlFor='smsOptIn' className='text-sm text-gray-600 cursor-pointer select-none'>
+            Opt-in to receive SMS notifications for this account
+          </label>
+        </div>
       </div>
 
       {/* Password */}
