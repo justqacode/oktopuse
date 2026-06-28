@@ -421,24 +421,24 @@ export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
     ),
     enableHiding: false,
   },
-  {
-    accessorKey: 'property',
-    header: 'Property',
-    cell: ({ row }) => (
-      <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.property}
-      </Button>
-    ),
-  },
-  {
-    accessorKey: 'tenant',
-    header: 'Tenant',
-    cell: ({ row }) => (
-      <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
-        {row.original.tenant}
-      </Button>
-    ),
-  },
+  // {
+  //   accessorKey: 'property',
+  //   header: 'Property',
+  //   cell: ({ row }) => (
+  //     <Button variant='link' className='text-muted-foreground w-fit px-0 text-left'>
+  //       {row.original.property}
+  //     </Button>
+  //   ),
+  // },
+  // {
+  //   accessorKey: 'tenant',
+  //   header: 'Tenant',
+  //   cell: ({ row }) => (
+  //     <Button variant='ghost' className='text-muted-foreground w-fit px-0 text-left'>
+  //       {row.original.tenant}
+  //     </Button>
+  //   ),
+  // },
   {
     accessorKey: 'amount',
     header: 'Amount',

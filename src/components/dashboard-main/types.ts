@@ -65,13 +65,12 @@ export type LandlordRequest = {
 };
 
 export type LandlordRentHistory = {
-  id: number;
+  id: string;
   date: string;
-  property: string;
-  tenant: string;
   amount: string;
-  method: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'rejected';
+  note: string;
+  paymentRef: string;
+  status: string;
   statement: string;
 };
 
