@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, Tag, Image as ImageIcon, DollarSign } from 'lucide-react';
 import { IconCircleCheckFilled, IconCircleXFilled, IconLoader } from '@tabler/icons-react';
 import formatDate from '@/utils/format-date';
 import { useAuthStore } from '@/auth/authStore';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
+import { toast } from 'sonner';
 
 // Types
 interface MaintenanceRequestPreview {
+  _id: string;
   id: string;
   date: string;
   createdAt: string;
@@ -29,7 +33,18 @@ interface MaintenanceRequestPreview {
   preferredTime?: string;
   images?: string[];
   allowEntry?: boolean;
+  costOfRepair?: number;
 }
+
+const UPDATE_COST_OF_REPAIR = gql`
+  mutation UpdateCostOfRepair($requestID: ID!, $costOfRepair: Float) {
+    updateMaintenanceStatus(requestID: $requestID, costOfRepair: $costOfRepair) {
+      _id
+      costOfRepair
+    }
+  }
+`;
+
 
 interface PreviewModalProps {
   open: boolean;
@@ -53,6 +68,43 @@ export function MaintenanceRequestPreviewModal({
   const request = requests?.property;
   if (!request) return null;
   const { user } = useAuthStore();
+
+  const [isEditingCost, setIsEditingCost] = useState(false);
+  const [costValue, setCostValue] = useState('');
+
+  useEffect(() => {
+    setCostValue(request.costOfRepair !== undefined && request.costOfRepair !== null ? String(request.costOfRepair) : '');
+    setIsEditingCost(false);
+  }, [request]);
+
+  const userRole = user?.role;
+  const isStaff = Array.isArray(userRole)
+    ? (userRole.includes('manager') || userRole.includes('landlord'))
+    : (userRole === 'manager' || userRole === 'landlord');
+
+  const [updateCostOfRepair, { loading: savingCost }] = useMutation(UPDATE_COST_OF_REPAIR, {
+    onCompleted: () => {
+      toast.success('Cost of repair updated successfully');
+      setIsEditingCost(false);
+    },
+    onError: (err: any) => {
+      toast.error(`Failed to update cost of repair: ${err.message}`);
+    },
+  });
+
+  const handleSaveCost = () => {
+    const val = parseFloat(costValue);
+    if (isNaN(val) && costValue !== '') {
+      toast.error('Please enter a valid number');
+      return;
+    }
+    updateCostOfRepair({
+      variables: {
+        requestID: request._id,
+        costOfRepair: costValue === '' ? null : val,
+      },
+    });
+  };
 
   const TD = user?.tenantInfo;
 
@@ -148,6 +200,58 @@ export function MaintenanceRequestPreviewModal({
               </div>
             </div>
           </div>
+
+          {/* Cost of Repair */}
+          {(isStaff || (request.costOfRepair !== undefined && request.costOfRepair !== null)) && (
+            <div className='p-4 border rounded-lg bg-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
+              <div className='flex items-start gap-3'>
+                <DollarSign className='h-5 w-5 text-muted-foreground mt-0.5' />
+                <div>
+                  <p className='text-sm font-medium text-muted-foreground'>Cost of Repair</p>
+                  {isEditingCost ? (
+                    <div className='flex items-center gap-2 mt-1.5'>
+                      <span className='text-sm font-semibold text-gray-500'>$</span>
+                      <input
+                        type='number'
+                        step='0.01'
+                        value={costValue}
+                        onChange={(e) => setCostValue(e.target.value)}
+                        placeholder='0.00'
+                        className='w-32 px-2.5 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-transparent outline-none bg-white text-black font-semibold'
+                      />
+                    </div>
+                  ) : (
+                    <p className='text-base font-semibold mt-0.5'>
+                      {request.costOfRepair !== undefined && request.costOfRepair !== null
+                        ? `$${Number(request.costOfRepair).toFixed(2)}`
+                        : 'Not specified'}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {isStaff && (
+                <div className='flex items-center gap-2 self-end sm:self-center'>
+                  {isEditingCost ? (
+                    <>
+                      <Button size='sm' onClick={handleSaveCost} disabled={savingCost}>
+                        {savingCost ? 'Saving...' : 'Save'}
+                      </Button>
+                      <Button variant='ghost' size='sm' onClick={() => setIsEditingCost(false)}>
+                        Cancel
+                      </Button>
+                    </>
+                  ) : (
+                    <Button variant='outline' size='sm' onClick={() => {
+                      setCostValue(request.costOfRepair !== undefined && request.costOfRepair !== null ? String(request.costOfRepair) : '');
+                      setIsEditingCost(true);
+                    }}>
+                      {request.costOfRepair !== undefined && request.costOfRepair !== null ? 'Update Cost' : 'Add Cost'}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Description */}
           {request.description && (

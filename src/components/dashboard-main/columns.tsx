@@ -200,6 +200,18 @@ export const maintenanceRequestsManagerColumn = (
       ),
     },
     {
+      accessorKey: 'costOfRepair',
+      header: 'Cost of Repair',
+      cell: ({ row }) => {
+        const cost = row.original.property?.costOfRepair;
+        return (
+          <span className='text-sm font-medium'>
+            {cost !== undefined && cost !== null ? `$${Number(cost).toFixed(2)}` : '—'}
+          </span>
+        );
+      },
+    },
+    {
       accessorKey: 'tenant',
       header: 'Tenant',
       cell: ({ row }) => (
@@ -317,6 +329,18 @@ export const maintenanceRequestsLandlordColumn2: ColumnDef<ManagerRequest>[] = [
         </div>
       </Button>
     ),
+  },
+  {
+    accessorKey: 'costOfRepair',
+    header: 'Cost of Repair',
+    cell: ({ row }) => {
+      const cost = row.original.property?.costOfRepair;
+      return (
+        <span className='text-sm font-medium'>
+          {cost !== undefined && cost !== null ? `$${Number(cost).toFixed(2)}` : '—'}
+        </span>
+      );
+    },
   },
   {
     accessorKey: 'tenant',

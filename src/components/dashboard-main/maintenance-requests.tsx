@@ -20,6 +20,10 @@ const GET_MAINTENANCE_HISTORY = gql`
       createdAt
       category
       preferedDateOfResolution
+      preferedTimeOfResolution
+      images
+      canManagementAccess
+      costOfRepair
     }
   }
 `;
@@ -47,9 +51,10 @@ export default function MaintenanceRequests() {
   const maintenanceHistoryFormatted = maintenanceHistoryData.map((item: any) => ({
     id: '...' + item._id.slice(-6),
     date: formatDate(item.createdAt) || '',
-    description: item.description.split(0, 22) || '',
+    description: item.description || '',
     category: item.category || 'N/A',
     status: item.status || 'pending',
+    property: item,
   }));
 
   const viewItem = (request: {}) => {

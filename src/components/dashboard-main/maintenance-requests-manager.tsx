@@ -21,6 +21,7 @@ const GET_MANAGER_MAINTENANCE_REQUESTS = gql`
       createdAt
       category
       images
+      costOfRepair
       propertyDetails {
         name
         propertyType

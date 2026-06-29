@@ -16,6 +16,7 @@ const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
       createdAt
       category
       images
+      costOfRepair
       propertyDetails {
         name
         propertyType
