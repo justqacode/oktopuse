@@ -337,7 +337,7 @@ export function Home() {
                 // className='w-full flex justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'
                 className='sams-btn'
               >
-                Get Started with a 60-Day Trial
+                Get Started with a 90-Day Pro Trial
                 <svg
                   className='w-5 h-5 group-hover:translate-x-1 transition-transform'
                   fill='none'
@@ -497,7 +497,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700'>Manage 1 Property</span>
+                <span className='text-slate-700'>Manage 1 Property/Unit</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg
@@ -513,7 +513,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700'>Limited to 5 Units</span>
+                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg
@@ -585,7 +585,7 @@ export function Home() {
               </div>
               <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Basic</h3>
               <div className='mb-4'>
-                <span className='text-5xl font-bold text-slate-900'>$25</span>
+                <span className='text-5xl font-bold text-slate-900'>$19.99</span>
                 <span className='text-slate-600 ml-2'>/mo</span>
               </div>
             </div>
@@ -605,7 +605,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700 font-medium'>Manage Up to 3 Properties</span>
+                <span className='text-slate-700 font-medium'>Manage Up to 5 Properties/Units</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg
@@ -621,7 +621,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700'>Up to 20 Units</span>
+                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg
@@ -700,7 +700,7 @@ export function Home() {
               </div>
               <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Pro</h3>
               <div className='mb-4'>
-                <span className='text-5xl font-bold text-slate-900'>$50</span>
+                <span className='text-5xl font-bold text-slate-900'>$49.99</span>
                 <span className='text-slate-600 ml-2'>/mo</span>
               </div>
             </div>
@@ -720,7 +720,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700 font-medium'>Manage Unlimited Properties</span>
+                <span className='text-slate-700 font-medium'>Manage Up to 20 Properties/Units</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg
@@ -736,7 +736,7 @@ export function Home() {
                     d='M5 13l4 4L19 7'
                   />
                 </svg>
-                <span className='text-slate-700'>Unlimited Units</span>
+                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
               </div>
               <div className='flex items-start gap-3'>
                 <svg

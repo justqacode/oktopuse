@@ -19,6 +19,7 @@ const REGISTER_MUTATION = gql`
     $role: [String!]!
     $referredBy: String
     $smsOptIn: Boolean
+    $emailOptIn: Boolean
   ) {
     register(
       firstName: $firstName
@@ -29,6 +30,7 @@ const REGISTER_MUTATION = gql`
       role: $role
       referredBy: $referredBy
       smsOptIn: $smsOptIn
+      emailOptIn: $emailOptIn
     ) {
       id
       firstName
@@ -45,6 +47,7 @@ export const RegisterForm = () => {
   const [success, setSuccess] = useState(false);
   const [passwordValue, setPasswordValue] = useState('');
   const [smsOptIn, setSmsOptIn] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState(false);
   const [registerMutation] = useMutation(REGISTER_MUTATION);
 
   const { '*': param } = useParams();
@@ -163,6 +166,19 @@ export const RegisterForm = () => {
         {form.formState.errors.email && (
           <p className='text-red-500 text-xs mt-1'>{form.formState.errors.email.message}</p>
         )}
+
+        <div className='flex items-center gap-2 mt-2'>
+          <input
+            type='checkbox'
+            id='emailOptIn'
+            checked={emailOptIn}
+            onChange={(e) => setEmailOptIn(e.target.checked)}
+            className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer'
+          />
+          <label htmlFor='emailOptIn' className='text-sm text-gray-600 cursor-pointer select-none'>
+            Opt-in to receive email notifications for this account
+          </label>
+        </div>
       </div>
 
       {/* Phone */}
