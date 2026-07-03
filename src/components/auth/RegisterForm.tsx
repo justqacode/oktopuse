@@ -89,6 +89,7 @@ export const RegisterForm = () => {
           referredBy: data.referredBy,
           role: data.role,
           smsOptIn,
+          emailOptIn,
         },
       });
 
