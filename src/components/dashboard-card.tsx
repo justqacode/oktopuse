@@ -15,6 +15,7 @@ type CardTypes = {
   topright?: ReactNode;
   footerTop?: ReactNode;
   footerBottom?: ReactNode;
+  bgClass?: string;
 };
 
 export const DashCard = ({
@@ -23,9 +24,10 @@ export const DashCard = ({
   cardMainContent,
   footerTop,
   footerBottom,
+  bgClass,
 }: CardTypes) => {
   return (
-    <Card className='@container/card'>
+    <Card className={'@container/card' + (bgClass ? ' ' + bgClass : '')}>
       <CardHeader>
         <CardDescription>{cardDescription}</CardDescription>
         {footerTop || footerBottom ? (

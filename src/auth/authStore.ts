@@ -154,7 +154,14 @@ export const useAuthStore = create<AuthState>()(
             err?.networkError?.result?.errors?.[0]?.message ||
             err?.message;
           console.error('Login error:', err);
-          toast.error(serverMessage || 'Incorrect or expired code. Please try again.');
+          // If the session has expired, clear auth state to allow re-login
+          if (typeof serverMessage === 'string' && serverMessage.includes('Session expired')) {
+            // Clear token and user info
+            set({ token: null, user: null, expiresAt: null });
+            toast.warning('Session expired. Please log in again.');
+          } else {
+            toast.error(serverMessage || 'Incorrect or expired code. Please try again.');
+          }
         } finally {
           set({ isLoading: false });
         }
