@@ -500,12 +500,23 @@ export const paymentHistoryLandlordColumn: ColumnDef<LandlordRentHistory>[] = [
   {
     accessorKey: 'statement',
     header: 'Statement',
-    cell: ({ row }) => (
-      <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left underline'>
-        {/* {row.original.statement} */}
-        Download
-      </Button>
-    ),
+    cell: ({ row }) => {
+      const docLink = row.original.statement;
+      if (!docLink || docLink === 'N/A') {
+        return (
+          <span className='text-muted-foreground/50 w-fit px-1.5 text-left select-none'>
+            N/A
+          </span>
+        );
+      }
+      return (
+        <Button variant='link' className='text-muted-foreground w-fit px-1.5 text-left underline' asChild>
+          <a href={docLink} target='_blank' rel='noopener noreferrer'>
+            Download
+          </a>
+        </Button>
+      );
+    },
   },
 ];
 
