@@ -1,6 +1,6 @@
 export const AuthHeader = ({ route }: { route: string }) => (
   <div className='p-8 text-center'>
-    <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+    <h1 className='text-3xl font-extrabold text-foreground tracking-tight mb-2'>
       {route === '/login' && 'Welcome Back'}
       {route === '/register' && 'Create an account'}
       {/* {route.startsWith('/register') && 'Create an account'} */}
@@ -9,7 +9,7 @@ export const AuthHeader = ({ route }: { route: string }) => (
       {route === '/contact' && 'Contact Us'}
       {route === '/2fa' && 'Verify your Identity'}
     </h1>
-    <p className='text-gray-600'>
+    <p className='text-sm text-muted-foreground'>
       {route === '/login' && 'Please enter your login details'}
       {route === '/register' && 'Please fill in your details to create an account'}
       {/* {route.startsWith('/register') && 'Please fill in your details to create an account'} */}

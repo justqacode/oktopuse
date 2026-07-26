@@ -16,417 +16,294 @@ export function Home() {
   }, [location]);
 
   return (
-    <div className='w-full min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 relative overflow-hidden'>
-      {/* Decorative elements */}
-      <div className='absolute top-10 right-20 w-32 h-32 bg-pink-300 rounded-full opacity-40 blur-2xl z-10'></div>
-      <div className='absolute bottom-20 left-10 w-40 h-40 bg-blue-300 rounded-full opacity-30 blur-2xl z-10'></div>
+    <div className='w-full min-h-screen bg-gradient-to-b from-background via-muted/30 to-background relative overflow-hidden transition-colors duration-500'>
+      {/* Decorative background glows */}
+      <div className='absolute top-[-10%] right-[-5%] w-[45rem] h-[45rem] rounded-full bg-primary/10 opacity-20 blur-[130px] pointer-events-none'></div>
+      <div className='absolute bottom-[15%] left-[-10%] w-[40rem] h-[40rem] rounded-full bg-primary/5 opacity-15 blur-[110px] pointer-events-none'></div>
 
-      <div className='max-w-7xl mx-auto px-12 py-40 flex flex-col lg:flex-row items-center justify-between gap-12'>
+      <div className='max-w-7xl mx-auto px-6 lg:px-12 py-32 lg:py-44 flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10'>
         {/* Left Content */}
-        <div className='flex-1 space-y-8'>
+        <div className='flex-1 space-y-8 text-center lg:text-left'>
           <div className='space-y-6'>
-            <h1 className='text-5xl lg:text-6xl font-bold text-slate-900 leading-tight'>
-              Join the hundreds simplifying
+            <h1 className='text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-tight bg-gradient-to-r from-foreground via-foreground to-foreground/75 bg-clip-text'>
+              Simplify Your <br />
+              <span className='text-primary bg-gradient-to-r from-primary to-primary-hover bg-clip-text'>Property Management</span>
             </h1>
-            <p className='text-2xl lg:text-3xl text-slate-700 font-light'>
-              their property management with Oktopuse
+            <p className='text-xl lg:text-2xl text-muted-foreground font-light max-w-xl mx-auto lg:mx-0'>
+              The intuitive platform built by property managers, designed for landlords and tenants who value efficiency and clarity.
             </p>
           </div>
 
-          <div className='sams-btn w-full sm:w-50'>
-            <Link to='/register'> Get Oktopuse</Link>
+          <div className='flex flex-col sm:flex-row justify-center lg:justify-start gap-4 items-center'>
+            <Link to='/register' className='sams-btn w-full sm:w-auto px-8 py-3 text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all'>
+              Get Oktopuse Free
+            </Link>
+            <a href='#pricing' className='w-full sm:w-auto flex justify-center items-center py-2.5 px-6 border border-border hover:bg-accent text-foreground rounded-lg font-medium transition-colors duration-200'>
+              View Pricing
+            </a>
           </div>
         </div>
 
         {/* Right Content - Mock Video Interface */}
-        <div className='flex-1 relative'>
-          <div className='bg-white rounded-2xl shadow-2xl overflow-hidden'>
+        <div className='flex-1 w-full max-w-xl lg:max-w-none relative mt-8 lg:mt-0'>
+          <div className='bg-card border border-border/70 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-primary/5'>
             {/* Browser-like header */}
-            <div className='bg-gray-100 px-4 py-3 flex items-center gap-2 border-b'>
+            <div className='bg-muted/50 px-4 py-3 flex items-center gap-2 border-b border-border/50'>
               <div className='flex gap-1.5'>
-                <div className='w-3 h-3 rounded-full bg-red-400'></div>
-                <div className='w-3 h-3 rounded-full bg-yellow-400'></div>
+                <div className='w-3 h-3 rounded-full bg-destructive/80'></div>
+                <div className='w-3 h-3 rounded-full bg-amber-400'></div>
                 <div className='w-3 h-3 rounded-full bg-green-400'></div>
               </div>
               <div className='flex-1 flex justify-center'>
-                <div className='bg-white rounded px-4 py-1 text-xs text-gray-500 flex items-center gap-2'>
-                  <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'>
-                    <path
-                      fillRule='evenodd'
-                      d='M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z'
-                      clipRule='evenodd'
-                    />
-                  </svg>
-                  Coordinating responses...
+                <div className='bg-card border border-border/40 rounded px-4 py-1 text-[11px] text-muted-foreground flex items-center gap-2 shadow-xs'>
+                  <span className='w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse'></span>
+                  oktopuse.com/dashboard
                 </div>
               </div>
             </div>
 
             {/* Video call toolbar */}
-            <div className='bg-white px-4 py-2 flex items-center justify-between border-b'>
+            <div className='bg-card px-4 py-3 flex items-center justify-between border-b border-border/50'>
               <div className='flex items-center gap-3'>
-                <span className='text-sm text-gray-600'>12:45</span>
+                <span className='text-xs font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded'>12:45 PM</span>
               </div>
               <div className='flex items-center gap-2'>
-                <button className='p-2 hover:bg-gray-100 rounded-full'>
-                  <svg
-                    className='w-5 h-5 text-gray-600'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M15 19l-7-7 7-7'
-                    />
+                <button className='p-1.5 hover:bg-muted text-muted-foreground rounded-md transition-colors'>
+                  <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
                   </svg>
                 </button>
-                <button className='p-2 hover:bg-gray-100 rounded-full'>
-                  <svg
-                    className='w-5 h-5 text-gray-600'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M12 4v16m8-8H4'
-                    />
+                <button className='p-1.5 hover:bg-muted text-muted-foreground rounded-md transition-colors'>
+                  <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
                   </svg>
                 </button>
-                <button className='bg-blue-500 text-white px-4 py-1.5 rounded text-sm font-medium'>
+                <button className='bg-primary hover:bg-primary-hover text-primary-foreground px-4 py-1.5 rounded-lg text-xs font-semibold shadow-xs transition-colors duration-200'>
                   Send Message
                 </button>
               </div>
             </div>
 
             {/* Video Grid */}
-            <div className='grid grid-cols-2 gap-1 bg-gray-200 p-1'>
+            <div className='grid grid-cols-2 gap-1.5 bg-muted/30 p-2'>
               {/* Participant 1 */}
-              <div className='aspect-video bg-gradient-to-br from-pink-200 to-pink-300 rounded-lg relative overflow-hidden'>
+              <div className='aspect-video bg-gradient-to-br from-indigo-100 to-violet-200 dark:from-slate-800 dark:to-slate-700 rounded-xl relative overflow-hidden border border-border/40 shadow-xs'>
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <div className='w-24 h-24 bg-pink-400 rounded-full opacity-50'></div>
+                  <div className='w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold text-lg border border-primary/20'>
+                    PM
+                  </div>
                 </div>
-                <div className='absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded'>
+                <div className='absolute bottom-2 left-2 bg-background/80 dark:bg-slate-900/90 text-foreground text-[10px] font-semibold px-2 py-0.5 rounded backdrop-blur-xs'>
                   Property Manager
                 </div>
               </div>
 
               {/* Participant 2 */}
-              <div className='aspect-video bg-gradient-to-br from-amber-200 to-amber-300 rounded-lg relative overflow-hidden'>
+              <div className='aspect-video bg-gradient-to-br from-pink-100 to-rose-200 dark:from-slate-800 dark:to-slate-700 rounded-xl relative overflow-hidden border border-border/40 shadow-xs'>
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <div className='w-24 h-24 bg-amber-400 rounded-full opacity-50'></div>
+                  <div className='w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center text-rose-500 font-bold text-lg border border-rose-500/20'>
+                    LR
+                  </div>
                 </div>
-                <div className='absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded'>
-                  Leslie Rowe
+                <div className='absolute bottom-2 left-2 bg-background/80 dark:bg-slate-900/90 text-foreground text-[10px] font-semibold px-2 py-0.5 rounded backdrop-blur-xs'>
+                  Leslie Rowe (Tenant)
                 </div>
               </div>
 
               {/* Participant 3 */}
-              <div className='aspect-video bg-gradient-to-br from-rose-200 to-rose-300 rounded-lg relative overflow-hidden'>
+              <div className='aspect-video bg-gradient-to-br from-amber-100 to-orange-200 dark:from-slate-800 dark:to-slate-700 rounded-xl relative overflow-hidden border border-border/40 shadow-xs'>
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <div className='w-24 h-24 bg-rose-400 rounded-full opacity-50'></div>
+                  <div className='w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center text-amber-600 font-bold text-lg border border-amber-500/20'>
+                    TS
+                  </div>
                 </div>
-                <div className='absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded'>
-                  Tim Sullivan
+                <div className='absolute bottom-2 left-2 bg-background/80 dark:bg-slate-900/90 text-foreground text-[10px] font-semibold px-2 py-0.5 rounded backdrop-blur-xs'>
+                  Tim Sullivan (Landlord)
                 </div>
               </div>
 
               {/* Participant 4 */}
-              <div className='aspect-video bg-gradient-to-br from-pink-100 to-pink-200 rounded-lg relative overflow-hidden'>
+              <div className='aspect-video bg-gradient-to-br from-teal-100 to-emerald-200 dark:from-slate-800 dark:to-slate-700 rounded-xl relative overflow-hidden border border-border/40 shadow-xs'>
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <div className='w-24 h-24 bg-pink-300 rounded-full opacity-50'></div>
+                  <div className='w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-600 font-bold text-lg border border-emerald-500/20'>
+                    CB
+                  </div>
                 </div>
-                <div className='absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded'>
-                  Carole Barber
+                <div className='absolute bottom-2 left-2 bg-background/80 dark:bg-slate-900/90 text-foreground text-[10px] font-semibold px-2 py-0.5 rounded backdrop-blur-xs'>
+                  Carole Barber (Vendor)
                 </div>
               </div>
             </div>
           </div>
 
           {/* Chat sidebar mockup */}
-          <div className='absolute -right-4 top-20 w-64 bg-white rounded-lg shadow-xl p-4 space-y-3'>
+          <div className='absolute -right-4 top-24 w-60 bg-card/90 backdrop-blur-md rounded-xl border border-border/70 shadow-2xl p-4 space-y-3 hidden sm:block transition-all hover:scale-102 duration-300'>
             <div className='flex items-start gap-2'>
-              <div className='w-8 h-8 bg-blue-400 rounded-full flex-shrink-0'></div>
+              <div className='w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-primary text-[10px] font-bold'>
+                PM
+              </div>
               <div className='flex-1'>
-                <div className='bg-gray-100 rounded-lg p-2 text-xs text-gray-700'>
-                  PM: Good morning, this is a reminder that HVAC tune-up is in two days.
+                <div className='bg-muted/80 rounded-lg p-2 text-[10px] text-foreground leading-normal'>
+                  Reminder: HVAC maintenance is scheduled for Tuesday.
                 </div>
               </div>
             </div>
 
-            <div className='flex items-start gap-2'>
-              <div className='w-8 h-8 bg-purple-400 rounded-full flex-shrink-0'></div>
-              <div className='flex-1'>
-                <div className='bg-indigo-500 text-white rounded-lg p-2 text-xs'>
-                  Tenant: Thanks for the reminder Ryan. See you soon.
+            <div className='flex items-start gap-2 justify-end'>
+              <div className='flex-1 text-right'>
+                <div className='bg-primary text-primary-foreground rounded-lg p-2 text-[10px] inline-block text-left leading-normal shadow-xs'>
+                  Awesome, I will be home. Thanks!
                 </div>
               </div>
             </div>
 
-            <div className='flex items-start gap-2'>
-              <div className='w-8 h-8 bg-green-400 rounded-full flex-shrink-0'></div>
-              <div className='flex-1'>
-                <div className='bg-gray-100 rounded-lg p-2 text-xs text-gray-700'>
-                  Hi Joy, The HVAC tune-up was completely done without inconveniencing the tenant's.
-                  Service statement is in your portal.
-                </div>
-              </div>
+            <div className='flex items-center gap-2 pt-2 border-t border-border/50'>
+              <span className='w-1.5 h-1.5 rounded-full bg-emerald-500'></span>
+              <span className='text-[10px] font-medium text-muted-foreground'>Ryan is typing...</span>
             </div>
-
-            <div className='flex items-start gap-2'>
-              <div className='w-8 h-8 bg-pink-400 rounded-full flex-shrink-0'></div>
-              <div className='flex-1'>
-                <div className='bg-indigo-500 text-white rounded-lg p-2 text-xs'>
-                  Thank you and your team for the prompt tune-up service at 412 Brick Way today.
-                </div>
-              </div>
-            </div>
-
-            <div className='flex items-center gap-2 pt-2 border-t'>
-              <div className='w-6 h-6 bg-green-400 rounded-full'></div>
-              <div className='text-xs font-medium text-gray-700'>Tenant:</div>
-            </div>
-
-            <div className='flex items-center gap-2 bg-gray-50 rounded-lg p-2'>
-              <input
-                type='text'
-                placeholder='Type a message...'
-                className='flex-1 bg-transparent text-xs outline-none'
-              />
-              <button className='text-gray-400 hover:text-gray-600'>
-                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Decorative 3D elements */}
-          <div className='absolute -bottom-10 -left-10 w-32 h-32 opacity-60'>
-            <div className='w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg transform rotate-12'></div>
           </div>
         </div>
       </div>
 
-      {/* Decorative bottom elements */}
-      {/* <div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 opacity-40'>
-        <div className='relative'>
-          <div className='absolute bottom-0 left-1/4 w-20 h-40 bg-coral-400 rounded-t-full'></div>
-          <div className='absolute bottom-0 left-1/2 w-16 h-32 bg-pink-400 rounded-t-full transform -translate-x-1/2'></div>
-          <div className='absolute bottom-0 right-1/4 w-24 h-36 bg-green-400 rounded-t-full'></div>
-        </div>
-      </div> */}
-
       {/* Made by property managers section */}
-      <div className='max-w-7xl mx-auto px-6 pt-20 pb-10'>
-        <h2 className='text-4xl lg:text-5xl font-light text-slate-700 text-center mb-16'>
-          Designed by property managers. Powered for your success.
-        </h2>
+      <div className='max-w-7xl mx-auto px-6 py-24 relative z-10'>
+        <div className='text-center max-w-3xl mx-auto mb-16'>
+          <h2 className='text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground mb-4'>
+            Designed by property managers.
+          </h2>
+          <p className='text-lg lg:text-xl text-muted-foreground font-light'>
+            We know the stress of coordination. That's why we created a centralized space to manage listings, leases, maintenance, and messages seamlessly.
+          </p>
+        </div>
 
         <div className='grid md:grid-cols-2 gap-8'>
           {/* Card 1 - Landlords */}
-          <div className='bg-white rounded-lg shadow-lg overflow-hidden'>
-            <div className='h-64 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden'>
+          <div className='bg-card rounded-2xl border border-border/70 shadow-lg overflow-hidden group hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col'>
+            <div className='h-64 overflow-hidden relative'>
+              <div className='absolute inset-0 bg-primary/5 z-10 transition-colors group-hover:bg-transparent'></div>
               <img
-                // src='https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=600&fit=crop'
                 src='/home-landlord-manage.jpg'
                 alt='Landlords reviewing documents'
-                className='w-full h-full object-cover'
+                className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
               />
             </div>
-            <div className='p-8 space-y-4'>
-              <h3 className='text-2xl font-semibold text-slate-800'>
-                Perfect for landlords who manage their own properties
-              </h3>
-              <p className='text-slate-600 leading-relaxed'>
-                Owner manage can be a hassle in the absence of processes and tools. With the
-                Oktopuse, manage your own property becomes easier.
-              </p>
-              <a
-                href='/register'
-                className='inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group'
+            <div className='p-8 space-y-4 flex-1 flex flex-col justify-between'>
+              <div className='space-y-2'>
+                <h3 className='text-2xl font-bold text-foreground'>
+                  For Independent Landlords
+                </h3>
+                <p className='text-muted-foreground text-sm leading-relaxed'>
+                  Managing properties on your own shouldn't feel like a full-time stress loop. Oktopuse equips you with automated rent collections, digital leases, and tenant chats.
+                </p>
+              </div>
+              <Link
+                to='/register'
+                className='inline-flex items-center text-primary hover:text-primary-hover font-semibold text-sm pt-4 group/link'
               >
-                Create an Account
+                Create a Landlord Account
                 <svg
-                  className='w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform'
+                  className='w-4 h-4 ml-1.5 group-hover/link:translate-x-1 transition-transform'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M9 5l7 7-7 7'
-                  />
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
 
           {/* Card 2 - Property Managers */}
-          <div className='bg-white rounded-lg shadow-lg overflow-hidden'>
-            <div className='h-64 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden'>
+          <div className='bg-card rounded-2xl border border-border/70 shadow-lg overflow-hidden group hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col'>
+            <div className='h-64 overflow-hidden relative'>
+              <div className='absolute inset-0 bg-primary/5 z-10 transition-colors group-hover:bg-transparent'></div>
               <img
-                // src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop'
                 src='/home-manager-manage.jpg'
                 alt='Property manager at business'
-                className='w-full h-full object-cover'
+                className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
               />
             </div>
-            <div className='p-8 space-y-4'>
-              <h3 className='text-2xl font-semibold text-slate-800'>
-                The best tool for PM who values peace and effectiveness
-              </h3>
-              <p className='text-slate-600 leading-relaxed'>
-                Expanding requires innovation to minimize the stress and maximize results. Cordinate
-                tenant and maintainance in one place.
-              </p>
-              <a
-                href='/register'
-                className='inline-flex items-center text-blue-600 hover:text-blue-700 font-medium group'
+            <div className='p-8 space-y-4 flex-1 flex flex-col justify-between'>
+              <div className='space-y-2'>
+                <h3 className='text-2xl font-bold text-foreground'>
+                  For Property Managers
+                </h3>
+                <p className='text-muted-foreground text-sm leading-relaxed'>
+                  Scale your operations and maximize productivity. Coordinate tenants, landlords, maintenance requests, and work orders in a single, robust workspace.
+                </p>
+              </div>
+              <Link
+                to='/register'
+                className='inline-flex items-center text-primary hover:text-primary-hover font-semibold text-sm pt-4 group/link'
               >
-                Start Optimizing your process
+                Optimize Your Operations
                 <svg
-                  className='w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform'
+                  className='w-4 h-4 ml-1.5 group-hover/link:translate-x-1 transition-transform'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M9 5l7 7-7 7'
-                  />
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
       {/* Don't Let a Cost Ruin Your Growth Plan section */}
-      <div className='max-w-7xl mx-auto px-6 pt-10 pb-20'>
-        <div className='bg-white rounded-2xl shadow-xl overflow-hidden'>
+      <div className='max-w-7xl mx-auto px-6 py-16 relative z-10'>
+        <div className='bg-card rounded-3xl border border-border/70 shadow-xl overflow-hidden'>
           <div className='grid lg:grid-cols-2 gap-0'>
             {/* Left Content */}
-            <div className='p-12 lg:p-16 flex flex-col justify-center space-y-8'>
-              <h2 className='text-4xl lg:text-5xl font-light text-slate-700 leading-tight'>
-                Don&apos;t let cost ruin your growth plan.
+            <div className='p-10 lg:p-16 flex flex-col justify-center space-y-6'>
+              <h2 className='text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground leading-tight'>
+                Don't let cost ruin your growth plan.
               </h2>
-
-              <p className='text-slate-600 text-lg leading-relaxed'>
-                Simplify your rental operations and focus on growing your portfolio. Try Oktopuse
-                free — no credit card, no questions asked.
+              <p className='text-muted-foreground text-base leading-relaxed'>
+                Simplify your rental operations and focus on expanding your portfolio. Test-drive all premium Oktopuse features free for 90 days. No credit card required.
               </p>
 
               <button
                 onClick={() => navigate('/register')}
-                // className='self-start border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded text-lg font-semibold transition-all duration-300 flex items-center gap-2 group'
-                // className='w-full flex justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'
-                className='sams-btn'
+                className='sams-btn self-start sm:w-auto px-8 py-3 text-base shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all flex items-center gap-2 group/btn'
               >
-                Get Started with a 90-Day Pro Trial
+                Start 90-Day Pro Trial
                 <svg
-                  className='w-5 h-5 group-hover:translate-x-1 transition-transform'
+                  className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M9 5l7 7-7 7'
-                  />
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
               </button>
             </div>
 
             {/* Right Content */}
-            <div className='p-12 lg:p-16 bg-gray-50 flex flex-col justify-center space-y-6'>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-4'>We simplify</h3>
-
+            <div className='p-10 lg:p-16 bg-muted/40 border-t lg:border-t-0 lg:border-l border-border/50 flex flex-col justify-center space-y-6'>
+              <h3 className='text-xl font-bold text-foreground'>What We Simplify:</h3>
               <div className='space-y-4'>
-                <a
-                  href='#'
-                  className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
-                >
-                  <svg
-                    className='w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M9 5l7 7-7 7'
-                    />
-                  </svg>
-                  Rent Collection
-                </a>
-
-                <a
-                  href='#'
-                  className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
-                >
-                  <svg
-                    className='w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M9 5l7 7-7 7'
-                    />
-                  </svg>
-                  Maintenance Management
-                </a>
-
-                <a
-                  href='#'
-                  className='flex items-center text-blue-600 hover:text-blue-700 text-lg group'
-                >
-                  <svg
-                    className='w-5 h-5 mr-3 group-hover:translate-x-1 transition-transform'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M9 5l7 7-7 7'
-                    />
-                  </svg>
-                  Communication with Renters and Landlords
-                </a>
+                <div className='flex items-center gap-3 text-muted-foreground text-base hover:text-foreground transition-colors duration-200'>
+                  <span className='w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold'>✓</span>
+                  Rent Collection & Tracking
+                </div>
+                <div className='flex items-center gap-3 text-muted-foreground text-base hover:text-foreground transition-colors duration-200'>
+                  <span className='w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold'>✓</span>
+                  Maintenance Requests
+                </div>
+                <div className='flex items-center gap-3 text-muted-foreground text-base hover:text-foreground transition-colors duration-200'>
+                  <span className='w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold'>✓</span>
+                  Landlord & Tenant Messaging
+                </div>
               </div>
 
               {/* Image */}
-              <div className='mt-8 rounded-lg overflow-hidden'>
+              <div className='rounded-xl overflow-hidden border border-border/50 shadow-sm mt-4'>
                 <img
-                  // src='https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&h=400&fit=crop'
                   src='/home-section-3.jpg'
                   alt='Person walking in work boots'
-                  className='w-full h-64 object-cover'
+                  className='w-full h-48 object-cover filter brightness-95'
                 />
               </div>
             </div>
@@ -435,394 +312,165 @@ export function Home() {
       </div>
 
       {/* Pricing Section */}
-      <div id='pricing' className='max-w-7xl mx-auto px-6 py-20'>
+      <div id='pricing' className='max-w-7xl mx-auto px-6 py-24 relative z-10'>
         <div className='text-center mb-16'>
-          <h2 className='text-5xl font-light text-slate-800 mb-4'>Select a Plan</h2>
-          <p className='text-xl text-slate-600'>
-            Choose a plan that best fits your property management needs.
+          <h2 className='text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground mb-4'>Select a Plan</h2>
+          <p className='text-lg text-muted-foreground max-w-lg mx-auto'>
+            Choose a tier that matches your property management needs, risk-free.
           </p>
         </div>
 
-        {/* Billing Toggle */}
-        {/* <div className='flex items-center justify-center gap-4 mb-12'>
-          <span className='text-slate-700 font-medium'>Billed Monthly</span>
-          <button className='relative inline-flex h-7 w-12 items-center rounded-full bg-blue-600'>
-            <span className='inline-block h-5 w-5 transform rounded-full bg-white transition translate-x-6'></span>
-          </button>
-          <span className='text-slate-700 font-medium'>Billed Annually</span>
-          <span className='inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800'>
-            Save 20%
-          </span>
-        </div> */}
-
         {/* Pricing Cards */}
-        <div className='grid md:grid-cols-3 gap-8 max-w-6xl mx-auto'>
+        <div className='grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch'>
           {/* Free Trial */}
-          <div className='bg-white rounded-2xl shadow-lg p-8 flex flex-col hover:bg-blue hover:border hover:border-blue-200 transition-colors duration-300'>
-            <div className='text-center mb-6'>
-              <div className='inline-block p-4 bg-gray-100 rounded-full mb-4'>
-                <svg
-                  className='w-12 h-12 text-gray-600'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={1.5}
-                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
-                  />
-                </svg>
+          <div className='bg-card rounded-2xl border border-border/70 shadow-lg p-8 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 group hover:shadow-xl'>
+            <div className='space-y-6'>
+              <div className='text-center'>
+                <div className='inline-block p-3 bg-muted rounded-xl mb-4 text-muted-foreground group-hover:text-primary transition-colors'>
+                  <svg className='w-8 h-8' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8' />
+                  </svg>
+                </div>
+                <h3 className='text-xl font-bold text-foreground'>Free Trial</h3>
+                <div className='mt-3 flex items-baseline justify-center'>
+                  <span className='text-4xl font-extrabold text-foreground'>$0</span>
+                  <span className='text-muted-foreground text-sm ml-2'>forever</span>
+                </div>
               </div>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Free Trial</h3>
-              <div className='mb-4'>
-                <span className='text-5xl font-bold text-slate-900'>$0</span>
-                <span className='text-slate-600 ml-2'>forever</span>
+
+              <div className='border-t border-border/50 pt-6 space-y-4 text-sm text-muted-foreground'>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Manage 1 Property/Unit
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Chat with Landlords/Tenants
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  View Payments Only
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Basic Email Support
+                </div>
               </div>
             </div>
 
-            <div className='space-y-4 mb-8 flex-grow'>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Manage 1 Property/Unit</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>View Payments Only</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Basic Support</span>
-              </div>
-            </div>
-
-            {/* <button className='w-full py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed'>
-              Current Plan
-            </button> */}
-
-            <Link to='/register'>
-              {/* <div className='w-full flex justify-center  py-3 px-6 border-2 border-gray-300 text-gray-500 rounded-lg font-semibold transition-colors duration-300'> */}
-              <div className='sams-btn'>Current Plan</div>
+            <Link to='/register' className='mt-8 block'>
+              <div className='sams-btn bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-foreground shadow-xs'>Current Plan</div>
             </Link>
           </div>
 
           {/* Basic Plan */}
-          <div className='bg-white rounded-2xl shadow-2xl p-8 flex flex-col border-4 border-blue-600 hover:bg-blue hover:border relative transform scale-105'>
-            <div className='absolute -top-4 left-1/2 transform -translate-x-1/2'>
-              <span className='bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full text-sm font-bold'>
+          <div className='bg-card rounded-2xl border-2 border-primary shadow-xl p-8 flex flex-col justify-between relative transform lg:scale-105 group hover:shadow-2xl transition-all duration-300'>
+            <div className='absolute -top-3.5 left-1/2 transform -translate-x-1/2 z-25'>
+              <span className='bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-bold tracking-wider uppercase shadow-sm'>
                 POPULAR
               </span>
             </div>
 
-            <div className='text-center mb-6'>
-              <div className='inline-block p-4 bg-blue-100 rounded-full mb-4'>
-                <svg
-                  className='w-12 h-12 text-blue-600'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={1.5}
-                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
-                  />
-                </svg>
+            <div className='space-y-6'>
+              <div className='text-center'>
+                <div className='inline-block p-3 bg-primary/10 rounded-xl mb-4 text-primary'>
+                  <svg className='w-8 h-8' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8' />
+                  </svg>
+                </div>
+                <h3 className='text-xl font-bold text-foreground'>Basic</h3>
+                <div className='mt-3 flex items-baseline justify-center'>
+                  <span className='text-4xl font-extrabold text-foreground'>$19.99</span>
+                  <span className='text-muted-foreground text-sm ml-2'>/mo</span>
+                </div>
               </div>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Basic</h3>
-              <div className='mb-4'>
-                <span className='text-5xl font-bold text-slate-900'>$19.99</span>
-                <span className='text-slate-600 ml-2'>/mo</span>
+
+              <div className='border-t border-border/50 pt-6 space-y-4 text-sm text-muted-foreground'>
+                <div className='flex items-center gap-3 font-semibold text-foreground'>
+                  <span className='text-emerald-500'>✓</span>
+                  Manage Up to 5 Properties
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Chat with Landlords/Tenants
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Collect Rent Payments
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Maintenance Requests
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Standard Support
+                </div>
               </div>
             </div>
 
-            <div className='space-y-4 mb-8 flex-grow'>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700 font-medium'>Manage Up to 5 Properties/Units</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Collect Rent Payments</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Maintenance Management</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Standard Support</span>
-              </div>
-            </div>
-
-            <Link to='/register'>
-              <div className='w-full flex justify-center  py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'>
-                Upgrade
-              </div>
+            <Link to='/register' className='mt-8 block'>
+              <div className='sams-btn shadow-md shadow-primary/20 hover:shadow-lg'>Upgrade</div>
             </Link>
           </div>
 
           {/* Pro Plan */}
-          <div className='bg-white rounded-2xl shadow-lg p-8 flex flex-col hover:bg-blue hover:border'>
-            <div className='text-center mb-6'>
-              <div className='inline-block p-4 bg-amber-100 rounded-full mb-4'>
-                <svg
-                  className='w-12 h-12 text-amber-600'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={1.5}
-                    d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'
-                  />
-                </svg>
+          <div className='bg-card rounded-2xl border border-border/70 shadow-lg p-8 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 group hover:shadow-xl'>
+            <div className='space-y-6'>
+              <div className='text-center'>
+                <div className='inline-block p-3 bg-muted rounded-xl mb-4 text-muted-foreground group-hover:text-primary transition-colors'>
+                  <svg className='w-8 h-8' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8' />
+                  </svg>
+                </div>
+                <h3 className='text-xl font-bold text-foreground'>Pro</h3>
+                <div className='mt-3 flex items-baseline justify-center'>
+                  <span className='text-4xl font-extrabold text-foreground'>$49.99</span>
+                  <span className='text-muted-foreground text-sm ml-2'>/mo</span>
+                </div>
               </div>
-              <h3 className='text-2xl font-semibold text-slate-800 mb-2'>Pro</h3>
-              <div className='mb-4'>
-                <span className='text-5xl font-bold text-slate-900'>$49.99</span>
-                <span className='text-slate-600 ml-2'>/mo</span>
+
+              <div className='border-t border-border/50 pt-6 space-y-4 text-sm text-muted-foreground'>
+                <div className='flex items-center gap-3 font-semibold text-foreground'>
+                  <span className='text-emerald-500'>✓</span>
+                  Manage Up to 20 Properties
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Chat with Landlords/Tenants
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Collect Rent & Payments
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Advanced Financial Reports
+                </div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-emerald-500 font-bold'>✓</span>
+                  Priority Support
+                </div>
               </div>
             </div>
 
-            <div className='space-y-4 mb-8 flex-grow'>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700 font-medium'>Manage Up to 20 Properties/Units</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Chat with Landlords/Tenants</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Collect Rent Payments</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>File Uploads for Payments</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Advanced Reporting</span>
-              </div>
-              <div className='flex items-start gap-3'>
-                <svg
-                  className='w-5 h-5 text-green-500 flex-shrink-0 mt-0.5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M5 13l4 4L19 7'
-                  />
-                </svg>
-                <span className='text-slate-700'>Priority Support</span>
-              </div>
-            </div>
-
-            <Link to='/register'>
-              <div className='w-full flex justify-center py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors duration-300'>
-                Upgrade
-              </div>
+            <Link to='/register' className='mt-8 block'>
+              <div className='sams-btn bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:text-foreground shadow-xs'>Upgrade</div>
             </Link>
           </div>
         </div>
 
         {/* Contact Section */}
-        <div className='text-center mt-12 z-50!'>
-          <p className='text-slate-600 text-lg'>
-            Need a custom plan?{' '}
+        <div className='text-center mt-16 relative z-10'>
+          <p className='text-muted-foreground text-base'>
+            Need an enterprise plan?{' '}
             <Link
               to='/contact'
-              className='text-blue-600 hover:text-blue-700 font-medium underline cursor-pointer'
+              className='text-primary hover:text-primary-hover font-semibold underline underline-offset-4 transition-colors'
             >
-              Contact
+              Contact Us
             </Link>{' '}
-            us for personalized solutions.
+            for a custom-tailored solution.
           </p>
         </div>
       </div>

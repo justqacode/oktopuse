@@ -47,94 +47,41 @@ export const Navbar = () => {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300',
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         isScrolled
-          ? 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
-          : 'bg-background',
+          ? 'bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm shadow-black/5 py-2'
+          : 'bg-transparent py-4 border-b border-transparent',
       )}
     >
-      <div className='container mx-auto px-4 lg:px-8 flex items-center justify-between h-16'>
+      <div className='container mx-auto px-6 lg:px-12 flex items-center justify-between h-16'>
         {/* Logo */}
-        <Link to='/' className='flex items-center space-x-2'>
+        <Link to='/' className='flex items-center space-x-2 transition-transform duration-300 hover:scale-105 active:scale-95'>
           {/* <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
             <span className='text-primary-foreground font-bold text-sm'>OP</span>
           </div>
           <span className='font-semibold text-lg'>Oktopuse</span> */}
           {/* <img src='/oktopuse-logo-cropped.png' alt='Oktopuse Logo' className='h-8 w-auto' /> */}
-          <img src='/oktopuse-logo-no-bk.png' alt='Oktopuse Logo' className='h-8 w-auto' />
+          <img src='/oktopuse-logo-no-bk.png' alt='Oktopuse Logo' className='h-9 w-auto filter drop-shadow-sm' />
         </Link>
 
         {/* Desktop Navigation */}
         <div className='hidden lg:flex items-center'>
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className='gap-1'>
               <NavigationMenuItem>
-                <NavigationMenuLink href='/' className='nav-link'>
+                <NavigationMenuLink 
+                  href='/' 
+                  className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none cursor-pointer'
+                >
                   Home
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
-              {/* <NavigationMenuItem>
-                <NavigationMenuTrigger>Products</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className='grid gap-3 p-6 w-[400px]'>
-                    <NavItem
-                      icon={Briefcase}
-                      title='Listings'
-                      desc='Explore our comprehensive service offerings'
-                    />
-                    <NavItem icon={Users} title='Resources' desc='Explore our resources' />
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem> */}
-
-              {/* <NavigationMenuItem>
-                <NavigationMenuTrigger>Company</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className='grid gap-3 p-6 w-[400px]'>
-                    <NavItem
-                      icon={Building}
-                      title='About us'
-                      desc='Learn about our company and meet our team'
-                    />
-                    <NavItem
-                      icon={Briefcase}
-                      title={
-                        <>
-                          Careers{' '}
-                          <span className='ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800'>
-                            We're hiring!
-                          </span>
-                        </>
-                      }
-                      desc='We are always looking for amazing people to join us'
-                    />
-                    <NavItem
-                      icon={FileText}
-                      title='Blog'
-                      desc='Stay up-to-date with the latest news'
-                    />
-                    <NavItem
-                      icon={Users}
-                      title='Become an agent'
-                      desc='Join us as an independent agent'
-                    />
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem> */}
-
-              {/* <NavigationMenuItem>
-                <div>
-                  <NavigationMenuLink className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'>
-                    Resources
-                  </NavigationMenuLink>
-                </div>
-              </NavigationMenuItem> */}
               <NavigationMenuItem>
                 <div>
                   <NavigationMenuLink
                     href='/about'
-                    className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'
+                    className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none cursor-pointer'
                   >
                     About Us
                   </NavigationMenuLink>
@@ -144,7 +91,7 @@ export const Navbar = () => {
                 <div>
                   <NavigationMenuLink
                     href='/pricing'
-                    className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer'
+                    className='group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none cursor-pointer'
                   >
                     Pricing
                   </NavigationMenuLink>
@@ -156,48 +103,19 @@ export const Navbar = () => {
 
         {/* Right side actions */}
         <div className='flex items-center space-x-2 sm:space-x-4'>
-          {/* Search Dialog */}
-          {/* <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-            <DialogTrigger asChild>
-              <Button variant='ghost' size='sm' className='h-9 w-9 p-0'>
-                <Search className='h-4 w-4' />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className='sm:max-w-md'>
-              <DialogHeader>
-                <DialogTitle>Search</DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSearch} className='space-y-4'>
-                <Input
-                  placeholder='Search for services, mentors, tutorials...'
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <div className='flex justify-end space-x-2'>
-                  <Button type='button' variant='outline' onClick={() => setIsSearchOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button type='submit'>Search</Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog> */}
-
           {/* User Menu or Auth Buttons */}
           {user ? (
             <>
-              <div className='hidden sm:inline-flex sams-btn h-10'>
+              <div className='hidden sm:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-medium text-sm py-2 px-5 rounded-lg transition-all duration-300 shadow-md shadow-primary/10 hover:shadow-lg hover:shadow-primary/15 active:scale-[0.98]'>
                 <Link to='/contact'>Contact Oktopuse</Link>
               </div>
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  {/* <Button variant='ghost' className='relative h-8 w-8 rounded-full'> */}
-                  <Avatar className='h-8 w-8'>
-                    <AvatarFallback>{user?.firstName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
+                <DropdownMenuTrigger className='focus:outline-none'>
+                  <Avatar className='h-9 w-9 border border-border/60 hover:border-primary/50 transition-colors duration-300 cursor-pointer shadow-sm'>
+                    <AvatarFallback className='bg-muted text-foreground font-medium'>{user?.firstName?.[0]?.toUpperCase() || 'U'}</AvatarFallback>
                   </Avatar>
-                  {/* </Button> */}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='w-56' align='end'>
+                <DropdownMenuContent className='w-56 mt-2' align='end'>
                   <DropdownMenuItem asChild>
                     <Link to='/dashboard'>Dashboard</Link>
                   </DropdownMenuItem>
@@ -207,18 +125,22 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              {/* <Button variant='ghost' size='sm' className='hidden sm:inline-flex'>
-                Connect with a PM
-              </Button> */}
               <Button
-                size='sm'
-                className='hidden sm:inline-flex '
+                variant='ghost'
+                className='hidden sm:inline-flex hover:bg-accent hover:text-accent-foreground text-sm font-medium transition-colors'
                 onClick={() => navigate('/login')}
               >
                 Log in
               </Button>
+              <Button
+                className='hidden sm:inline-flex bg-primary hover:bg-primary-hover text-primary-foreground font-medium text-sm py-2.5 px-5 rounded-lg transition-all duration-300 shadow-md shadow-primary/10 hover:shadow-lg hover:shadow-primary/15 active:scale-[0.98]'
+                onClick={() => navigate('/register')}
+              >
+                Get Started
+              </Button>
             </>
           )}
+
 
           {/* Mobile Menu */}
           <div className='lg:hidden'>

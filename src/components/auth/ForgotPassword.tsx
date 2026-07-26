@@ -62,23 +62,20 @@ export const ForgotPasswordForm = () => {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
       {/* Email */}
       <div>
-        <label className='block text-sm font-medium text-gray-700 mb-1'>Email Address</label>
+        <label className='block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5'>Email Address</label>
         <div className='relative'>
           <input
             {...form.register('email')}
             type='email'
             placeholder='you@example.com'
-            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+            className='w-full px-4 py-2.5 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/35 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/60 text-sm'
           />
-          {/* <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
-            <Check className='w-5 h-5 text-green-500' />
-          </div> */}
         </div>
         {form.formState.errors.email && (
-          <p className='text-red-500 text-xs mt-1'>{form.formState.errors.email.message}</p>
+          <p className='text-destructive text-xs mt-1'>{form.formState.errors.email.message}</p>
         )}
       </div>
 
@@ -86,16 +83,16 @@ export const ForgotPasswordForm = () => {
       <button
         type='submit'
         disabled={isLoading}
-        className='w-full bg-primary hover:bg-blue-500 disabled:bg-blue-400 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2'
+        className='sams-btn w-full mt-2'
       >
         {isLoading ? (
           <>
-            <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+            <div className='w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2'></div>
             <span>Sending request...</span>
           </>
         ) : (
           <>
-            <LogIn className='w-4 h-4' />
+            <LogIn className='w-4 h-4 mr-2' />
             <span>Continue</span>
           </>
         )}

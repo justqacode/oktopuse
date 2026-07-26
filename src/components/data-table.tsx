@@ -396,7 +396,7 @@ export function DataTable<T extends Record<string, any>>({
 
   return (
     <div className={`relative flex flex-col gap-4 overflow-auto ${className}`}>
-      <div className='overflow-hidden rounded-lg border'>
+      <div className='overflow-hidden rounded-xl border border-border/70 shadow-xs bg-card'>
         {enableDragAndDrop ? (
           <DndContext
             collisionDetection={closestCenter}
@@ -406,7 +406,7 @@ export function DataTable<T extends Record<string, any>>({
             id={sortableId}
           >
             <Table>
-              <TableHeader className='bg-muted stick top-0 z5'>
+              <TableHeader className='bg-muted/50 sticky top-0 z-10'>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
@@ -433,11 +433,11 @@ export function DataTable<T extends Record<string, any>>({
                   </SortableContext>
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className='h-24 text-center'>
+                    <TableCell colSpan={columns.length} className='h-24 text-center text-muted-foreground'>
                       {loading ? (
-                        <div className='flex items-center justify-center'>
-                          <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                          Loading...
+                        <div className='flex items-center justify-center gap-2'>
+                          <Loader2 className='h-4 w-4 animate-spin text-primary' />
+                          <span>Loading...</span>
                         </div>
                       ) : emptyState ? (
                         emptyState
@@ -452,7 +452,7 @@ export function DataTable<T extends Record<string, any>>({
           </DndContext>
         ) : (
           <Table>
-            <TableHeader className='bg-muted sticky top-0 z-10'>
+            <TableHeader className='bg-muted/50 sticky top-0 z-10'>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
@@ -479,11 +479,11 @@ export function DataTable<T extends Record<string, any>>({
                   ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className='h-24 text-center'>
+                  <TableCell colSpan={columns.length} className='h-24 text-center text-muted-foreground'>
                     {loading ? (
-                      <div className='flex items-center justify-center'>
-                        <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-                        Loading...
+                      <div className='flex items-center justify-center gap-2'>
+                        <Loader2 className='h-4 w-4 animate-spin text-primary' />
+                        <span>Loading...</span>
                       </div>
                     ) : emptyState ? (
                       emptyState

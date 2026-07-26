@@ -24,7 +24,7 @@ export const Auth = () => {
 
   return (
     <AuthLayout>
-      <div className='bg-white rounded-2xl shadow-lg pb-12 overflow-hidden'>
+      <div className='bg-card border border-border/70 rounded-2xl shadow-xl pb-12 overflow-hidden transition-all duration-300'>
         <AuthHeader route={route} />
         {regLogin && <AuthTabs isLogin={isLogin} navigate={navigate} />}
         <div className='px-8'>{route === '/login' && <LoginForm />}</div>

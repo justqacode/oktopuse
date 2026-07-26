@@ -5,114 +5,109 @@ import {
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
+import {
+  IconBrandFacebook,
+  IconBrandLinkedin,
+  IconBrandTwitter,
+} from '@tabler/icons-react';
+// import { Link } from 'react-router-dom';
+
 export const Footer = () => {
   return (
-    <footer className='bg-black text-gray-400 py-16 px-8'>
+    <footer className='bg-card text-muted-foreground border-t border-border/60 py-16 px-8 transition-colors duration-300'>
       <div className='max-w-7xl mx-auto'>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-12 mb-16'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-12 mb-12'>
           {/* Logo and Social */}
-          <div>
-            {/* Logo */}
-            <div className='flex items-center space-x-2 mb-6'>
-              <Link to='/'>
-                <div className='flex items-center space-x-2'>
-                  <div className='w-8 h-8 bg-primary rounded-md flex items-center justify-center'>
-                    <span className='text-primary-foreground font-bold text-sm'>OP</span>
-                  </div>
-                  <span className='font-semibold text-lg'>
-                    {/* White<span className='text-primary'>Gloves</span> */}
-                    Oktopuse
-                  </span>
-                </div>
-              </Link>
-            </div>
+          <div className='flex flex-col space-y-6'>
+            <Link to='/' className='flex items-center space-x-2 transition-opacity hover:opacity-90'>
+              <img src='/oktopuse-logo-no-bk.png' alt='Oktopuse Logo' className='h-8 w-auto filter drop-shadow-sm' />
+            </Link>
+            <p className='text-sm text-muted-foreground/80 max-w-xs leading-relaxed'>
+              Built by Property Managers. Designed for Everyone. Experience the next generation of property management.
+            </p>
             <div className='flex gap-3'>
-              {/* <a href="#" className="w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition">
-                <Github className="w-5 h-5" />
-              </a> */}
-              {/* <a
+              <a
                 href='#'
-                className='w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition'
+                aria-label='LinkedIn'
+                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
               >
-                <IconBrandLinkedinFilled className='w-5 h-5' />
+                <IconBrandLinkedin className='w-5 h-5' />
               </a>
               <a
                 href='#'
-                className='w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition'
+                aria-label='Facebook'
+                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
               >
-                <IconBrandFacebookFilled className='w-5 h-5' />
+                <IconBrandFacebook className='w-5 h-5' />
               </a>
               <a
                 href='#'
-                className='w-12 h-12 bg-zinc-900 rounded-lg flex items-center justify-center hover:bg-zinc-800 transition'
+                aria-label='Twitter'
+                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
               >
-                <IconBrandTwitterFilled className='w-5 h-5' />
-              </a> */}
+                <IconBrandTwitter className='w-5 h-5' />
+              </a>
             </div>
           </div>
 
-          {/* Tools Column */}
+          {/* Pages Column */}
           <div>
-            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>
+            <h3 className='text-foreground text-sm font-semibold mb-6 uppercase tracking-wider'>
               Pages
             </h3>
-            <ul className='space-y-4'>
+            <ul className='space-y-4 text-sm'>
               <li>
-                <a href='/register' className='hover:text-white transition'>
+                <Link to='/register' className='hover:text-primary transition-colors duration-200'>
                   Register
-                </a>
+                </Link>
               </li>
-              {/* <li>
-                <a href='#' className='hover:text-white transition'>
-                  Resources
-                </a>
-              </li> */}
               <li>
-                <a href='/about' className='hover:text-white transition'>
+                <Link to='/about' className='hover:text-primary transition-colors duration-200'>
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href='/pricing' className='hover:text-white transition'>
+                <Link to='/pricing' className='hover:text-primary transition-colors duration-200'>
                   Pricing
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal Column */}
+          {/* Support Column */}
           <div>
-            <h3 className='text-white text-sm font-semibold mb-6 uppercase tracking-wider'>
+            <h3 className='text-foreground text-sm font-semibold mb-6 uppercase tracking-wider'>
               Support
             </h3>
-            <ul className='space-y-4'>
+            <ul className='space-y-4 text-sm'>
               <li>
-                <a href='/contact' className='hover:text-white transition'>
+                <Link to='/contact' className='hover:text-primary transition-colors duration-200'>
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href='/terms' className='hover:text-white transition'>
+                <Link to='/terms' className='hover:text-primary transition-colors duration-200'>
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href='/privacy-policy' className='hover:text-white transition'>
+                <Link to='/privacy-policy' className='hover:text-primary transition-colors duration-200'>
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Large Background Text */}
-        <div className='relative overflow-hidden'>
-          {/* <div className='text-[180px] font-bold text-zinc-900 leading-none select-none'>
-            Shadcnblocks.com
-          </div> */}
-          <p className='relative text-sm text-gray-500 text-center'>
+        {/* Divider and Copyright */}
+        <div className='pt-8 border-t border-border/50 flex flex-col md:flex-row justify-between items-center gap-4'>
+          <p className='text-xs text-muted-foreground/60'>
             &copy; {new Date().getFullYear()} Oktopuse. All rights reserved.
           </p>
+          <div className='flex space-x-6 text-xs text-muted-foreground/60'>
+            <Link to='/terms' className='hover:text-primary transition-colors'>Terms</Link>
+            <Link to='/privacy-policy' className='hover:text-primary transition-colors'>Privacy</Link>
+          </div>
         </div>
       </div>
     </footer>
