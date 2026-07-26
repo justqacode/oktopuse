@@ -25,7 +25,7 @@ export const Footer = () => {
             <p className='text-sm text-muted-foreground/80 max-w-xs leading-relaxed'>
               Built by Property Managers. Designed for Everyone. Experience the next generation of property management.
             </p>
-            <div className='flex gap-3'>
+            {/* <div className='flex gap-3'>
               <a
                 href='#'
                 aria-label='LinkedIn'
@@ -47,7 +47,7 @@ export const Footer = () => {
               >
                 <IconBrandTwitter className='w-5 h-5' />
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Pages Column */}
