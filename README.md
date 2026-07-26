@@ -57,6 +57,14 @@ Make sure you have the peer dependencies installed:
 npm install @tanstack/react-table @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities @tabler/icons-react
 ```
 
+### For development
+
+```bash
+
+npm run dev
+
+```
+
 ---
 
 ## 🖥️ Usage
