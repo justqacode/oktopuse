@@ -66,6 +66,8 @@ export const RegisterForm = () => {
     },
   });
 
+  const phoneValue = form.watch('phone');
+
   const passwordChecks = {
     minLength: passwordValue.length >= 9,
     hasUppercase: /[A-Z]/.test(passwordValue),
@@ -198,9 +200,22 @@ export const RegisterForm = () => {
         <input
           {...form.register('phone')}
           type='tel'
-          placeholder='Enter your phone number'
+          placeholder='2704389566'
+          maxLength={10}
+          onKeyDown={(e) => {
+            const allowed = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+            if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
           className='w-full px-4 py-2.5 border border-border bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary/35 focus:border-primary outline-none transition-all placeholder:text-muted-foreground/60 text-sm'
         />
+        {phoneValue && phoneValue.length > 0 && phoneValue.length < 10 && !form.formState.errors.phone && (
+          <p className='text-amber-500 text-xs mt-1 flex items-center gap-1'>
+            <span>⚠</span>
+            <span>{phoneValue.length}/10 digits — must be exactly 10</span>
+          </p>
+        )}
         {form.formState.errors.phone && (
           <p className='text-destructive text-xs mt-1'>{form.formState.errors.phone.message}</p>
         )}

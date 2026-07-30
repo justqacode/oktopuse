@@ -54,9 +54,9 @@ ExpensesHistory.HeaderButton = function HeaderButton() {
 
   return (
     <div className='flex gap-2'>
-      <Button variant='outline' size='sm' onClick={handleDownloadStatement}>
+      {/* <Button variant='outline' size='sm' onClick={handleDownloadStatement}>
         <DownloadCloud className='mr-1' /> Download statement
-      </Button>
+      </Button> */}
 
       {/* <MaintenanceRequestModal open={open} onOpenChange={setOpen} /> */}
     </div>

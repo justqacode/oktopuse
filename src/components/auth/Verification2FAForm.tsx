@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useNavigate } from 'react-router-dom';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 import { gql } from '@apollo/client';
@@ -20,8 +21,8 @@ import { toast } from 'sonner';
 import { RESEND_VERIFY_MUTATION, type ResendVerifyAccountProps } from '@/pages/Verify';
 
 export const MFA_MUTATION = gql`
-  mutation MFA($mfaCode: String!) {
-    MFAlogin(mfaCode: $mfaCode) {
+  mutation MFA($mfaCode: String!, $rememberDevice: Boolean) {
+    MFAlogin(mfaCode: $mfaCode, rememberDevice: $rememberDevice) {
       token
       user {
         id
@@ -77,6 +78,7 @@ const CODE_LENGTH = 6;
 export const verifySchema = z.object({
   verificationCode: z.string().length(CODE_LENGTH, `Code must be ${CODE_LENGTH} characters`),
   // .regex(/^[A-Z0-9]+$/, 'Code must contain only capital letters and numbers'),
+  rememberDevice: z.boolean().optional(),
 });
 
 export type VerifyFormValues = z.infer<typeof verifySchema>;
@@ -330,8 +332,7 @@ export const Verification2FA = () => {
         if (resendData?.resendMFA?.success) {
           setCountdown(COUNTDOWN_SECONDS);
           toast.success(
-            `MFA preference updated. Verification code sent via ${
-              nextChannel === 'SMS' ? 'text message (SMS)' : 'email'
+            `MFA preference updated. Verification code sent via ${nextChannel === 'SMS' ? 'text message (SMS)' : 'email'
             }.`
           );
         } else {
@@ -352,12 +353,13 @@ export const Verification2FA = () => {
     resolver: zodResolver(verifySchema),
     defaultValues: {
       verificationCode: '',
+      rememberDevice: false,
     },
   });
 
   const onSubmit = async (data: VerifyFormValues) => {
     const capify = data.verificationCode.toUpperCase();
-    await mfaLogin(capify, navigate);
+    await mfaLogin(capify, navigate, data.rememberDevice ?? false);
   };
 
   const resendVerificationEmail = async (email: string) => {
@@ -411,6 +413,25 @@ export const Verification2FA = () => {
             )}
           />
 
+          <FormField
+            control={veriForm.control}
+            name='rememberDevice'
+            render={({ field }) => (
+              <FormItem className='flex flex-row items-center gap-2'>
+                <FormControl>
+                  <Checkbox
+                    id='rememberDevice'
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel htmlFor='rememberDevice' className='!mt-0 cursor-pointer font-normal'>
+                  Remember this device for 14 days
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+
           <Button type='submit' disabled={mfaLoading} className='w-full'>
             {mfaLoading ? 'Verifying...' : 'Verify'}
           </Button>
@@ -453,10 +474,10 @@ export const Verification2FA = () => {
           {preferenceLoading
             ? 'Updating channel...'
             : resendLoading
-            ? 'Sending code...'
-            : deliveryChannel === 'Email'
-            ? "Didn't receive the email? Receive code via text message (SMS)"
-            : 'Receive code via email instead'}
+              ? 'Sending code...'
+              : deliveryChannel === 'Email'
+                ? "Didn't receive the email? Receive code via text message (SMS)"
+                : 'Receive code via email instead'}
         </button>
       </div>
     </div>

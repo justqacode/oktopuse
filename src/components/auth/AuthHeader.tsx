@@ -7,7 +7,7 @@ export const AuthHeader = ({ route }: { route: string }) => (
       {route === '/forgotpassword' && 'Forgot Password?'}
       {route === '/reset-password' && 'Create New Password'}
       {route === '/contact' && 'Contact Us'}
-      {route === '/2fa' && 'Verify your Identity'}
+      {route === '/2fa' && 'Verify Your Identity'}
     </h1>
     <p className='text-sm text-muted-foreground'>
       {route === '/login' && 'Please enter your login details'}

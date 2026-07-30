@@ -46,8 +46,8 @@ export const registerSchema = z.object({
     .max(254, { message: 'Email is too long' }),
   phone: z
     .string()
-    .min(10, { message: 'Phone number must be at least 10 digits' })
-    .regex(/^[+]?[\d\s\-\(\)]+$/, { message: 'Please enter a valid phone number' }),
+    .length(10, { message: 'Phone number must be exactly 10 digits' })
+    .regex(/^\d{10}$/, { message: 'Phone number must contain only digits' }),
   // password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
   password: z
     .string()

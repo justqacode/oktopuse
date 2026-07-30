@@ -25,29 +25,7 @@ export const Footer = () => {
             <p className='text-sm text-muted-foreground/80 max-w-xs leading-relaxed'>
               Built by Property Managers. Designed for Everyone. Experience the next generation of property management.
             </p>
-            {/* <div className='flex gap-3'>
-              <a
-                href='#'
-                aria-label='LinkedIn'
-                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
-              >
-                <IconBrandLinkedin className='w-5 h-5' />
-              </a>
-              <a
-                href='#'
-                aria-label='Facebook'
-                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
-              >
-                <IconBrandFacebook className='w-5 h-5' />
-              </a>
-              <a
-                href='#'
-                aria-label='Twitter'
-                className='w-10 h-10 bg-secondary hover:bg-primary hover:text-primary-foreground text-foreground rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm'
-              >
-                <IconBrandTwitter className='w-5 h-5' />
-              </a>
-            </div> */}
+
           </div>
 
           {/* Pages Column */}

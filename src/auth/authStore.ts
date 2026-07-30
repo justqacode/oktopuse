@@ -36,7 +36,7 @@ type AuthState = {
   expiresAt: number | null;
   setToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
-  mfaLogin: (verificationCode: string, navigate: NavigateFunction) => Promise<void>;
+  mfaLogin: (verificationCode: string, navigate: NavigateFunction, rememberDevice: boolean) => Promise<void>;
   loginWithGoogle: (
     credential: string,
     ipa: string,
@@ -113,12 +113,12 @@ export const useAuthStore = create<AuthState>()(
       setToken: (token) => set({ token }),
       setUser: (user) => set({ user }),
 
-      mfaLogin: async (verificationCode, navigate) => {
+      mfaLogin: async (verificationCode, navigate, rememberDevice) => {
         set({ isLoading: true });
         try {
           const { data } = await client.mutate<MFALoginResponse>({
             mutation: MFA_MUTATION,
-            variables: { mfaCode: verificationCode },
+            variables: { mfaCode: verificationCode, rememberDevice },
             fetchPolicy: 'no-cache', // Always make a fresh network call — never return a cached result
           });
 
@@ -137,10 +137,10 @@ export const useAuthStore = create<AuthState>()(
               user.role === 'admin' ||
               (Array.isArray(user.role) && user.role.includes('admin'))
             ) {
-              toast.success('Login successful');
+              toast.success('Login was successful!');
               navigate('/dashboard/admin/users');
             } else if (user.role != null) {
-              toast.success('Login successful');
+              toast.success('Login was successful!');
               navigate('/dashboard');
             } else {
               toast.error('Incorrect verification code. Please try again.');
