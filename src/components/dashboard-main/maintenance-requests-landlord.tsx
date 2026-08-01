@@ -6,6 +6,9 @@ import { gql } from '@apollo/client';
 import { useAuthStore } from '@/auth/authStore';
 import formatDate from '@/utils/format-date';
 import MaintenanceRequestPreviewModal from './modals/maintenance-preview-modal';
+import { Button } from '../ui/button';
+import { IconPlus } from '@tabler/icons-react';
+import MaintenanceRequestModal from './modals/maintenance-modal';
 
 const GET_LANDLORD_MAINTENANCE_REQUESTS = gql`
   query GetMaintenanceHistoryStakeHolder {
@@ -77,3 +80,17 @@ export default function MaintenanceRequestsLandlord() {
     </>
   );
 }
+
+MaintenanceRequestsLandlord.HeaderButton = function HeaderButton() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className='flex gap-2'>
+      <Button variant='default' size='sm' onClick={() => setOpen(true)}>
+        <IconPlus /> Request Maintenance
+      </Button>
+
+      <MaintenanceRequestModal open={open} onOpenChange={setOpen} />
+    </div>
+  );
+};

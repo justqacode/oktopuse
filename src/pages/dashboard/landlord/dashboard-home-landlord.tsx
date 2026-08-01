@@ -61,7 +61,13 @@ export default function DashboardHomeLandlord() {
               tabs={tabs}
               defaultValue='payment-history'
               onValueChange={setActiveTab}
-              header={activeTab === 'expenses' ? <ExpensesHistory.HeaderButton /> : null}
+              header={
+                activeTab === 'expenses'
+                  ? <ExpensesHistory.HeaderButton />
+                  : activeTab === 'maintenance-requests'
+                  ? <MaintenanceRequestsLandlord.HeaderButton />
+                  : null
+              }
             >
               <TabsContent value='payment-history'>
                 <PaymentHistoryLandlord records={records} loading={loading} />

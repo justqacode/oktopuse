@@ -34,7 +34,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { gql } from '@apollo/client';
 import { toast } from 'sonner';
-import { useMutation } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { useCloudinaryUpload } from '@/hooks/useCloudinaryUpload';
 import { useMaintenanceStore } from '@/stores/useMaintenanceStore';
 import { useAuthStore } from '@/auth/authStore';
@@ -46,6 +46,7 @@ const MAX_IMAGES = 5;
 
 // ================== ZOD SCHEMA ==================
 const formSchema = z.object({
+  propertyID: z.string().optional(),
   category: z.string().min(1, { message: 'Please select a category' }),
   description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
   preferredDate: z.string().min(1, { message: 'Please select a preferred date' }),
@@ -75,6 +76,15 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 // ================== GRAPHQL MUTATION ==================
+const GET_MY_PROPERTIES = gql`
+  query GetMyProperties {
+    getMyProperties {
+      id
+      name
+    }
+  }
+`;
+
 const MAINTENANCE_MUTATION = gql`
   mutation CreateRequest(
     $category: String!
@@ -83,6 +93,7 @@ const MAINTENANCE_MUTATION = gql`
     $description: String!
     $canManagementAccess: Boolean!
     $images: [String!]!
+    $propertyID: String
   ) {
     createMaintenanceRequest(
       category: $category
@@ -91,6 +102,7 @@ const MAINTENANCE_MUTATION = gql`
       description: $description
       images: $images
       canManagementAccess: $canManagementAccess
+      propertyID: $propertyID
     ) {
       _id
       status
@@ -125,12 +137,30 @@ export default function MaintenanceRequestModal({
   const { user } = useAuthStore();
   const mon = user?.tenantInfo?.rentalAddress;
 
+  const { data: propertiesData, loading: propertiesLoading } = useQuery<any>(GET_MY_PROPERTIES, {
+    skip: !open,
+  });
+
+  const properties = propertiesData?.getMyProperties || [];
+  const tenantPropertyId = user?.tenantInfo?.propertyId;
+  const tenantAddress = user?.tenantInfo?.rentalAddress;
+
+  const displayProperties =
+    properties.length > 0
+      ? properties
+      : tenantPropertyId && tenantAddress
+        ? [{ id: tenantPropertyId, name: tenantAddress }]
+        : tenantAddress
+          ? [{ id: tenantAddress, name: tenantAddress }]
+          : [];
+
   const [maintenanceRequest] = useMutation(MAINTENANCE_MUTATION);
   const { uploadImages, isUploading, progress } = useCloudinaryUpload();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      propertyID: '',
       category: '',
       description: '',
       preferredDate: '',
@@ -196,6 +226,7 @@ export default function MaintenanceRequestModal({
           canManagementAccess: data.allowEntry === 'yes',
           // images: selectedImages.map((img) => img.url),
           images: imageAvailable ? imageUrls : '',
+          ...(data.propertyID ? { propertyID: data.propertyID } : {}),
         },
       });
 
@@ -240,6 +271,36 @@ export default function MaintenanceRequestModal({
         ) : ( */}
         <Form {...form}>
           <div className='space-y-6'>
+            {/* Property */}
+            <FormField
+              control={form.control}
+              name='propertyID'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select the affected property' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {propertiesLoading && <SelectItem value='loading' disabled>Loading properties...</SelectItem>}
+                      {!propertiesLoading && displayProperties.length === 0 && (
+                        <SelectItem value='none' disabled>No properties available</SelectItem>
+                      )}
+                      {displayProperties.map((property: any) => (
+                        <SelectItem key={property.id || property.name} value={property.id || property.name}>
+                          {property.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             {/* Category */}
             <FormField
               control={form.control}

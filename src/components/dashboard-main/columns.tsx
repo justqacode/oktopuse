@@ -332,7 +332,7 @@ export const maintenanceRequestsLandlordColumn2: ColumnDef<ManagerRequest>[] = [
   },
   {
     accessorKey: 'costOfRepair',
-    header: 'Cost of Repair',
+    header: 'Repair Cost',
     cell: ({ row }) => {
       const cost = row.original.property?.costOfRepair;
       return (
