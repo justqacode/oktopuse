@@ -21,6 +21,7 @@ import AssociateAccount from './pages/dashboard/associate-account';
 import { useSEO } from './hooks/useSEO';
 import NotFound from './pages/NotFound';
 import UsersPage from './pages/dashboard/admin/users';
+import TextPeoplePage from './pages/dashboard/admin/text-people';
 import TenantPage from './pages/dashboard/manager/tenants';
 import LandlordPage from './pages/dashboard/manager/landlords';
 
@@ -189,9 +190,17 @@ function MessagesPage() {
 function UsersAdminPage() {
   useSEO({
     title: 'Admin - Users',
-    description: 'View your messages and conversations',
+    description: 'View and manage registered system users',
   });
   return <UsersPage />;
+}
+
+function TextPeopleAdminPage() {
+  useSEO({
+    title: 'Admin - Text People',
+    description: 'Send direct and broadcast SMS messages to phone numbers or registered users',
+  });
+  return <TextPeoplePage />;
 }
 
 function TenantManagerPage() {
@@ -250,6 +259,7 @@ export default function App() {
 
                 <Route path='admin'>
                   <Route path='users' element={<UsersAdminPage />} />
+                  <Route path='text-people' element={<TextPeopleAdminPage />} />
                 </Route>
                 <Route path='manager'>
                   <Route path='tenants' element={<TenantManagerPage />} />

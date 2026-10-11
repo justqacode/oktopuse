@@ -11,6 +11,7 @@ import {
   IconFileWord,
   IconPigMoney,
   IconMoneybagPlus,
+  IconMessageDots,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -91,6 +92,12 @@ const data = {
       title: 'Users',
       url: '/dashboard/admin/users',
       icon: IconUsers,
+      roles: ['admin'],
+    },
+    {
+      title: 'Text People',
+      url: '/dashboard/admin/text-people',
+      icon: IconMessageDots,
       roles: ['admin'],
     },
     {
