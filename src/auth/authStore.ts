@@ -7,6 +7,7 @@ import { config } from '@/config/app.config';
 import { toast } from 'sonner';
 import type { Role } from '@/types';
 import { MFA_MUTATION, type MFALoginResponse } from '@/components/auth/Verification2FAForm';
+import { setDeviceToken } from '@/auth/deviceToken';
 
 export type User = {
   id: string;
@@ -123,7 +124,8 @@ export const useAuthStore = create<AuthState>()(
           });
 
           if (data?.MFAlogin) {
-            const { token, user: rawUser } = data.MFAlogin;
+            const { token, user: rawUser, deviceToken } = data.MFAlogin;
+            if (deviceToken) setDeviceToken(deviceToken);
             const expiresAt = Date.now() + 60 * 60 * 1000; // 1 hr from now
 
             const user: User = {

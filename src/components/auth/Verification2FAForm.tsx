@@ -24,6 +24,7 @@ export const MFA_MUTATION = gql`
   mutation MFA($mfaCode: String!, $rememberDevice: Boolean) {
     MFAlogin(mfaCode: $mfaCode, rememberDevice: $rememberDevice) {
       token
+      deviceToken
       user {
         id
         oktoID
@@ -86,6 +87,7 @@ export type VerifyFormValues = z.infer<typeof verifySchema>;
 export type MFALoginResponse = {
   MFAlogin: {
     token: string;
+    deviceToken?: string | null;
     user: {
       id: string;
       oktoID: string;
@@ -426,7 +428,7 @@ export const Verification2FA = () => {
                   />
                 </FormControl>
                 <FormLabel htmlFor='rememberDevice' className='!mt-0 cursor-pointer font-normal'>
-                  Remember this device for 14 days
+                  Remember this device for 48 hours
                 </FormLabel>
               </FormItem>
             )}

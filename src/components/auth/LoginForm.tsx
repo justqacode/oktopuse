@@ -11,11 +11,64 @@ import { toast } from 'sonner';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useIP } from '@/hooks/user-ip';
+import { getDeviceToken, setDeviceToken } from '@/auth/deviceToken';
 
 const LOGIN_MUTATION = gql`
-  mutation Login($ipa: String, $ua: String, $email: String!, $password: String!) {
-    login(ipa: $ipa, ua: $ua, email: $email, password: $password) {
+  mutation Login(
+    $ipa: String
+    $ua: String
+    $email: String!
+    $password: String!
+    $deviceToken: String
+  ) {
+    login(ipa: $ipa, ua: $ua, email: $email, password: $password, deviceToken: $deviceToken) {
       token
+      requires2FA
+      deviceToken
+      user {
+        id
+        oktoID
+        firstName
+        lastName
+        email
+        phone
+        role
+        verificationStatus
+        notificationPreferences
+        emergencyContact {
+          name
+          phone
+          relationship
+        }
+        ACHProfile {
+          ACHRouting
+          ACHAccount
+        }
+        managerInfo {
+          managerID
+          companyName
+          companyAddress
+          propertyManagerEmail
+          propertyManagerName
+          propertyManagerPhone
+        }
+        landlordInfo {
+          ownerID
+          ownedProperties
+        }
+        tenantInfo {
+          propertyId
+          leaseStartDate
+          leaseEndDate
+          rentAmount
+          balanceDue
+          paymentFrequency
+          rentalAddress
+          rentalZip
+          rentalState
+          rentalCity
+        }
+      }
     }
   }
 `;
@@ -24,7 +77,9 @@ type FormValues = z.infer<typeof loginSchema>;
 type LoginMutationResponse = {
   login: {
     token: string;
-    user: User;
+    requires2FA?: boolean;
+    deviceToken?: string | null;
+    user?: User | null;
   };
 };
 
@@ -50,15 +105,37 @@ export const LoginForm = () => {
 
     try {
       const { data: result } = await loginMutation({
-        variables: { email: data.email, password: data.password, ipa: ip, ua: userAgent },
+        variables: {
+          email: data.email,
+          password: data.password,
+          ipa: ip,
+          ua: userAgent,
+          deviceToken: getDeviceToken(),
+        },
       });
 
       if (result) {
-        toast.success('Please check your email account for the authentication code');
+        const { token, requires2FA, user, deviceToken } = result.login;
         form.reset();
 
+        if (deviceToken) setDeviceToken(deviceToken);
+
+        if (requires2FA === false && user) {
+          // Trusted device (< 48h): 2FA skipped, log in directly
+          useAuthStore.setState({
+            token,
+            user,
+            expiresAt: Date.now() + 60 * 60 * 1000,
+          });
+          toast.success('Login was successful!');
+          const roles = Array.isArray(user.role) ? user.role : [user.role];
+          navigate(roles.includes('admin') ? '/dashboard/admin/users' : '/dashboard');
+          return;
+        }
+
+        toast.success('Please check your email account for the authentication code');
         // Persist token in zustand (and localStorage via persist middleware)
-        setToken(result.login.token);
+        setToken(token);
         navigate('/2fa');
       }
     } catch (error: any) {

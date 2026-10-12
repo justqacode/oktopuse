@@ -6,6 +6,8 @@ import { paymentHistoryManagerColumn } from '@/components/dashboard-main/columns
 import formatDate from '@/utils/format-date';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/utils/format-currency';
+import { useState } from 'react';
+import { CreateRentHistoryDialog } from '@/components/dashboard-main/CreateRentHistoryDialog';
 
 const GET_ALL_MANAGER_PAYMENTS = gql`
   query GetRentHistoryForManager {
@@ -24,7 +26,8 @@ const GET_ALL_MANAGER_PAYMENTS = gql`
 
 export default function PaymentHistoryManager() {
   const { user } = useAuthStore();
-  const { data, loading } = useQuery<any>(GET_ALL_MANAGER_PAYMENTS, {
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const { data, loading, refetch } = useQuery<any>(GET_ALL_MANAGER_PAYMENTS, {
     fetchPolicy: 'cache-and-network',
     variables: { managerID: user?.id },
   });
@@ -47,14 +50,19 @@ export default function PaymentHistoryManager() {
           <div className='py-4 lg:py-6 px-8'>
             <div className='flex justify-between text-lg font-semibold mb-2'>
               <p>Payment History</p>
-              <Button
-                variant='default'
-                size='sm'
-                className='hidden sm:flex'
-                // onClick={() => console.log('pay landlord')}
-              >
-                Pay landlord
-              </Button>
+              <div className='flex gap-2'>
+                <Button variant='outline' size='sm' onClick={() => setHistoryOpen(true)}>
+                  Create rent history
+                </Button>
+                <Button
+                  variant='default'
+                  size='sm'
+                  className='hidden sm:flex'
+                  // onClick={() => console.log('pay landlord')}
+                >
+                  Pay landlord
+                </Button>
+              </div>
             </div>
             <DataTable
               columns={paymentHistoryManagerColumn}
@@ -65,6 +73,11 @@ export default function PaymentHistoryManager() {
               enableFiltering
               pageSize={10}
               loading={loading}
+            />
+            <CreateRentHistoryDialog
+              open={historyOpen}
+              onOpenChange={setHistoryOpen}
+              onCreated={() => refetch()}
             />
           </div>
         </div>
