@@ -24,6 +24,7 @@ import UsersPage from './pages/dashboard/admin/users';
 import TextPeoplePage from './pages/dashboard/admin/text-people';
 import TenantPage from './pages/dashboard/manager/tenants';
 import LandlordPage from './pages/dashboard/manager/landlords';
+import MongotiseWallpaperPage from './pages/Mongotise';
 
 const checkAuth = () => {
   const { user } = useAuthStore();
@@ -247,6 +248,9 @@ export default function App() {
               <Route path='/privacy-policy' element={<PrivacyPage />} />
               <Route path='*' element={<NotFound />} />
             </Route>
+
+            {/* Standalone Fullscreen Wallpaper (No public header/navbar or footer) */}
+            <Route path='/mongotise' element={<MongotiseWallpaperPage />} />
 
             {/* Protected Dashboard Routes */}
             <Route element={<RequireAuth />}>
