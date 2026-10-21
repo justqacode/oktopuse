@@ -86,6 +86,29 @@ const CLOUDINARY_WALLPAPERS: CloudinaryWallpaper[] = [
     resolution: '1920 × 1080',
   },
 
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792551270/Mongotise/Small_Steps_Big_Results_so8fsx.png',
+    publicId: 'Mongotise/Nine-panel_motivational_inspiration_collage_5_nv6d7l',
+    title: 'Small Steps, Big Results',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792551270/Mongotise/Keep_Up_the_Great_Work_Desk_gfzlob.png',
+    publicId: 'Mongotise/Nine-panel_motivational_inspiration_collage_7_wmwnma',
+    title: 'Keep Up the Great Work',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792551270/Mongotise/You_re_Doing_Great_Mountain_Sunrise_osnpdr.png',
+    publicId: 'Mongotise/You_re_Doing_Great_Mountain_Sunrise_osnpdr',
+    title: 'You\'re Doing Great',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+
+
 
 ];
 
