@@ -110,6 +110,72 @@ const CLOUDINARY_WALLPAPERS: CloudinaryWallpaper[] = [
 
 
 
+
+
+
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636763/Mongotise/wallpaper_9_qchmwm.png',
+    publicId: 'Mongotise/wallpaper_9_qchmwm',
+    title: 'Stay Consistent',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636763/Mongotise/wallpaper_8_u5twwz.png',
+    publicId: 'Mongotise/Nine-panel_motivational_inspiration_collage_7_wmwnma',
+    title: 'Progress Not Perfection',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636767/Mongotise/wallpaper_6_sdw4c4.png',
+    publicId: 'Mongotise/wallpaper_6_sdw4c4',
+    title: 'Stay Curious',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+
+
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636766/Mongotise/wallpaper_5_xuuiex.png',
+    publicId: 'Mongotise/wallpaper_5_vav3bn',
+    title: 'Stay Curious',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636769/Mongotise/wallpaper_4_mtdroy.png',
+    publicId: 'Mongotise/wallpaper_4_mtdroy',
+    title: 'Focus on the Goal',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636770/Mongotise/wallpaper_3_uq5zob.png',
+    publicId: 'Mongotise/wallpaper_3_uq5zob',
+    title: 'Stay Curious',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636772/Mongotise/wallpaper_1_hmcec9.png',
+    publicId: 'Mongotise/wallpaper_1_hmcec9',
+    title: 'Stay Focused',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+  {
+    url: 'https://res.cloudinary.com/mongotise/image/upload/v1792636770/Mongotise/wallpaper_2_guh4co.png',
+    publicId: 'Mongotise/wallpaper_2_guh4co',
+    title: 'Keep it Going',
+    category: 'Oktopuse',
+    resolution: '1920 × 1080',
+  },
+
+
+
 ];
 
 // Randomization interval options in seconds
