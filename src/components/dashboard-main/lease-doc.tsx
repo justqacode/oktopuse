@@ -55,10 +55,14 @@ const GET_LEASE_DOCS = gql`
 
 const sampleData: any = [];
 
-export default function LeaseDoc() {
+export interface LeaseDocProps {
+  filter?: string | null;
+}
+
+export default function LeaseDoc({ filter = 'lease' }: LeaseDocProps = {}) {
   const { data, loading } = useQuery<any>(GET_LEASE_DOCS, {
     fetchPolicy: 'cache-and-network',
-    variables: { filter: 'lease' },
+    variables: { filter: filter ?? null },
   });
 
   const documents = data?.getDocuments || [];
