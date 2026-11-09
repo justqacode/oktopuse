@@ -59,10 +59,10 @@ export interface LeaseDocProps {
   filter?: string | null;
 }
 
-export default function LeaseDoc({ filter = 'lease' }: LeaseDocProps = {}) {
+export default function LeaseDoc({ filter = '' }: LeaseDocProps = {}) {
   const { data, loading } = useQuery<any>(GET_LEASE_DOCS, {
     fetchPolicy: 'cache-and-network',
-    variables: { filter: filter ?? null },
+    variables: { filter: filter ?? '' },
   });
 
   const documents = data?.getDocuments || [];
